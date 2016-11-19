@@ -1,41 +1,38 @@
 {
   "project_info": {
-    "project_number": "375885813662",
-    "project_id": "firebase-semtempo"
+    "project_number": "812359248056",
+    "project_id": "semtempo-150004"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:375885813662:android:89f2498b2929ecd7",
+        "mobilesdk_app_id": "1:812359248056:android:89f2498b2929ecd7",
         "android_client_info": {
           "package_name": "com.example.semtempo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "375885813662-rcuabmdlejh7knaaa906nfml49vsrg1a.apps.googleusercontent.com",
+          "client_id": "812359248056-40habk72frhee8qjtf1gkn7hkmqsnacu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.semtempo",
-            "certificate_hash": "D2668EB55546F641CE6A05433F22B25AFB02E483"
+            "certificate_hash": "53F16CE8FD70FA6FA4027C82B841ADE789E116E0"
           }
         },
         {
-          "client_id": "375885813662-45n37ttrl7mqfjotgna1fqdm2qksl8j1.apps.googleusercontent.com",
+          "client_id": "812359248056-n8h1k8manj2h8bt6nj1rgbnu38ua6ihd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCrtz1NY6bLhbr5QzBnNbWnFSVXhn6stfU"
+          "current_key": "AIzaSyAvJx4FtUMVAm85UKXqMt8RYMhowM1-jBk"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-87705780-1"
-          }
+          "status": 1
         },
         "appinvite_service": {
           "status": 1,
