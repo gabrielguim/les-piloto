@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -8,18 +9,18 @@ import java.util.Date;
 public class Horario {
 
     private int totalHorasInvestidas;
-    private Date dataQueRealizou;
+    private Calendar dataQueRealizou;
 
-    public Horario(int totalHorasInvestidas, Date dataQueRealizou){
+    public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
         this.dataQueRealizou = dataQueRealizou;
     }
 
-    public Date getDataQueRealizou() {
+    public Calendar getDataQueRealizou() {
         return dataQueRealizou;
     }
 
-    public void alterarDataQueRealizou(Date dataQueRealizou) {
+    public void alterarDataQueRealizou(Calendar dataQueRealizou) {
         this.dataQueRealizou = dataQueRealizou;
     }
 
