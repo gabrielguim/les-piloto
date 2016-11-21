@@ -67,7 +67,15 @@ public class Atividade {
      * */
     public boolean removerHorario(Horario horarioEscolhido){
         return horariosRealizDaAtv.remove(horarioEscolhido);
+    }
 
+    public int getTotalDeHorasGasto(){
+        int total = 0;
+        for (Horario horario: getHorariosRealizDaAtv()){
+            total += horario.getTotalHorasInvestidas();
+        }
+
+        return total;
     }
 
 
