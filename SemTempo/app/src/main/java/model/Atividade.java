@@ -22,6 +22,12 @@ public class Atividade {
         this.horariosRealizDaAtv = new ArrayList<Horario>();
     }
 
+    public Atividade(String nomeDaAtv, Prioridade prioridade){
+        this.nomeDaAtv = nomeDaAtv;
+        this.prioridade = prioridade;
+        this.horariosRealizDaAtv = new ArrayList<Horario>();
+    }
+
     public Foto getFotoDaAtividade() {
         return fotoDaAtividade;
     }
