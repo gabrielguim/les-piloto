@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.semtempo.R;
 
-public class HomeFragment extends Fragment {
+public class ReportFragment extends Fragment {
 
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
 

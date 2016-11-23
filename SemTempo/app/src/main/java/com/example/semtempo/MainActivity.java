@@ -17,12 +17,14 @@ import android.widget.Toast;
 
 import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.HomeFragment;
+import com.example.semtempo.fragments.ReportFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    NavigationView navigationView = null;
-    Toolbar toolbar = null;
+    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
+    private NavigationView navigationView = null;
+    private Toolbar toolbar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,27 +97,32 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Fragment fragment = null;
 
         if (id == R.id.nav_home) {
-            HomeFragment fragment = new HomeFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment, "ADD_FRAGMENT");
-            fragmentTransaction.commit();
-        } else if (id == R.id.nav_gallery) {
+            fragment = new HomeFragment();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_report) {
+            fragment = new ReportFragment();
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_rank) {
+            fragment = new HomeFragment();
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_history) {
+            fragment = new HomeFragment();
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_pref) {
 
         }
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

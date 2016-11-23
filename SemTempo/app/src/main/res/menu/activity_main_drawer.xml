@@ -7,29 +7,25 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Visão geral" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_report"
+            android:icon="@drawable/ic_show_chart_black_24dp"
+            android:title="Relatórios" />
+        <item
+            android:id="@+id/nav_rank"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Ranking" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="Histórico"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Configurações">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_pref"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Preferências" />
         </menu>
     </item>
 

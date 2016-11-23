@@ -14,6 +14,12 @@ public class Atividade {
     private Tag categoria;
     private Prioridade prioridade;
 
+    public Atividade(String nomeDaAtv, Prioridade prioridade){
+        this.nomeDaAtv = nomeDaAtv;
+        this.prioridade = prioridade;
+        this.horariosRealizDaAtv = new ArrayList<Horario>();
+    }
+
     public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Tag categoria, Prioridade prioridade){
         this.nomeDaAtv = nomeDaAtv;
         this.fotoDaAtividade = fotoDaAtividade;

@@ -3,8 +3,6 @@ package com.example.semtempo.fragments;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,11 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import model.Atividade;
+import model.Horario;
 import model.Prioridade;
 
 public class AddFragment extends Fragment {
@@ -34,11 +36,13 @@ public class AddFragment extends Fragment {
     private EditText label_priority;
     private AutoCompleteTextView autoCompleteTextView;
 
+    private View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_add, container, false);
+        rootView = inflater.inflate(R.layout.fragment_add, container, false);
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
 
@@ -56,8 +60,9 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
-
-                    Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), null, null, priority);
+                    Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), priority);
+                    Calendar creation_date = new GregorianCalendar();
+                    atividade.registrarNovoHorario(new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
                     Toast.makeText(getActivity(), atividade.toString(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -82,6 +87,29 @@ public class AddFragment extends Fragment {
 
     private boolean validateFields(){
         boolean fields_ok = true;
+        String err_msg = "";
+
+        if (!high_priority.isSelected() & !medium_priority.isSelected() & !low_priority.isSelected()){
+            err_msg += "Selecione uma prioridade!";
+            fields_ok = false;
+
+        } if (autoCompleteTextView.getText().toString().isEmpty()) {
+            if (!err_msg.equals(""))
+                err_msg += "\n";
+            err_msg += "Informe-nos o nome da atividade";
+            fields_ok = false;
+
+        } if (spent_time.getText().toString().isEmpty()){
+            if (!err_msg.equals(""))
+                err_msg += "\n";
+            err_msg += "Insira um tempo válido";
+            fields_ok = false;
+
+        }
+
+        if (!fields_ok) {
+            Toast.makeText(getActivity(), err_msg, Toast.LENGTH_SHORT).show();
+        }
 
         return fields_ok;
     }
