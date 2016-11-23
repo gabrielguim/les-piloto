@@ -11,11 +11,11 @@ public class Foto {
         this.IDFoto = IDFoto;
     }
 
-    public String getIDFoto() {
+    public String retornarID() {
         return IDFoto;
     }
 
-    public void alterarIDFoto(String IDFoto) {
-        this.IDFoto = IDFoto;
+    public void alterarID(String novoID) {
+        this.IDFoto = novoID;
     }
 }

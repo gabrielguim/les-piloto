@@ -16,15 +16,15 @@ public class Horario {
         this.dataQueRealizou = dataQueRealizou;
     }
 
-    public Calendar getDataQueRealizou() {
+    public Calendar retornarDataQueRealizou() {
         return dataQueRealizou;
     }
 
-    public void alterarDataQueRealizou(Calendar dataQueRealizou) {
+    public void alterarDataDeRealizacao(Calendar dataQueRealizou) {
         this.dataQueRealizou = dataQueRealizou;
     }
 
-    public int getTotalHorasInvestidas() {
+    public int retornarTotalHorasInvestidas() {
         return totalHorasInvestidas;
     }
 

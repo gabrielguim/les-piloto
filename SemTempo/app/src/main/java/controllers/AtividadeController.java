@@ -21,13 +21,13 @@ public class AtividadeController {
         Map<Atividade, Integer> atvsFiltradas = new HashMap<>();
 
         for (Atividade atividade: atvsASeremFiltradas){
-            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
+            for (Horario horario: atividade.retornarHorariosRealizDaAtv()){
+                if (horario.retornarDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
                     if (atvsFiltradas.containsKey(atividade)){
                         int actualTime = atvsFiltradas.get(atividade);
-                        atvsFiltradas.put(atividade, actualTime + horario.getTotalHorasInvestidas());
+                        atvsFiltradas.put(atividade, actualTime + horario.retornarTotalHorasInvestidas());
                     } else {
-                        atvsFiltradas.put(atividade, horario.getTotalHorasInvestidas());
+                        atvsFiltradas.put(atividade, horario.retornarTotalHorasInvestidas());
                     }
                 }
             }
@@ -44,8 +44,8 @@ public class AtividadeController {
         Collection<Atividade> atvsFiltradas = new ArrayList<>();
 
         for (Atividade atividade: atvsASeremFiltradas){
-            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
+            for (Horario horario: atividade.retornarHorariosRealizDaAtv()){
+                if (horario.retornarDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
                     atvsFiltradas.add(atividade);
                     break;
                 }
@@ -64,7 +64,7 @@ public class AtividadeController {
         Map<Prioridade, Integer> atvsFiltradas = new HashMap<>();
 
         for (Atividade atividade: atvsASeremFiltradas){
-            atvsFiltradas.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
+            atvsFiltradas.put(atividade.retornarPrioridade(), atividade.calcularTotalDeHorasInvestidas());
         }
 
         return atvsFiltradas;
