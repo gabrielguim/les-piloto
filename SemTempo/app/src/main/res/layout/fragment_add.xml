@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:inputType="textAutoComplete"
                 android:drawableLeft="@drawable/ic_textsms_black_24dp"
                 android:drawableTint="#c6000000"
                 android:drawablePadding="20dp"
@@ -65,7 +66,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="#c6000000"
                 android:layout_marginTop="25dp"
-                android:id="@+id/spend_hours"
+                android:id="@+id/spent_hours"
                 android:layout_below="@id/view1"
                 android:background="#00000000"/>
 
@@ -76,7 +77,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:layout_below="@id/spend_hours"
+                android:layout_below="@id/spent_hours"
                 android:id="@+id/view2"></View>
 
             <EditText
@@ -111,19 +112,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
-                    android:layout_marginLeft="20dp" />
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/high_radio"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2"
-                    android:layout_marginLeft="20dp" />
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/medium_radio"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3"
-                    android:layout_marginLeft="20dp" />
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/low_radio"/>
 
             </RadioGroup>
 
