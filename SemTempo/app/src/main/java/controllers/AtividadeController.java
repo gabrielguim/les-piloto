@@ -4,88 +4,70 @@ package controllers;
  * Created by Mafra on 21/11/2016.
  */
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import model.Atividade;
-import model.Horario;
-import model.Prioridade;
+import java.util.*;
+import model.*;
 
 /**
- * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios
+ * Classe que atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios.
  */
 public class AtividadeController {
 
     /**
-     * Filtra uma lista de atividades pela semana
-     *
-     * @param allActivities Lista a ser filtrada
-     * @param week    Semana pela qual será filtrada
-     * @return filteredActivities Um mapa que relaciona atividade e horas gastas levando em conta apenas aquela semana
-     * @author            João Mafra
+     * Um retorno apropriado para representar o que a função executa diz respeito a um mapa
+     * que relaciona as atividades com horas investidas nelas, levando em conta apenas a semana passada como parâmetro.
      */
-    public static Map<Atividade, Integer> filterActivitiesByWeekAndSpentHours(Collection<Atividade> allActivities, int week){
-        Map<Atividade, Integer> filteredActivities = new HashMap<>();
+    public static Map<Atividade, Integer> filtrarAtvsPorTempoInvestido(Collection<Atividade> atvsASeremFiltradas, int semanaEscolhida){
 
-        for (Atividade atividade: allActivities){
+        Map<Atividade, Integer> atvsFiltradas = new HashMap<>();
+
+        for (Atividade atividade: atvsASeremFiltradas){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
-                    if (filteredActivities.containsKey(atividade)){
-                        int actualTime = filteredActivities.get(atividade);
-                        filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
+                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
+                    if (atvsFiltradas.containsKey(atividade)){
+                        int actualTime = atvsFiltradas.get(atividade);
+                        atvsFiltradas.put(atividade, actualTime + horario.getTotalHorasInvestidas());
                     } else {
-                        filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
+                        atvsFiltradas.put(atividade, horario.getTotalHorasInvestidas());
                     }
                 }
             }
         }
 
-        return filteredActivities;
+        return atvsFiltradas;
     }
 
     /**
-     * Filtra uma lista de atividades pela semana
-     *
-     * @param allActivities Lista a ser filtrada
-     * @param week    Semana pela qual será filtrada
-     * @return filteredActivities Uma lista apenas com as atividades realizadas naquela semana
-     * @author            João Mafra
+     * Um retorno apropriado para representar o que a função executa diz respeito a uma coleção
+     * apenas com as atividades realizadas naquela semana.
      */
-    public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week){
-        Collection<Atividade> filteredActivities = new ArrayList<>();
+    public static Collection<Atividade> filtraAtvsPelaSemana(Collection<Atividade> atvsASeremFiltradas, int semanaEscolhida){
+        Collection<Atividade> atvsFiltradas = new ArrayList<>();
 
-        for (Atividade atividade: allActivities){
+        for (Atividade atividade: atvsASeremFiltradas){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
-                    filteredActivities.add(atividade);
+                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == semanaEscolhida){
+                    atvsFiltradas.add(atividade);
                     break;
                 }
             }
         }
-
-        return filteredActivities;
+        return atvsFiltradas;
     }
 
 
     /**
-     * Agrupa as atividades de acordo com sua prioridade
-     *
-     * @param allActivities Lista a ser filtrada
-     * @return filteredActivities Um mapa que relaciona a prioridade das atividades e horas gastas com cada prioridade
-     * @author            João Mafra
+     * Um retorno apropriado para representar o que a função executa diz respeito a um mapa
+     * que relaciona a prioridade da atividade com as horas investidas nelas.
      */
-    public static Map<Prioridade, Integer> groupByPriority(Collection<Atividade> allActivities){
+    public static Map<Prioridade, Integer> agrupaAtvsPorPrioridade(Collection<Atividade> atvsASeremFiltradas){
 
-        Map<Prioridade, Integer> filteredActivities = new HashMap<>();
+        Map<Prioridade, Integer> atvsFiltradas = new HashMap<>();
 
-        for (Atividade atividade: allActivities){
-            filteredActivities.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
+        for (Atividade atividade: atvsASeremFiltradas){
+            atvsFiltradas.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
         }
 
-        return filteredActivities;
+        return atvsFiltradas;
     }
 
 }
