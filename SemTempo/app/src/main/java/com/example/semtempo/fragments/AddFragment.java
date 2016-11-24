@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -30,9 +31,9 @@ public class AddFragment extends Fragment {
             "Belgium", "France", "Italy", "Germany", "Spain"
     };
 
-    private RadioButton high_priority;
-    private RadioButton medium_priority;
-    private RadioButton low_priority;
+    private ImageView high_priority;
+    private ImageView medium_priority;
+    private ImageView low_priority;
     private EditText spent_time;
     private EditText label_priority;
     private AutoCompleteTextView autoCompleteTextView;
@@ -53,9 +54,9 @@ public class AddFragment extends Fragment {
 
                 if(validateFields()) {
                     Prioridade priority;
-                    if (high_priority.isSelected()) {
+                    if (isSelected(high_priority)) {
                         priority = Prioridade.ALTA;
-                    } else if (medium_priority.isSelected()) {
+                    } else if (isSelected(medium_priority)) {
                         priority = Prioridade.MEDIA;
                     } else {
                         priority = Prioridade.BAIXA;
@@ -86,9 +87,37 @@ public class AddFragment extends Fragment {
         autoCompleteTextView.setThreshold(1);
         autoCompleteTextView.setAdapter(adapter);
 
-        high_priority = (RadioButton) rootView.findViewById(R.id.high_radio);
-        medium_priority = (RadioButton) rootView.findViewById(R.id.medium_radio);
-        low_priority = (RadioButton) rootView.findViewById(R.id.low_radio);
+        high_priority = (ImageView) rootView.findViewById(R.id.high_radio);
+        medium_priority = (ImageView) rootView.findViewById(R.id.medium_radio);
+        low_priority = (ImageView) rootView.findViewById(R.id.low_radio);
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.high_priority:
+                        high_priority.animate().scaleX(1.3f).scaleY(1.3f);
+                        medium_priority.animate().scaleX(1).scaleY(1);
+                        low_priority.animate().scaleX(1).scaleY(1);
+                        break;
+                    case R.id.medium_priority:
+                        high_priority.animate().scaleX(1).scaleY(1);
+                        medium_priority.animate().scaleX(1.3f).scaleY(1.3f);
+                        low_priority.animate().scaleX(1).scaleY(1);
+                        break;
+                    case R.id.low_priority:
+                        high_priority.animate().scaleX(1).scaleY(1);
+                        medium_priority.animate().scaleX(1).scaleY(1);
+                        low_priority.animate().scaleX(1.3f).scaleY(1.3f);
+                        break;
+                }
+            }
+        };
+
+        high_priority.setOnClickListener(listener);
+        medium_priority.setOnClickListener(listener);
+        low_priority.setOnClickListener(listener);
+
         label_priority = (EditText) rootView.findViewById(R.id.label_priority);
         label_priority.setEnabled(false);
 
@@ -101,7 +130,7 @@ public class AddFragment extends Fragment {
         boolean fields_ok = true;
         String err_msg = "";
 
-        if (!high_priority.isSelected() & !medium_priority.isSelected() & !low_priority.isSelected()){
+        if (!isSelected(high_priority) && !isSelected(medium_priority) && !isSelected(low_priority)){
             err_msg += "Selecione uma prioridade!";
             fields_ok = false;
 
@@ -124,6 +153,10 @@ public class AddFragment extends Fragment {
         }
 
         return fields_ok;
+    }
+
+    private boolean isSelected(ImageView priority){
+        return priority.getScaleX() == 1.3f;
     }
 
 }

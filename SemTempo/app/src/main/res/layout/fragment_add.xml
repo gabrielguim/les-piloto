@@ -108,40 +108,37 @@
                 android:layout_below="@id/view2"
                 android:background="#00000000"/>
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:hint="Tempo gasto"
-                android:inputType="numberDecimal"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:id="@+id/priority"
-                android:layout_below="@id/view2"
-                android:layout_toRightOf="@id/label_priority">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/label_priority"
+                android:layout_above="@id/view3"
+                android:layout_marginLeft="30dp">
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1"
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/high_radio"/>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/high_priority"
+                    android:tint="#f10714"/>
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2"
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/medium_radio"/>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/medium_priority"
+                    android:tint="#ffbf00"
+                    android:layout_marginLeft="30dp"/>
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3"
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/low_radio"/>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/low_priority"
+                    android:tint="#4169e1"
+                    android:layout_marginLeft="30dp"/>
 
-            </RadioGroup>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -150,8 +147,8 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:layout_below="@id/priority"
-                android:id="@+id/view3"></View>
+                android:id="@+id/view3"
+                android:layout_below="@id/label_priority"></View>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_fab"
