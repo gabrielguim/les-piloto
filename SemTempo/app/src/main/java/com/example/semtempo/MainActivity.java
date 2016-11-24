@@ -17,6 +17,13 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.database.FirebaseController;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -31,7 +38,6 @@ import com.squareup.picasso.Picasso;
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
 
-
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInAccount userInfo;
     private TextView email;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,7 +100,12 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
                     .resize(115, 115)
                     .into(photo);
+
+            FirebaseController.saveUser(result.getSignInAccount().getDisplayName());
         }
+
+
+
     }
 
     @Override
