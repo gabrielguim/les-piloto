@@ -1,5 +1,6 @@
 package com.example.semtempo.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -60,10 +61,21 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
+                    final ProgressDialog dialog = new ProgressDialog(getActivity());
+                    dialog.setMessage("Registrando atividade!");
+                    dialog.setCancelable(false);
+                    dialog.show();
+
                     Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), priority);
                     Calendar creation_date = new GregorianCalendar();
                     atividade.registrarNovoHorario(new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
                     Toast.makeText(getActivity(), atividade.toString(), Toast.LENGTH_SHORT).show();
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+                    fragmentTransaction.commit();
+
+
                 }
 
             }

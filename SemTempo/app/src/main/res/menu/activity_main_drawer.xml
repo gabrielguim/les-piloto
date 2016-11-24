@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_dashboard_black_24dp"
             android:title="Visão geral" />
         <item
             android:id="@+id/nav_report"
@@ -12,7 +12,7 @@
             android:title="Relatórios" />
         <item
             android:id="@+id/nav_rank"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_format_list_numbered_black_24dp"
             android:title="Ranking" />
         <item
             android:id="@+id/nav_history"
