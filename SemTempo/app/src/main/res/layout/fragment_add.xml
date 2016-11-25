@@ -1,0 +1,170 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.semtempo.fragments.AddFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:id="@+id/atv_photo"
+                android:gravity="bottom"
+                android:paddingBottom="15dp"
+                android:background="@color/colorPrimaryDark"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/name_atv_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/atv_photo"
+                android:layout_marginTop="40dp">
+
+                <AutoCompleteTextView
+                    android:hint="Nome da Atividade *"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_textsms_black_24dp"
+                    android:drawableTint="#c6000000"
+                    android:drawablePadding="20dp"
+                    android:id="@+id/name_atv"
+                    android:background="#00000000"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@id/name_atv_layout"
+                android:id="@+id/view1"></View>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/spent_hours_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name_atv_layout"
+                android:layout_marginTop="25dp">
+                <EditText
+                    android:hint="Tempo gasto *"
+                    android:layout_marginLeft="10dp"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_timer_black_24dp"
+                    android:drawablePadding="20dp"
+                    android:drawableTint="#c6000000"
+                    android:id="@+id/spent_hours"
+                    android:layout_below="@id/view1"
+                    android:background="#00000000"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@id/spent_hours_layout"
+                android:id="@+id/view2"></View>
+
+            <EditText
+                android:hint="Prioridade *"
+                android:layout_marginLeft="10dp"
+                android:inputType="numberDecimal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_priority_high_black_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="#c6000000"
+                android:layout_marginTop="28dp"
+                android:id="@+id/label_priority"
+                android:layout_below="@id/view2"
+                android:background="#00000000"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/view3"
+                android:layout_below="@id/label_priority"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/label_priority"
+                android:layout_above="@id/view3"
+                android:layout_marginLeft="30dp">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/high_priority"
+                    android:tint="#f10714"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/medium_priority"
+                    android:tint="#ffbf00"
+                    android:layout_marginLeft="30dp"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="?android:attr/textSelectHandleLeft"
+                    android:id="@+id/low_priority"
+                    android:tint="#4169e1"
+                    android:layout_marginLeft="30dp"/>
+
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                app:srcCompat="@drawable/ic_add_a_photo_white_24dp"
+                android:layout_marginBottom="46dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginEnd="7dp"
+                android:layout_above="@+id/view1"
+                android:layout_alignRight="@+id/view1"
+                android:layout_alignEnd="@+id/view1" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

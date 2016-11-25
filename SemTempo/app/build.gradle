@@ -32,4 +32,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
     apply plugin: 'com.google.gms.google-services'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'im.dacer:AndroidCharts:1.0.2'
+    compile 'com.txusballesteros:FitChart:1.0'
+
 }
