@@ -1,13 +1,17 @@
 package com.example.semtempo.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.RecentTasksAdapter;
@@ -25,6 +29,8 @@ public class SeeMoreFragment extends Fragment {
 
     private ListView allTasks;
     private View rootView;
+    private List<Atividade> atividades;
+    private Spinner sort_spinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,10 +39,59 @@ public class SeeMoreFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_see_more, container, false);
 
         setFab();
+        setUp();
+        setUpSpinner();
 
+        return rootView;
+    }
+
+    private void setFab(){
+        FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
+        addFab.setVisibility(View.INVISIBLE);
+    }
+
+    private void setUpSpinner(){
+
+        sort_spinner = (Spinner) rootView.findViewById(R.id.filter_spinner);
+
+        sort_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+
+                if (item.equals("Menor prioridade - Maior prioridade")){
+                    Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                } else if (item.equals("Menos horas - Mais horas")){
+                    Utils.sortByHours(atividades, 0, atividades.size()-1);
+                }
+
+                allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
+                Utils.setListViewHeightBasedOnChildren(allTasks);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        List<String> categories = new ArrayList<String>();
+        categories.add("Menos horas - Mais horas");
+        categories.add("Mais horas - Menos horas");
+        categories.add("Menor prioridade - Maior prioridade");
+        categories.add("Maior prioridade - Menor prioridade");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sort_spinner.setAdapter(dataAdapter);
+    }
+
+    private void setUp() {
         allTasks = (ListView) rootView.findViewById(R.id.all_tasks);
-        List<Atividade> atividades = new ArrayList<>();
-
         atividades = new ArrayList<>();
 
         Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
@@ -76,12 +131,6 @@ public class SeeMoreFragment extends Fragment {
         allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
         Utils.setListViewHeightBasedOnChildren(allTasks);
 
-        return rootView;
-    }
-
-    private void setFab(){
-        FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
-        addFab.setVisibility(View.INVISIBLE);
     }
 
 

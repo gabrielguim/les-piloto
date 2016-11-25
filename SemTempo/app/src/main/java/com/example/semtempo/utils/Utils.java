@@ -5,6 +5,11 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.Collections;
+import java.util.List;
+
+import model.Atividade;
+
 /**
  * Created by Gabriel on 24/11/2016.
  */
@@ -32,6 +37,14 @@ public class Utils {
         listView.setLayoutParams(params);
         listView.requestLayout();
 
+    }
+
+    public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
+        Collections.reverse(atividades);
+    }
+
+    public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
+        Collections.reverse(atividades);
     }
 
 }
