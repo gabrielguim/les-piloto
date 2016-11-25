@@ -79,6 +79,9 @@ public class Atividade {
         return horariosRealizDaAtv.remove(horarioEscolhido);
     }
 
+    /**
+     * Calcula o total de hora de todos os horários cadastrados em uma determinada atividade.
+     * */
     public int calcularTotalDeHorasInvestidas(){
         int total = 0;
         for (Horario horario: retornarHorariosRealizDaAtv()){
@@ -88,5 +91,12 @@ public class Atividade {
         return total;
     }
 
+    /** Esse método se faz necessário para o processo de ordenação, tendo em vista que o sistema não
+     * tem como supor, por exemplo, que a prioridade ALTA deve vir primeiro que Média, que por sua vez
+     * deve vir primeiro que BAIXA.
+     * */
+    public int retornarPesoDaPrioridade(){
+        return retornarPrioridade().retornarPeso();
+    }
 
 }
