@@ -26,10 +26,14 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
     compile 'com.google.android.gms:play-services-auth:9.8.0'
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.firebase:firebase-client-android:2.5.1+'
     compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
+    compile 'im.dacer:AndroidCharts:1.0.2'
+    compile 'com.txusballesteros:FitChart:1.0'
+
     apply plugin: 'com.google.gms.google-services'
 }
