@@ -10,18 +10,30 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.RecentTasksAdapter;
 import com.example.semtempo.adapters.SubtitlesAdapter;
+import com.example.semtempo.utils.Utils;
 import com.txusballesteros.widgets.FitChart;
 import com.txusballesteros.widgets.FitChartValue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import controllers.AtividadeController;
 import model.Atividade;
+import model.Horario;
 import model.Prioridade;
 
 public class HomeFragment extends Fragment {
@@ -30,6 +42,10 @@ public class HomeFragment extends Fragment {
     private View rootView;
     private ListView subtitles;
     private ListView recentTasks;
+    private TextView seeMore;
+    private List<Atividade> atividades;
+    private Map<Atividade, Integer> atividadesDaSemana;
+    private String[] chartColors = {"#7B68EE", "#4B0082", "#000080", "#4169E1", "#4682B4", "#DB7093", "#CD5C5C", "#00CED1", "#FA8072", "#3CB371", "#FF8C00", "#F4A460", };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +53,23 @@ public class HomeFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        seeMore = (TextView) rootView.findViewById(R.id.see_more);
+
+        seeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SeeMoreFragment fragment = new SeeMoreFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+        setUp();
         setFab();
-        plotChart();
+        if (atividadesDaSemana != null)
+            plotChart();
         loadRecentTasks();
 
         return rootView;
@@ -47,6 +78,7 @@ public class HomeFragment extends Fragment {
     private void setFab(){
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(ADD_ICON);
+        addFab.setVisibility(View.VISIBLE);
 
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,64 +94,117 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-
-        if (listAdapter == null) {
-            return;
-        }
-
-        int totalHeight = 0;
-
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
-
     private void loadRecentTasks(){
         recentTasks = (ListView) rootView.findViewById(R.id.recent_tasks);
-        List<Atividade> atividades = new ArrayList<>();
+        List<Atividade> atividades_recentes= new ArrayList<>();
 
-        atividades.add(new Atividade("Jogar bola na UFCG", Prioridade.ALTA));
-        atividades.add(new Atividade("Fazer cocô", Prioridade.BAIXA));
-        atividades.add(new Atividade("Quebrar o dente", Prioridade.MEDIA));
-        atividades.add(new Atividade("Pular da janela", Prioridade.ALTA));
+        int i = 0;
+        while (i < 5){
+            atividades_recentes.add(atividades.get(i));
+            i++;
+        }
 
-        recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
-        setListViewHeightBasedOnChildren(recentTasks);
+        recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
+        Utils.setListViewHeightBasedOnChildren(recentTasks);
 
     }
 
     private void plotChart(){
         subtitles = (ListView) rootView.findViewById(R.id.subtitles);
-        int[] colors = { Color.RED, Color.GREEN, Color.BLUE, Color.BLACK};
-        String[] valores = {"Jogar Bola na UFCGd 12d1 asdasd asd", "Peidard1 2da sd d12 1 ", "Fuasdsad 12d 12mar", "Cagar"};
-        float[] perc = {30f, 20f, 15f, 10f};
         TextView perc_text =(TextView) rootView.findViewById(R.id.text_perc);
+
+        List<Integer> colors = new ArrayList<>();
+        List<String> valores = new ArrayList<>();
+        List<Float> perc = new ArrayList<>();
+        float totalHours = 0;
+
+        int index_values = 0;
+
+        for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
+            valores.add(entry.getKey().getNomeDaAtv());
+            totalHours += entry.getValue();
+            colors.add(Color.parseColor(chartColors[index_values]));
+            index_values++;
+        }
+
+        for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
+            perc.add((entry.getValue()/totalHours)*100f);
+        }
 
         subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, colors, perc, perc_text, rootView));
         subtitles.setDivider(null);
-        setListViewHeightBasedOnChildren(subtitles);
+        Utils.setListViewHeightBasedOnChildren(subtitles);
 
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
+
         fitChart.setMaxValue(100f);
 
         Collection<FitChartValue> values = new ArrayList<>();
-        values.add(new FitChartValue(30f, Color.RED));
-        values.add(new FitChartValue(20f, Color.GREEN));
-        values.add(new FitChartValue(15f, Color.BLUE));
-        values.add(new FitChartValue(10f, Color.BLACK));
+
+        for (int i = 0; i < valores.size(); i++) {
+            values.add(new FitChartValue(perc.get(i), colors.get(i)));
+        }
 
         fitChart.setValues(values);
+    }
+
+    private void setUp(){
+
+        atividades = new ArrayList<>();
+
+        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
+        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+
+        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
+        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
+
+        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
+        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+
+        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
+        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
+
+        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
+        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
+
+        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
+        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+
+        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
+        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+
+        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
+        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+
+        atividades.add(atv1);
+        atividades.add(atv2);
+        atividades.add(atv3);
+        atividades.add(atv4);
+        atividades.add(atv5);
+        atividades.add(atv6);
+        atividades.add(atv7);
+        atividades.add(atv8);
+
+        setUpWeek();
+
+    }
+
+    private void setUpWeek(){
+
+        atividadesDaSemana = new HashMap<>();
+
+        Calendar cal = Calendar.getInstance();
+        GregorianCalendar date = new GregorianCalendar();
+        int month = date.get(GregorianCalendar.MONTH);
+        int day = date.get(GregorianCalendar.DAY_OF_MONTH);
+        int year = date.get(GregorianCalendar.YEAR);
+
+        cal.set(year, month, day);
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+        atividadesDaSemana = AtividadeController.filterActivitiesByWeekAndSpentHours(atividades, week);
     }
 
 }

@@ -108,6 +108,16 @@
                 android:layout_below="@id/view2"
                 android:background="#00000000"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/view3"
+                android:layout_below="@id/label_priority"></View>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -139,16 +149,6 @@
                     android:layout_marginLeft="30dp"/>
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:id="@+id/view3"
-                android:layout_below="@id/label_priority"></View>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_fab"

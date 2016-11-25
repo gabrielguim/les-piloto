@@ -2,7 +2,6 @@ package com.example.semtempo.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,14 +14,13 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import model.Atividade;
 import model.Horario;
 import model.Prioridade;
 
-public class RecentTasksAdapter extends BaseAdapter{
+public class AllTasksAdapter extends BaseAdapter{
 
     private List<Atividade> atividades;
     private View rootView;
@@ -30,7 +28,7 @@ public class RecentTasksAdapter extends BaseAdapter{
 
     private static LayoutInflater inflater = null;
 
-    public RecentTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
+    public AllTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
 
         this.rootView = rootView;
         this.atividades = atividades;
@@ -56,8 +54,8 @@ public class RecentTasksAdapter extends BaseAdapter{
 
     public class Holder {
         TextView task_name;
-        TextView task_date;
         TextView task_time;
+        TextView task_date;
         ImageView task_prority;
     }
 

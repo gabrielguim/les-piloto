@@ -7,7 +7,9 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import model.Atividade;
@@ -32,7 +34,7 @@ public class AtividadeController {
 
         for (Atividade atividade: allActivities){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
+                if (getWeek(horario) == week){
                     if (filteredActivities.containsKey(atividade)){
                         int actualTime = filteredActivities.get(atividade);
                         filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
@@ -44,6 +46,21 @@ public class AtividadeController {
         }
 
         return filteredActivities;
+    }
+
+    private static int getWeek(Horario horario){
+
+        GregorianCalendar date = (GregorianCalendar) horario.getDataQueRealizou();
+        Calendar cal = Calendar.getInstance();
+
+        int month = date.get(GregorianCalendar.MONTH);
+        int day = date.get(GregorianCalendar.DAY_OF_MONTH);
+        int year = date.get(GregorianCalendar.YEAR);
+
+        cal.set(year, month, day);
+        int taskWeek = cal.get(Calendar.WEEK_OF_YEAR);
+
+        return taskWeek;
     }
 
     /**
@@ -59,7 +76,7 @@ public class AtividadeController {
 
         for (Atividade atividade: allActivities){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
+                if (getWeek(horario) == week){
                     filteredActivities.add(atividade);
                     break;
                 }

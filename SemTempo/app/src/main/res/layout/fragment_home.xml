@@ -18,7 +18,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:text="Visão geral"
+                android:text="Visão semanal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -29,7 +29,7 @@
             <com.txusballesteros.widgets.FitChart
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                app:strokeSize="30dp"
+                app:strokeSize="25dp"
                 android:id="@+id/fitChart"
                 app:animationMode="overdraw"
                 android:layout_centerHorizontal="true"
@@ -81,6 +81,19 @@
                 android:layout_below="@id/recent_title"
                 android:textAlignment="center"
                 android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:text="Visualizar mais..."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:id="@+id/see_more"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="50dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_below="@id/recent_tasks"/>
 
         </RelativeLayout>
 

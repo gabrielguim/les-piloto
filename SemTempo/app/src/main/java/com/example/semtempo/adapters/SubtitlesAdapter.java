@@ -13,16 +13,18 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
+import java.util.List;
+
 public class SubtitlesAdapter extends BaseAdapter{
 
-    private String[] valores;
-    private int[] colors;
-    private float[] perc;
+    private List<String> valores;
+    private List<Integer> colors;
+    private List<Float> perc;
     private TextView perc_text;
     private View rootView;
 
     private static LayoutInflater inflater = null;
-    public SubtitlesAdapter(Context context, String[] valores, int[] colors, float[] perc, TextView perc_text, View rootView) {
+    public SubtitlesAdapter(Context context, List<String> valores, List<Integer> colors, List<Float> perc, TextView perc_text, View rootView) {
 
         this.valores = valores;
         this.colors = colors;
@@ -35,7 +37,7 @@ public class SubtitlesAdapter extends BaseAdapter{
     }
     @Override
     public int getCount() {
-        return valores.length;
+        return valores.size();
     }
 
     @Override
@@ -64,8 +66,8 @@ public class SubtitlesAdapter extends BaseAdapter{
         holder.subtitle_text = (TextView) rowView.findViewById(R.id.subtitle_text);
         holder.subtitle_color = (ImageView) rowView.findViewById(R.id.subtitle_color);
 
-        holder.subtitle_text.setText(valores[position]);
-        holder.subtitle_color.setColorFilter(colors[position]);
+        holder.subtitle_text.setText(valores.get(position));
+        holder.subtitle_color.setColorFilter(colors.get(position));
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,8 +77,8 @@ public class SubtitlesAdapter extends BaseAdapter{
                 rootView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        perc_text.setText(Math.round(perc[position]) + "%");
-                        perc_text.setTextColor(colors[position]);
+                        perc_text.setText(Math.round(perc.get(position)) + "%");
+                        perc_text.setTextColor(colors.get(position));
                         perc_text.animate().scaleX(1).scaleY(1).start();
                     }
                 }, 200);

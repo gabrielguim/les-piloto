@@ -47,6 +47,7 @@ public class AddFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
+        addFab.setVisibility(View.VISIBLE);
 
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +77,7 @@ public class AddFragment extends Fragment {
                     fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
                     fragmentTransaction.commit();
 
+                    dialog.dismiss();
 
                 }
 
@@ -87,28 +89,31 @@ public class AddFragment extends Fragment {
         autoCompleteTextView.setThreshold(1);
         autoCompleteTextView.setAdapter(adapter);
 
-        high_priority = (ImageView) rootView.findViewById(R.id.high_radio);
-        medium_priority = (ImageView) rootView.findViewById(R.id.medium_radio);
-        low_priority = (ImageView) rootView.findViewById(R.id.low_radio);
+        high_priority = (ImageView) rootView.findViewById(R.id.high_priority);
+        medium_priority = (ImageView) rootView.findViewById(R.id.medium_priority);
+        low_priority = (ImageView) rootView.findViewById(R.id.low_priority);
+        high_priority.animate().rotation(180);
+        medium_priority.animate().rotation(180);
+        low_priority.animate().rotation(180);
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.high_priority:
-                        high_priority.animate().scaleX(1.3f).scaleY(1.3f);
-                        medium_priority.animate().scaleX(1).scaleY(1);
-                        low_priority.animate().scaleX(1).scaleY(1);
+                        high_priority.animate().scaleX(1.3f).scaleY(1.3f).rotation(360).setDuration(200);
+                        medium_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
+                        low_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
                         break;
                     case R.id.medium_priority:
-                        high_priority.animate().scaleX(1).scaleY(1);
-                        medium_priority.animate().scaleX(1.3f).scaleY(1.3f);
-                        low_priority.animate().scaleX(1).scaleY(1);
+                        high_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
+                        medium_priority.animate().scaleX(1.3f).scaleY(1.3f).rotation(360).setDuration(200);
+                        low_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
                         break;
                     case R.id.low_priority:
-                        high_priority.animate().scaleX(1).scaleY(1);
-                        medium_priority.animate().scaleX(1).scaleY(1);
-                        low_priority.animate().scaleX(1.3f).scaleY(1.3f);
+                        high_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
+                        medium_priority.animate().scaleX(1).scaleY(1).rotation(180).setDuration(200);
+                        low_priority.animate().scaleX(1.3f).scaleY(1.3f).rotation(360).setDuration(200);
                         break;
                 }
             }

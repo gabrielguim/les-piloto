@@ -25,6 +25,7 @@ public class ReportFragment extends Fragment {
     private void setFab(){
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(ADD_ICON);
+        addFab.setVisibility(View.VISIBLE);
 
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
