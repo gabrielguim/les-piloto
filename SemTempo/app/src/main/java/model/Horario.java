@@ -1,11 +1,7 @@
 package model;
 
 import java.util.Calendar;
-import java.util.Date;
 
-/**
- * Created by Lucas on 20/11/2016.
- */
 public class Horario {
 
     private int totalHorasInvestidas;

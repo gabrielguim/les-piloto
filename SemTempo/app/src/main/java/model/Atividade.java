@@ -1,11 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
-/**
- * Created by Lucas on 20/11/2016.
- */
 public class Atividade {
 
     private String nomeDaAtv;
@@ -19,7 +15,7 @@ public class Atividade {
         this.fotoDaAtv = fotoDaAtv;
         this.categoriaDaAtv = categoriaDaAtv;
         this.prioridadeDaAtv = prioridadeDaAtv;
-        this.horariosRealizDaAtv = new ArrayList<Horario>();
+        this.horariosRealizDaAtv = new ArrayList<>();
     }
 
     /** Construtor adequado para o caso do usuário
@@ -28,7 +24,7 @@ public class Atividade {
     public Atividade(String nomeDaAtv, Prioridade prioridadeDaAtv){
         this.nomeDaAtv = nomeDaAtv;
         this.prioridadeDaAtv = prioridadeDaAtv;
-        this.horariosRealizDaAtv = new ArrayList<Horario>();
+        this.horariosRealizDaAtv = new ArrayList<>();
     }
 
     public Foto retornarFoto() {

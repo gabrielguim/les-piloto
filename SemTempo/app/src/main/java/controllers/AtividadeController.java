@@ -1,16 +1,12 @@
 package controllers;
 
-/**
- * Created by Mafra on 21/11/2016.
- */
-
 import java.util.*;
 import model.*;
 
 /**
  * Classe que atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios.
  */
-public class AtividadeController {
+class AtividadeController {
 
     /**
      * Um retorno apropriado para representar o que a função executa diz respeito a um mapa
