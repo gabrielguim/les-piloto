@@ -14,11 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.example.semtempo.fragments.AddFragment;
-import com.example.semtempo.fragments.HomeFragment;
-import com.example.semtempo.fragments.ReportFragment;
 import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +35,12 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
+
+import android.widget.Toast;
+
+import com.example.semtempo.fragments.AddFragment;
+import com.example.semtempo.fragments.HomeFragment;
+import com.example.semtempo.fragments.ReportFragment;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        //initUserInfor(navigationView);
+        initUserInfor(navigationView);
 
     }
 
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
                     .resize(115, 115)
                     .into(photo);
+
+            FirebaseController.saveUser(result.getSignInAccount().getDisplayName());
         }
 
 
@@ -174,6 +177,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_history) {
             fragment = new HomeFragment();
+
         } else if (id == R.id.nav_share) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
@@ -187,9 +191,7 @@ public class MainActivity extends AppCompatActivity
             finish();
         } else if (id == R.id.nav_pref) {
 
-
         }
-
 
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();

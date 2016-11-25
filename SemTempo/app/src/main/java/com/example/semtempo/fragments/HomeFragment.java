@@ -31,10 +31,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import controllers.AtividadeController;
-import model.Atividade;
-import model.Horario;
-import model.Prioridade;
+import com.example.semtempo.controllers.AtividadeController;
+import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.controllers.model.Horario;
+import com.example.semtempo.controllers.model.Prioridade;
 
 public class HomeFragment extends Fragment {
 

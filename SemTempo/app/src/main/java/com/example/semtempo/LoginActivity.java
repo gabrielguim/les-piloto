@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
 
-import com.example.semtempo.database.FirebaseController;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -120,9 +119,6 @@ public class LoginActivity extends AppCompatActivity implements
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            System.out.println("Logado como " + result.getSignInAccount().getEmail());
-            System.out.println("Salvando no BD...");
-            FirebaseController.saveUser(result.getSignInAccount().getDisplayName());
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
@@ -234,4 +230,3 @@ public class LoginActivity extends AppCompatActivity implements
 
     }
 }
-

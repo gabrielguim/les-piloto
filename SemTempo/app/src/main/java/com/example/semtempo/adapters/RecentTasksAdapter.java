@@ -18,9 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import model.Atividade;
-import model.Horario;
-import model.Prioridade;
+import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.controllers.model.Horario;
+import com.example.semtempo.controllers.model.Prioridade;
 
 public class RecentTasksAdapter extends BaseAdapter{
 

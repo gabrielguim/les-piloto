@@ -23,6 +23,11 @@
     <item android:title="Configurações">
         <menu>
             <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Logout" />
+
+            <item
                 android:id="@+id/nav_pref"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Preferências" />

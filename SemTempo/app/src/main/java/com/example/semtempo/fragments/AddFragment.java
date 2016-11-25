@@ -25,9 +25,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import model.Atividade;
-import model.Horario;
-import model.Prioridade;
+import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.controllers.model.Horario;
+import com.example.semtempo.controllers.model.Prioridade;
 
 public class AddFragment extends Fragment {
 
