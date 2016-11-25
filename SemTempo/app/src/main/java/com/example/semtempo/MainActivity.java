@@ -1,5 +1,6 @@
 package com.example.semtempo;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Prioridade;
 import com.example.semtempo.database.FirebaseController;
@@ -42,11 +44,12 @@ import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.HomeFragment;
 import com.example.semtempo.fragments.ReportFragment;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    private GoogleSignInAccount userInfo;
     private TextView email;
     private ImageView photo;
     private TextView name;
@@ -126,12 +129,19 @@ public class MainActivity extends AppCompatActivity
                     .resize(115, 115)
                     .into(photo);
 
-            FirebaseController.saveUser(result.getSignInAccount().getDisplayName());
+            GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
+
+            System.out.println("Logado como " + currentUser.getEmail());
+
+            FirebaseController.saveUser(currentUser.getDisplayName());
+
         }
-
-
-
     }
+
+
+
+
+
 
     @Override
     public void onBackPressed() {

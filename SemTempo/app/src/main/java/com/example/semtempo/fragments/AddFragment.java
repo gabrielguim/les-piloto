@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.RecentTasksAdapter;
+import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.database.FirebaseController;
 import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
@@ -73,6 +75,11 @@ public class AddFragment extends Fragment {
                     Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), priority);
                     Calendar creation_date = new GregorianCalendar();
                     atividade.registrarNovoHorario(new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
+
+                    List<Atividade> lista = new ArrayList<Atividade>();
+                    lista.add(atividade);
+
+                    FirebaseController.getFirebase().child(UsuarioController.getInstance().getCurrentUser().getDisplayName()).setValue(lista);
 
                     showProgressDialog();
 

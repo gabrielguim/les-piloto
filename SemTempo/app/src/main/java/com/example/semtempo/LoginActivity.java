@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
 
+import com.example.semtempo.controllers.UsuarioController;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -121,6 +122,8 @@ public class LoginActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+            UsuarioController.getInstance().setCurrentUser(acct);
+            System.out.println("Usuario atual eh: " + UsuarioController.getInstance().getCurrentUser().getDisplayName());
             mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             updateUI(true);
             Intent intent = new Intent(this, MainActivity.class);
