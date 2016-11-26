@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity
             System.out.println("Logado como " + currentUser.getEmail());
 
             FirebaseController.saveUser(currentUser.getDisplayName());
+            FirebaseController.retrieveActivities(currentUser.getDisplayName());
 
         }
     }

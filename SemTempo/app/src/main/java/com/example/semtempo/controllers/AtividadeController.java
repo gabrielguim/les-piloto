@@ -30,6 +30,8 @@ public class AtividadeController {
     public static Map<Atividade, Integer> filterActivitiesByWeekAndSpentHours(Collection<Atividade> allActivities, int week){
         Map<Atividade, Integer> filteredActivities = new HashMap<>();
 
+
+
         for (Atividade atividade: allActivities){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
                 if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
