@@ -8,7 +8,7 @@ import android.widget.ListView;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.model.Atividade;
 
 /**
  * Created by Gabriel on 24/11/2016.

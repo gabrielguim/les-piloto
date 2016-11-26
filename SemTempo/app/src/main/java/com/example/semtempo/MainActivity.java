@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.FirebaseController;
+import com.example.semtempo.controllers.FirebaseController;
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

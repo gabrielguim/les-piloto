@@ -1,8 +1,8 @@
-package com.example.semtempo.database;
+package com.example.semtempo.controllers;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 import com.firebase.client.Firebase;
 
 import java.util.ArrayList;

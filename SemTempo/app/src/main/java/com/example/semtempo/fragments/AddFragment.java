@@ -16,16 +16,16 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.FirebaseController;
+import com.example.semtempo.controllers.FirebaseController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 public class AddFragment extends Fragment {
 

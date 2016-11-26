@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.semtempo.controllers.AtividadeController;
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 public class HomeFragment extends Fragment {
 
