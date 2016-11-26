@@ -12,6 +12,7 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,44 +70,41 @@ public class FirebaseController {
         atividadesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                final String title = (String) dataSnapshot.child("nomeDaAtv").getValue();
-                String description = (String) dataSnapshot.child("prioridade").getValue();
-                String id = (String) dataSnapshot.child("id").getValue();
-                System.out.println(title);
-                System.out.println(description);
+                Map<String, Object> message = (Map<String, Object>)dataSnapshot.getValue();
+                String nome = (String) message.get("nomeDaAtv");
+                String prioridade = (String) message.get("prioridade");
+                GenericTypeIndicator<List<Atividade>> t = new GenericTypeIndicator<List<Atividade>>() {};
+                List<Object> yourStringArray = (List<Object>) message.get("horariosRealizDaAtv");
 
-                Atividade atv = new Atividade(title, Prioridade.ALTA);
-                lista.add(atv);
+                Atividade atividade = new Atividade(nome, convertePrioridade(prioridade));
 
-                Firebase horariosRef = atividadesRef.child(id).child("horarios");
+                List<Horario> horarios_da_atividade = new ArrayList<Horario>();
 
-                horariosRef.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot snapHoras, String s) {
-                        Long horasGastas = (Long) snapHoras.child("totalHorasInvestidas").getValue();
-                        System.out.println("HORARIO " + title + " HORAS INVESTIDAS: " + horasGastas);
+                if (yourStringArray != null){
+                    for (int i = 0; i < yourStringArray.size(); i++){
+                        Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
+                        Integer totalDeHorasInvestidas = (int) (long) horarios.get("totalHorasInvestidas");
+                        Integer semanaDoAno = (int) (long) horarios.get("semana");
+                        Horario horario = new Horario(totalDeHorasInvestidas, semanaDoAno);
+                        horarios_da_atividade.add(horario);
                     }
+                }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                atividade.setListaHorarios(horarios_da_atividade);
+                lista.add(atividade);
 
-                    }
+                System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
+                System.out.println("NOME DA ATIVIDADE " + atividade.getNomeDaAtv());
+                System.out.println("PRIORIDADE = " + atividade.getPrioridade());
+                System.out.println("IMPRIMINDO HORARIOS DESSA ATIVIDADE");
+                System.out.println("-----------------------------------");
+                for (Horario horario: atividade.getHorariosRealizDaAtv()){
+                    System.out.println("SEMANA DO ANO: " + horario.getSemana());
+                    System.out.println("TEMPO GASTO: " + horario.getTotalHorasInvestidas());
+                }
+                System.out.println("-----------------------------------");
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                });
 
 
             }
@@ -151,6 +149,17 @@ public class FirebaseController {
 
     public static void cleanUserDate(String user){
         getFirebase().child(user).removeValue();
+    }
+
+    private static Prioridade convertePrioridade(String prioridade){
+        System.out.println(prioridade);
+        if (prioridade.equals("ALTA")){
+            return Prioridade.ALTA;
+        } else if (prioridade.equals("MEDIA")){
+            return Prioridade.MEDIA;
+        } else {
+            return Prioridade.BAIXA;
+        }
     }
 
 }

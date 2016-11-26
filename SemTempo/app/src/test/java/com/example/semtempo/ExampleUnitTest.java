@@ -1,6 +1,13 @@
 package com.example.semtempo;
 
+import com.example.semtempo.controllers.model.Atividade;
+
 import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -12,6 +19,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+
+
     }
 }

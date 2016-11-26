@@ -2,6 +2,7 @@ package com.example.semtempo.controllers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Lucas on 20/11/2016.
@@ -10,7 +11,7 @@ public class Atividade {
 
     private String nomeDaAtv;
     private Foto fotoDaAtividade;
-    private Collection<Horario> horariosRealizDaAtv;
+    private List<Horario> horariosRealizDaAtv;
     private Tag categoria;
     private Prioridade prioridade;
     private String id;
@@ -45,8 +46,12 @@ public class Atividade {
         this.fotoDaAtividade = fotoDaAtividade;
     }
 
-    public Collection<Horario> getHorariosRealizDaAtv() {
+    public List<Horario> getHorariosRealizDaAtv() {
         return horariosRealizDaAtv;
+    }
+
+    public void setListaHorarios(List<Horario> lista){
+        this.horariosRealizDaAtv = lista;
     }
 
     public Tag getCategoria() {

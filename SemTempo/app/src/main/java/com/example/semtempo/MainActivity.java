@@ -146,9 +146,13 @@ public class MainActivity extends AppCompatActivity
 
             Horario horario3 = new Horario(4, new GregorianCalendar());
 
+            a.registrarNovoHorario(horario);
+            a.registrarNovoHorario(horario2);
+            b.registrarNovoHorario(horario3);
+
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
-//
+
 //
 //            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
 //            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
