@@ -26,8 +26,9 @@ public class FirebaseController {
     }
 
     public static void saveUser(String user){
-        Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
-        Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
+        Horario horarioAux = new Horario(3, new GregorianCalendar());
+        Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horarioAux);
+        Atividade b = new Atividade("Estudar", Prioridade.BAIXA, horarioAux);
         List<Atividade> atv = new ArrayList<>();
         a.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
         atv.add(a);

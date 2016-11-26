@@ -146,30 +146,31 @@ public class HomeFragment extends Fragment {
     private void setUp(){
 
         atividades = new ArrayList<>();
+        Horario horario = new Horario(4, new GregorianCalendar());
 
-        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
+        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA, horario);
         atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
 
-        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
+        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA, horario);
         atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
 
-        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
+        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA, horario);
         atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
 
-        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
+        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA, horario);
         atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
         atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
 
-        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
+        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA, horario);
         atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
 
-        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
+        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA, horario);
         atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
 
-        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
+        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA, horario);
         atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
 
-        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
+        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA, horario);
         atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
 
         atividades.add(atv1);
