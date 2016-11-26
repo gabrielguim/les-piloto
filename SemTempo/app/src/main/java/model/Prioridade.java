@@ -10,7 +10,7 @@ public enum Prioridade {
             this.peso = peso;
     }
 
-    public int retornarPeso() {
+    public int getPeso() {
             return peso;
     }
 

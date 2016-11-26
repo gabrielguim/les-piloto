@@ -2,17 +2,17 @@ package model;
 
 public class Foto {
 
-    private String IDFoto;
+    private String idFoto;
 
-    public Foto(String IDFoto){
-        this.IDFoto = IDFoto;
+    public Foto(String idFoto){
+        this.idFoto = idFoto;
     }
 
-    public String retornarID() {
-        return IDFoto;
+    public String getIdFoto() {
+        return idFoto;
     }
 
-    public void alterarID(String novoID) {
-        this.IDFoto = novoID;
+    public void setIdFoto(String idFoto) {
+        this.idFoto = idFoto;
     }
 }
