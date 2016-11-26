@@ -13,6 +13,7 @@ public class Atividade {
     private Collection<Horario> horariosRealizDaAtv;
     private Tag categoria;
     private Prioridade prioridade;
+    private String id;
 
     public Atividade(String nomeDaAtv, Prioridade prioridade){
         this.nomeDaAtv = nomeDaAtv;
@@ -26,6 +27,14 @@ public class Atividade {
         this.categoria = categoria;
         this.prioridade = prioridade;
         this.horariosRealizDaAtv = new ArrayList<Horario>();
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 
     public Foto getFotoDaAtividade() {

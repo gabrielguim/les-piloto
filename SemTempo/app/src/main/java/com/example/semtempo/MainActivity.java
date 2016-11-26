@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
 import com.example.semtempo.database.FirebaseController;
 import com.firebase.client.DataSnapshot;
@@ -44,6 +45,8 @@ import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.HomeFragment;
 import com.example.semtempo.fragments.ReportFragment;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -133,8 +136,27 @@ public class MainActivity extends AppCompatActivity
 
             System.out.println("Logado como " + currentUser.getEmail());
 
-            FirebaseController.saveUser(currentUser.getDisplayName());
-            FirebaseController.retrieveActivities(currentUser.getDisplayName());
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
+            Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
+            List<Atividade> atv = new ArrayList<>();
+
+            Horario horario = new Horario(2, new GregorianCalendar());
+
+            Horario horario2 = new Horario(3, new GregorianCalendar());
+
+            Horario horario3 = new Horario(4, new GregorianCalendar());
+
+//            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
+//            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
+//
+//
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
+//
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
+
+            List<Atividade> lista = FirebaseController.retrieveActivities(currentUser.getDisplayName());
+            System.out.println(lista);
 
         }
     }
