@@ -1,8 +1,9 @@
 package com.example.semtempo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,35 +13,124 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.database.FirebaseController;
+import com.firebase.client.Firebase;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.squareup.picasso.Picasso;
+
+import com.example.semtempo.fragments.AddFragment;
+import com.example.semtempo.fragments.HomeFragment;
+import com.example.semtempo.fragments.ReportFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
+
+    private GoogleApiClient mGoogleApiClient;
+    private TextView email;
+    private ImageView photo;
+    private TextView name;
+
+    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
+    private NavigationView navigationView = null;
+    private Toolbar toolbar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        HomeFragment fragment = new HomeFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+        fragmentTransaction.commit();
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.add_fab);
+        addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                AddFragment fragment = new AddFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+
             }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
+
+        initUserInfor(navigationView);
+
     }
+
+    private void initUserInfor(NavigationView navigationView ) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+
+        if (opr.isDone()) {
+            GoogleSignInResult result = opr.get();
+            View header = navigationView.getHeaderView(0);
+            photo = (ImageView)header.findViewById(R.id.imageView);
+            email = (TextView)header.findViewById(R.id.textView);
+            name = (TextView)header.findViewById(R.id.nameUserView);
+
+            System.out.println(result.getSignInAccount().getEmail());
+            email.setText(result.getSignInAccount().getEmail());
+            System.out.println(result.getSignInAccount().getDisplayName());
+            name.setText(result.getSignInAccount().getDisplayName());
+            photo.setImageURI(result.getSignInAccount().getPhotoUrl());
+            Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
+                    .resize(115, 115)
+                    .into(photo);
+
+            GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
+
+            System.out.println("Logado como " + currentUser.getEmail());
+
+            FirebaseController.saveUser(currentUser.getDisplayName());
+
+        }
+    }
+
+
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -54,19 +144,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -77,25 +162,55 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_home) {
+            fragment = new HomeFragment();
+            callFragment(fragment);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_report) {
+            fragment = new ReportFragment();
+            callFragment(fragment);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_rank) {
+            fragment = new HomeFragment();
+            callFragment(fragment);
+
+        } else if (id == R.id.nav_history) {
+            fragment = new HomeFragment();
+            callFragment(fragment);
 
         } else if (id == R.id.nav_share) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
 
-        } else if (id == R.id.nav_send) {
+                        }
+                    });
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_pref) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void callFragment(Fragment fragment){
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        //Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 }

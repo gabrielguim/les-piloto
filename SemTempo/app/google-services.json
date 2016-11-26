@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "86446643310",
+    "firebase_url": "https://sem-tempo.firebaseio.com",
+    "project_id": "sem-tempo",
+    "storage_bucket": "sem-tempo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86446643310:android:89f2498b2929ecd7",
+        "android_client_info": {
+          "package_name": "com.example.semtempo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86446643310-csc4u17hs3hn99kjt5dtq2ahh914du1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnzh5pyu6NPOJTFvnKB_GeANXB9PHsMSc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

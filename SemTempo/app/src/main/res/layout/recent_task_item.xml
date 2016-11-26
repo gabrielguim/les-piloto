@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_margin="10dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="?android:attr/textSelectHandleLeft"
+        android:id="@+id/task_priority"
+        android:tint="@color/colorAccent"/>
+
+    <TextView
+        android:text="{{ nome da atividade }}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_name"
+        android:layout_toRightOf="@id/task_priority"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:text="{{ horas gastas }}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_time"
+        android:textSize="12sp"
+        android:layout_toRightOf="@id/task_name"
+        android:gravity="end"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:text="{{ data de att }}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_date"
+        android:textSize="10sp"
+        android:layout_toRightOf="@id/task_name"
+        android:layout_below="@id/task_time"
+        android:gravity="end"
+        android:layout_marginRight="15dp"/>
+
+
+
+
+</RelativeLayout>
