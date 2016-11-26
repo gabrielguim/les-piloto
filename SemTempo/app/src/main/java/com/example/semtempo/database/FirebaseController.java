@@ -33,8 +33,8 @@ public class FirebaseController {
         Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
         Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
         List<Atividade> atv = new ArrayList<>();
-      //  a.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
-        // /atv.add(a);
+        a.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+        atv.add(a);
         atv.add(b);
         getFirebase().child(user).setValue(atv);
     }
