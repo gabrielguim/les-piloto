@@ -2,7 +2,7 @@ package com.example.semtempo.model;
 
 public enum Prioridade {
 
-    ALTA(3), BAIXA(1), MEDIA(2);
+    ALTA(1), MEDIA(2), BAIXA(3);
 
     private final int peso;
 

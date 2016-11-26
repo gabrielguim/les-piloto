@@ -16,6 +16,7 @@ import com.example.semtempo.adapters.RecentTasksAdapter;
 import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -60,8 +61,14 @@ public class SeeMoreFragment extends Fragment {
 
                 if (item.equals("Menor prioridade - Maior prioridade")){
                     Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                    Collections.reverse(atividades);
                 } else if (item.equals("Menos horas - Mais horas")){
                     Utils.sortByHours(atividades, 0, atividades.size()-1);
+                } else if (item.equals("Maior prioridade - Menor prioridade")){
+                    Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                } else {
+                    Utils.sortByHours(atividades, 0, atividades.size()-1);
+                    Collections.reverse(atividades);
                 }
 
                 allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
@@ -76,10 +83,10 @@ public class SeeMoreFragment extends Fragment {
         });
 
         List<String> categories = new ArrayList<String>();
-        categories.add("Menos horas - Mais horas");
-        categories.add("Mais horas - Menos horas");
         categories.add("Menor prioridade - Maior prioridade");
         categories.add("Maior prioridade - Menor prioridade");
+        categories.add("Menos horas - Mais horas");
+        categories.add("Mais horas - Menos horas");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
 

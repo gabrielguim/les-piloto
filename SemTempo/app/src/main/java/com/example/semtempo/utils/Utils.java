@@ -6,6 +6,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.example.semtempo.model.Atividade;
@@ -40,11 +41,27 @@ public class Utils {
     }
 
     public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
-        Collections.reverse(atividades);
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                int result = 0;
+                if (atv1.calcularTotalDeHorasInvestidas()  < atv2.calcularTotalDeHorasInvestidas())
+                    result =  -1;
+                else if (atv1.calcularTotalDeHorasInvestidas()  > atv2.calcularTotalDeHorasInvestidas())
+                    result = 1;
+
+                return result;
+            }
+        });
     }
 
     public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
-        Collections.reverse(atividades);
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                return atv1.getPrioridade().compareTo(atv2.getPrioridade());
+            }
+        });
     }
 
 }

@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new HomeFragment();
             callFragment(fragment);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_logout) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
