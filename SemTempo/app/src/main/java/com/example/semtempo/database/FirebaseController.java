@@ -7,6 +7,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
@@ -50,10 +51,20 @@ public class FirebaseController {
         getFirebase().child(user).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+
                 Map<String, Object> message = (Map<String, Object>)dataSnapshot.getValue();
                 System.out.println(message.get("totalDeHorasGasto"));
                 System.out.println(message.get("prioridade"));
                 System.out.println(message.get("totalDeHorasGasto"));
+                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                try{
+                    List<Object> yourStringArray = (ArrayList<Object>) message.get("horariosRealizDaAtv");
+                    Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
+                    System.out.println(horarios.get("totalHorasInvestidas"));
+                    System.out.println(horarios.get("dataQueRealizou"));
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
 
             }
 
@@ -64,6 +75,15 @@ public class FirebaseController {
                 System.out.println(message.get("totalDeHorasGasto"));
                 System.out.println(message.get("prioridade"));
                 System.out.println(message.get("totalDeHorasGasto"));
+                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                try{
+                    List<Object> yourStringArray = (ArrayList<Object>) message.get("horariosRealizDaAtv");
+                    Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
+                    System.out.println(horarios.get("totalHorasInvestidas"));
+                    System.out.println(horarios.get("dataQueRealizou"));
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
 
         }
 

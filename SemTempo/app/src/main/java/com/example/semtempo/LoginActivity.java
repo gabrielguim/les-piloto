@@ -185,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements
             mProgressDialog.setIndeterminate(true);
         }
 
-        mProgressDialog.show();
+//        mProgressDialog.show();
     }
 
     private void hideProgressDialog() {
