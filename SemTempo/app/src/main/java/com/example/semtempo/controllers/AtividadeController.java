@@ -35,11 +35,11 @@ public class AtividadeController {
     }
 
     /**
-     * Um retorno apropriado para representar o que a função executa diz respeito a uma coleção
+     * Um retorno apropriado para representar o que a função executa diz respeito a uma lista
      * apenas com as atividades realizadas naquela semana.
      */
-    public static Collection<Atividade> filtraAtvsPelaSemana(Collection<Atividade> atvsASeremFiltradas, int semanaEscolhida){
-        Collection<Atividade> atvsFiltradas = new ArrayList<>();
+    public static List<Atividade> filtraAtvsPelaSemana(Collection<Atividade> atvsASeremFiltradas, int semanaEscolhida){
+        List<Atividade> atvsFiltradas = new ArrayList<>();
 
         for (Atividade atividade: atvsASeremFiltradas){
             for (Horario horario: atividade.getHorarios()){

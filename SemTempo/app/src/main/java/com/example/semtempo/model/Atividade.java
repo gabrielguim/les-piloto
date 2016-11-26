@@ -5,17 +5,17 @@ import java.util.*;
 public class Atividade {
 
     private String nome;
-    private Collection<Horario> horarios;
+    private List<Horario> horarios;
     private Prioridade prioridade;
-
 
     /** Construtor adequado para o caso do usuário
      *  não querer colocar foto na criação da atividade.
      */
-    public Atividade(String nome, Prioridade prioridade){
+    public Atividade(String nome, Prioridade prioridade, Horario horario){
         this.nome = nome;
         this.prioridade = prioridade;
         this.horarios = new ArrayList<>();
+        registrarNovoHorario(horario);
     }
 
     public String getNome() {
@@ -26,7 +26,7 @@ public class Atividade {
         this.nome = nome;
     }
 
-    public Collection<Horario> getHorarios() {
+    public List<Horario> getHorarios() {
         return horarios;
     }
 
