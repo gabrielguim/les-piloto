@@ -179,15 +179,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             fragment = new HomeFragment();
+            callFragment(fragment);
 
         } else if (id == R.id.nav_report) {
             fragment = new ReportFragment();
+            callFragment(fragment);
 
         } else if (id == R.id.nav_rank) {
             fragment = new HomeFragment();
+            callFragment(fragment);
 
         } else if (id == R.id.nav_history) {
             fragment = new HomeFragment();
+            callFragment(fragment);
 
         } else if (id == R.id.nav_share) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -203,15 +207,16 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_pref) {
 
         }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
+    private void callFragment(Fragment fragment){
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
