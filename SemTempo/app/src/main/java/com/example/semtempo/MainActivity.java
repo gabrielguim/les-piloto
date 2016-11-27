@@ -216,6 +216,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_rank) {
             fragment = new HomeFragment();
+            GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
+            Horario horario = new Horario(5, new GregorianCalendar());
+            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario);
             callFragment(fragment);
 
         } else if (id == R.id.nav_history) {

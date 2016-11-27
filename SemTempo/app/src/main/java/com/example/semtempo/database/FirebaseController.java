@@ -54,10 +54,21 @@ public class FirebaseController {
     public static void saveNewHourActivity(String user, Atividade atividade, Horario horario){
         Firebase firebaseRef = getFirebase();
         Firebase activitiesReference = firebaseRef.child(user).child("activities");
-        Firebase activityRef = activitiesReference.child(atividade.getId());
-        Firebase horariosRef = activityRef.child("horarios");
-        Firebase novoHorario = horariosRef.push();
-        novoHorario.setValue(horario);
+        List<Atividade> atividades = Utils.getLista();
+        String key = null;
+
+        for(Atividade a: atividades){
+            if(atividade.getNomeDaAtv().equals(a.getNomeDaAtv())){
+                key = a.getId();
+            }
+        }
+
+        if(key != null){
+            Firebase novoHorario = activitiesReference.child(key).child("horarios").push();
+            novoHorario.setValue(horario);
+        }
+
+
     }
 
     public static List<Atividade> retrieveActivities(String user){
@@ -74,10 +85,12 @@ public class FirebaseController {
                 Map<String, Object> message = (Map<String, Object>)dataSnapshot.getValue();
                 String nome = (String) message.get("nomeDaAtv");
                 String prioridade = (String) message.get("prioridade");
+                String id = (String) message.get("id");
                 GenericTypeIndicator<List<Atividade>> t = new GenericTypeIndicator<List<Atividade>>() {};
                 List<Object> yourStringArray = (List<Object>) message.get("horariosRealizDaAtv");
 
                 Atividade atividade = new Atividade(nome, convertePrioridade(prioridade));
+                atividade.setId(id);
 
                 List<Horario> horarios_da_atividade = new ArrayList<Horario>();
 
