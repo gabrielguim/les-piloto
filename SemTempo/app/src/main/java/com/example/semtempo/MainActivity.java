@@ -66,18 +66,18 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.add_fab);
-        addFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AddFragment fragment = new AddFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.commit();
-
-            }
-        });
+//        addFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                AddFragment fragment = new AddFragment();
+//                android.support.v4.app.FragmentTransaction fragmentTransaction =
+//                        getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragment_container, fragment);
+//                fragmentTransaction.commit();
+//
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 

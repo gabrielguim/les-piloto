@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,13 +73,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        setUp();
-        setFab();
-        if (atividadesDaSemana != null) {
-            fillChartCollors();
-            plotChart();
-        }
-        loadRecentTasks();
+            setUp();
+//        setFab();
+//        if (atividadesDaSemana != null) {
+//            fillChartCollors();
+//            plotChart();
+//        }
+//        loadRecentTasks();
 
         return rootView;
     }
@@ -91,11 +93,17 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                AddFragment fragment = new AddFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        getActivity().getSupportFragmentManager().beginTransaction();
+                Fragment fragment = new AddFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction =        fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+//                AddFragment fragment = new AddFragment();
+//                android.support.v4.app.FragmentTransaction fragmentTransaction =
+//                        getActivity().getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragment_container, fragment);
+//                fragmentTransaction.commit();
 
             }
         });
@@ -154,10 +162,6 @@ public class HomeFragment extends Fragment {
                 values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
             }
         }catch(Exception e){
-            System.out.println("Entrou aqui. Caramba");
-            System.out.println(perc.size());
-            System.out.println(chartColors.size());
-            System.out.println(valores.size());
             System.out.println(e.getMessage());
         }
 
@@ -166,12 +170,6 @@ public class HomeFragment extends Fragment {
 
     private void fillChartCollors(){
         chartColors = new ArrayList<>();
-        System.out.println("Entrou aqui. Carambolas");
-        System.out.println("Entrou aqui. Carambolas");
-        System.out.println("Entrou aqui. Carambolas");
-        System.out.println("Entrou aqui. Carambolas");
-        System.out.println("Entrou aqui. Carambolas");
-        System.out.println(atividadesDaSemana.size());
         for (int i = 0; i < atividadesDaSemana.size(); i++) {
             int color = Color.parseColor(niceColors[i]);
             chartColors.add(color);
@@ -180,7 +178,15 @@ public class HomeFragment extends Fragment {
 
 
     private void setUp(){
-
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
+        System.out.println("Aqui esta a porra do erro");
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
@@ -208,8 +214,8 @@ public class HomeFragment extends Fragment {
 
         System.out.println("Init");
         System.out.println("End");
-        setUpWeek();
-
+//        setUpWeek();
+//
     }
 
     private void setUpWeek(){

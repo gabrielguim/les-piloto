@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.database.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,14 +70,26 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
-                    Atividade atividade = new Atividade();
                     Calendar creation_date = new GregorianCalendar();
-                    atividade.registrarNovoHorario(new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
+                    System.out.println("Init.");
+                    System.out.println("Init.");
+                    System.out.println("Init.");
+                    System.out.println("Init.");
+                    System.out.println("Init.");
+                    System.out.println("Init.");
 
-                    List<Atividade> lista = new ArrayList<Atividade>();
-                    lista.add(atividade);
+                    System.out.println();
+                    System.out.println("Acabou.");
+                    System.out.println("Acabou.");
+                    System.out.println("Acabou.");
+                    System.out.println("Acabou.");
+                    System.out.println("Acabou.");
+                    System.out.println("Acabou.");
 
-                    FirebaseController.getFirebase().child(UsuarioController.getInstance().getCurrentUser().getDisplayName()).setValue(lista);
+                    Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
+                    Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
+
+                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), a);
 
                     showProgressDialog();
 
@@ -144,53 +159,37 @@ public class AddFragment extends Fragment {
         dialog.setMessage("Adicionando atividade...");
         dialog.setCancelable(false);
         dialog.show();
+
+
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 dialog.dismiss();
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
-                fragmentTransaction.commit();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new HomeFragment(), "NewFragmentTag");
+                ft.commit();
+//                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+//                fragmentTransaction.commit();
             }
         }, TIME);
     }
 
     private void setUp() {
         atividades = new ArrayList<>();
-//
-//        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
-//        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-//
-//        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
-//        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
-//
-//        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
-//        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
-//
-//        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
-//        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-//        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
-//
-//        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
-//        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
-//
-//        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
-//        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-//
-//        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
-//        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-//
-//        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
-//        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-//
-//        atividades.add(atv1);
-//        atividades.add(atv2);
-//        atividades.add(atv3);
-//        atividades.add(atv4);
-//        atividades.add(atv5);
-//        atividades.add(atv6);
-//        atividades.add(atv7);
-//        atividades.add(atv8);
+        GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
+
+
+        FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+            @Override
+            public void onStart() {
+                //Colocar hmm waiting talvez..
+            }
+
+            @Override
+            public void onSuccess(final List<Atividade> data) {
+                atividades = data;
+            }
+        });
 
     }
 
