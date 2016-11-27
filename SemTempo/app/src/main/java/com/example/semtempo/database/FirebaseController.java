@@ -115,7 +115,7 @@ public class FirebaseController {
 
                 atividade.setListaHorarios(horarios_da_atividade);
                 lista.add(atividade);
-
+                com.example.semtempo.utils.Utils.addLista(atividade);
 
                 System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
                 System.out.println("NOME DA ATIVIDADE " + atividade.getNomeDaAtv());
@@ -130,6 +130,7 @@ public class FirebaseController {
 
 
                 listener.onSuccess(lista);
+                //Consertar essa merda;
 
             }
 
