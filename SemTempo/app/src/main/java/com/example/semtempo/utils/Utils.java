@@ -5,8 +5,12 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.example.semtempo.controllers.model.Atividade;
@@ -47,6 +51,18 @@ public class Utils {
 
     public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
         Collections.reverse(atividades);
+    }
+
+    public static Calendar convertDateToCalendar(String data) {
+        Calendar calendar = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            calendar.setTime(sdf.parse(data));
+        } catch (ParseException e) {
+            System.out.println("Erro ao converter a data");
+        }
+
+        return calendar;
     }
 
     public static void addLista(Atividade a) {

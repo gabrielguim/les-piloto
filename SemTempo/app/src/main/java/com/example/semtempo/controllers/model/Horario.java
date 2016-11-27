@@ -1,55 +1,34 @@
 package com.example.semtempo.controllers.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import java.text.*;
+import java.util.*;
 
-/**
- * Created by Lucas on 20/11/2016.
- */
 public class Horario {
 
     private int totalHorasInvestidas;
-    private String dataQueRealizou;
+    private Calendar dataQueRealizou;
+    private String data;
     private int semana;
 
     public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
-        this.dataQueRealizou = dataQueRealizou.getTime().toString();
-        this.semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
-    }
-
-    public Horario(int totalHorasInvestidas, int semana){
-        this.semana = semana;
-        this.totalHorasInvestidas = totalHorasInvestidas;
-    }
-
-    public Calendar getDataQueRealizou() throws ParseException {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-        cal.setTime(sdf.parse(dataQueRealizou));
-        return cal;
-    }
-
-    public void alterarDataQueRealizou(Calendar dataQueRealizou) {
-        this.dataQueRealizou = dataQueRealizou.getTime().toString();
-    }
-
-    public void setDataString(String dataQueRealizou) {
         this.dataQueRealizou = dataQueRealizou;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setCalendar(dataQueRealizou);
+        data = dateFormat.format(dataQueRealizou.getTime());
+        semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
     }
+
+    public int getSemana() { return semana; }
+
+    public String getData(){ return data; }
 
     public int getTotalHorasInvestidas() {
         return totalHorasInvestidas;
     }
 
-    public void alterarTotalHorasInvestidas(int totalHorasInvestidas) {
-        this.totalHorasInvestidas = totalHorasInvestidas;
-    }
-
-    public int getSemana(){
-        return semana;
+    public Calendar getDataQueRealizou() {
+        return dataQueRealizou;
     }
 
 }
