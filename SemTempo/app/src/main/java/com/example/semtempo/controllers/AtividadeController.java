@@ -39,6 +39,8 @@ public class AtividadeController {
             Horario horario = atividade.getHorariosRealizDaAtv();
 
             if (atvCal.get(Calendar.WEEK_OF_YEAR) == week) {
+                System.out.println("Atividade: " + atividade.getNomeDaAtv());
+                System.out.println("Horario: " + horario.getTotalHorasInvestidas());
                 if (filteredActivities.containsKey(atividade)) {
                     int actualTime = filteredActivities.get(atividade);
                     filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
@@ -62,12 +64,13 @@ public class AtividadeController {
         Collection<Atividade> filteredActivities = new ArrayList<>();
 
         for (Atividade atividade: allActivities){
-//            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-//                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
-//                    filteredActivities.add(atividade);
-//                    break;
-//                }
-//            }
+            System.out.println("filterActivitiesByWeek");
+            System.out.println("Atividade: " + atividade.getNomeDaAtv());
+            Calendar horario = Utils.convertDateToCalendar(atividade.getHorariosRealizDaAtv().getData());
+            if (horario.get(Calendar.WEEK_OF_YEAR) == week){
+                filteredActivities.add(atividade);
+            }
+
         }
 
         return filteredActivities;
@@ -83,10 +86,12 @@ public class AtividadeController {
     public static Map<Prioridade, Integer> groupByPriority(Collection<Atividade> allActivities){
 
         Map<Prioridade, Integer> filteredActivities = new HashMap<>();
+        Map<Atividade, Integer> allTimeActivity = TimeCalcuation(allActivities);
 
-//        for (Atividade atividade: allActivities){
-//            filteredActivities.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
-//        }
+        for (Map.Entry<Atividade, Integer> entry : allTimeActivity.entrySet())
+        {
+            filteredActivities.put(entry.getKey().getPrioridade(), entry.getValue());
+        }
 
         return filteredActivities;
     }

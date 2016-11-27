@@ -154,7 +154,11 @@ public class HomeFragment extends Fragment {
                 values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
             }
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Entrou aqui. Caramba");
+            System.out.println(perc.size());
+            System.out.println(chartColors.size());
+            System.out.println(valores.size());
+            System.out.println(e.getMessage());
         }
 
         fitChart.setValues(values);
@@ -162,7 +166,12 @@ public class HomeFragment extends Fragment {
 
     private void fillChartCollors(){
         chartColors = new ArrayList<>();
-
+        System.out.println("Entrou aqui. Carambolas");
+        System.out.println("Entrou aqui. Carambolas");
+        System.out.println("Entrou aqui. Carambolas");
+        System.out.println("Entrou aqui. Carambolas");
+        System.out.println("Entrou aqui. Carambolas");
+        System.out.println(atividadesDaSemana.size());
         for (int i = 0; i < atividadesDaSemana.size(); i++) {
             int color = Color.parseColor(niceColors[i]);
             chartColors.add(color);
@@ -184,10 +193,11 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onSuccess(final List<Atividade> data) {
-                atividades.addAll(data);
+                atividades = data;
                 setUpWeek();
                 setFab();
                 if (atividadesDaSemana != null)
+                    fillChartCollors();
                     plotChart();
                 loadRecentTasks();
 
