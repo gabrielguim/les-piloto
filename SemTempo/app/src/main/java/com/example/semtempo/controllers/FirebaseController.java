@@ -1,28 +1,20 @@
-package com.example.semtempo.database;
+package com.example.semtempo.controllers;
 
-import android.provider.ContactsContract;
-
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.utils.Utils;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.GenericTypeIndicator;
-import com.firebase.client.MutableData;
-import com.firebase.client.Transaction;
-import com.firebase.client.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**

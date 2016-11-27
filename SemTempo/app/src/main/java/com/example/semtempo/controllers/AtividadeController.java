@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 /**
  * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios

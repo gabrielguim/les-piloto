@@ -1,7 +1,6 @@
 package com.example.semtempo.database;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.firebase.client.DataSnapshot;
+import com.example.semtempo.model.Atividade;
 
 import java.util.List;
 

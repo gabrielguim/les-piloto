@@ -1,13 +1,11 @@
 package com.example.semtempo;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,20 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
-import com.example.semtempo.database.FirebaseController;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.fragments.AddFragment;
+import com.example.semtempo.fragments.HomeFragment;
+import com.example.semtempo.fragments.ReportFragment;
+import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.utils.Utils;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -39,12 +37,6 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
-
-import android.widget.Toast;
-
-import com.example.semtempo.fragments.AddFragment;
-import com.example.semtempo.fragments.HomeFragment;
-import com.example.semtempo.fragments.ReportFragment;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -170,11 +162,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-
-
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -229,7 +216,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new HomeFragment();
             callFragment(fragment);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_logout) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override

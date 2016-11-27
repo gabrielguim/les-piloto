@@ -38,7 +38,7 @@
                 android:layout_marginTop="40dp">
 
                 <AutoCompleteTextView
-                    android:hint="Nome da Atividade *"
+                    android:hint="@string/task_name"
                     android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:layout_below="@id/name_atv_layout"
                 android:layout_marginTop="25dp">
                 <EditText
-                    android:hint="Tempo gasto *"
+                    android:hint="@string/time_spent"
                     android:layout_marginLeft="10dp"
                     android:inputType="numberDecimal"
                     android:layout_width="match_parent"
@@ -94,7 +94,7 @@
                 android:id="@+id/view2"></View>
 
             <EditText
-                android:hint="Prioridade *"
+                android:hint="@string/task_priority"
                 android:layout_marginLeft="10dp"
                 android:inputType="numberDecimal"
                 android:layout_width="wrap_content"

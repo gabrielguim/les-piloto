@@ -1,6 +1,5 @@
-package com.example.semtempo.controllers.model;
+package com.example.semtempo.model;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

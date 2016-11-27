@@ -1,16 +1,9 @@
 package com.example.semtempo;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

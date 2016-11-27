@@ -1,8 +1,6 @@
 package com.example.semtempo.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,12 +16,13 @@ import com.example.semtempo.adapters.RecentTasksAdapter;
 import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 public class SeeMoreFragment extends Fragment {
 
@@ -62,8 +61,14 @@ public class SeeMoreFragment extends Fragment {
 
                 if (item.equals("Menor prioridade - Maior prioridade")){
                     Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                    Collections.reverse(atividades);
                 } else if (item.equals("Menos horas - Mais horas")){
                     Utils.sortByHours(atividades, 0, atividades.size()-1);
+                } else if (item.equals("Maior prioridade - Menor prioridade")){
+                    Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                } else {
+                    Utils.sortByHours(atividades, 0, atividades.size()-1);
+                    Collections.reverse(atividades);
                 }
 
                 allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
@@ -78,10 +83,10 @@ public class SeeMoreFragment extends Fragment {
         });
 
         List<String> categories = new ArrayList<String>();
+        categories.add("Maior prioridade - Menor prioridade");
+        categories.add("Menor prioridade - Maior prioridade");
         categories.add("Menos horas - Mais horas");
         categories.add("Mais horas - Menos horas");
-        categories.add("Menor prioridade - Maior prioridade");
-        categories.add("Maior prioridade - Menor prioridade");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
 

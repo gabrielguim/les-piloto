@@ -2,10 +2,8 @@ package com.example.semtempo.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -14,14 +12,12 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 public class RecentTasksAdapter extends BaseAdapter{
 
@@ -96,10 +92,11 @@ public class RecentTasksAdapter extends BaseAdapter{
         holder.task_date.setText(horarios.get(horarios.size() - 1).getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
-        rowView.setOnClickListener(new OnClickListener() {
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
 

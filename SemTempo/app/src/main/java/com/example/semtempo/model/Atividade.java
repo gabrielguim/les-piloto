@@ -1,8 +1,13 @@
-package com.example.semtempo.controllers.model;
+package com.example.semtempo.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.example.semtempo.model.Foto;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Tag;
 
 /**
  * Created by Lucas on 20/11/2016.
@@ -27,7 +32,7 @@ public class Atividade {
         this.fotoDaAtividade = fotoDaAtividade;
         this.categoria = categoria;
         this.prioridade = prioridade;
-        this.horariosRealizDaAtv = new ArrayList<Horario>();
+        this.horariosRealizDaAtv = new ArrayList<com.example.semtempo.model.Horario>();
     }
 
     public String getId(){

@@ -13,13 +13,12 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
-import com.example.semtempo.controllers.model.Horario;
-import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
 
 public class AllTasksAdapter extends BaseAdapter{
 

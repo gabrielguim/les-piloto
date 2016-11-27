@@ -1,4 +1,4 @@
-package com.example.semtempo.controllers.model;
+package com.example.semtempo.model;
 
 import java.text.*;
 import java.util.*;

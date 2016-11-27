@@ -23,14 +23,13 @@
     <item android:title="Configurações">
         <menu>
             <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Logout" />
-
-            <item
                 android:id="@+id/nav_pref"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Preferências" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_backspace_black_24dp"
+                android:title="Sair" />
         </menu>
     </item>
 

@@ -10,10 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.example.semtempo.controllers.model.Atividade;
+import com.example.semtempo.model.Atividade;
 
 /**
  * Created by Gabriel on 24/11/2016.
@@ -46,11 +47,27 @@ public class Utils {
     }
 
     public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
-        Collections.reverse(atividades);
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                int result = 0;
+                if (atv1.getTotalDeHorasGasto()  < atv2.getTotalDeHorasGasto())
+                    result =  -1;
+                else if (atv1.getTotalDeHorasGasto()  > atv2.getTotalDeHorasGasto())
+                    result = 1;
+
+                return result;
+            }
+        });
     }
 
     public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
-        Collections.reverse(atividades);
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                return atv1.getPrioridade().compareTo(atv2.getPrioridade());
+            }
+        });
     }
 
     public static Calendar convertDateToCalendar(String data) {
