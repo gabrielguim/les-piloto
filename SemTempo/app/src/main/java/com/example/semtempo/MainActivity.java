@@ -69,12 +69,6 @@ public class MainActivity extends AppCompatActivity
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
-        HomeFragment fragment = new HomeFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
-        fragmentTransaction.commit();
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -104,6 +98,14 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initUserInfor(navigationView);
+
+
+        HomeFragment fragment = new HomeFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+        fragmentTransaction.commit();
+
 
     }
 
@@ -151,14 +153,14 @@ public class MainActivity extends AppCompatActivity
             a.registrarNovoHorario(horario2);
             b.registrarNovoHorario(horario3);
 
-            //FirebaseController.saveActivity(currentUser.getDisplayName(), a);
-            //FirebaseController.saveActivity(currentUser.getDisplayName(), b);
-
-
-            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
-            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
-
-            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
+//            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
+//            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
+//
+//
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
+//
+//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
 
             List<Atividade> lista = FirebaseController.retrieveActivities(currentUser.getDisplayName());
             System.out.println(lista);

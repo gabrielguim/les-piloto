@@ -100,8 +100,13 @@ public class HomeFragment extends Fragment {
 
         int i = 0;
         while (i < 5){
-            atividades_recentes.add(atividades.get(i));
-            i++;
+            try {
+                atividades_recentes.add(atividades.get(i));
+                i++;
+            }catch (Exception e){
+                i++;
+                System.out.println(e.getMessage());
+            }
         }
 
         recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
@@ -152,40 +157,8 @@ public class HomeFragment extends Fragment {
     private void setUp(){
 
         atividades = new ArrayList<>();
+        atividades = Utils.getLista();
 
-        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
-        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
-        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
-
-        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
-        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
-
-        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
-        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
-
-        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
-        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
-
-        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
-        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
-        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
-        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        atividades.add(atv1);
-        atividades.add(atv2);
-        atividades.add(atv3);
-        atividades.add(atv4);
-        atividades.add(atv5);
-        atividades.add(atv6);
-        atividades.add(atv7);
-        atividades.add(atv8);
 
         setUpWeek();
 

@@ -1,6 +1,9 @@
 package com.example.semtempo.controllers.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Lucas on 20/11/2016.
@@ -8,12 +11,12 @@ import java.util.Calendar;
 public class Horario {
 
     private int totalHorasInvestidas;
-    private Calendar dataQueRealizou;
+    private String dataQueRealizou;
     private int semana;
 
     public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
-        this.dataQueRealizou = dataQueRealizou;
+        this.dataQueRealizou = dataQueRealizou.getTime().toString();
         this.semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
     }
 
@@ -22,12 +25,15 @@ public class Horario {
         this.totalHorasInvestidas = totalHorasInvestidas;
     }
 
-    public Calendar getDataQueRealizou() {
-        return dataQueRealizou;
+    public Calendar getDataQueRealizou() throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        cal.setTime(sdf.parse(dataQueRealizou));
+        return cal;
     }
 
     public void alterarDataQueRealizou(Calendar dataQueRealizou) {
-        this.dataQueRealizou = dataQueRealizou;
+        this.dataQueRealizou = dataQueRealizou.getTime().toString();
     }
 
     public int getTotalHorasInvestidas() {

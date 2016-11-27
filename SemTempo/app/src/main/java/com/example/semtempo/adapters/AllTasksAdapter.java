@@ -90,7 +90,7 @@ public class AllTasksAdapter extends BaseAdapter{
 
         holder.task_name.setText(atividades.get(position).getNomeDaAtv());
         holder.task_time.setText(atividades.get(position).getTotalDeHorasGasto() + horasGastas);
-        holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
+//        holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
         rowView.setOnClickListener(new OnClickListener() {

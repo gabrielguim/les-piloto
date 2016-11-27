@@ -4,6 +4,7 @@ package com.example.semtempo.controllers;
  * Created by Mafra on 21/11/2016.
  */
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -34,13 +35,17 @@ public class AtividadeController {
 
         for (Atividade atividade: allActivities){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
-                    if (filteredActivities.containsKey(atividade)){
-                        int actualTime = filteredActivities.get(atividade);
-                        filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
-                    } else {
-                        filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
+                try {
+                    if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week) {
+                        if (filteredActivities.containsKey(atividade)) {
+                            int actualTime = filteredActivities.get(atividade);
+                            filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
+                        } else {
+                            filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
+                        }
                     }
+                }catch(Exception e){
+
                 }
             }
         }
@@ -56,7 +61,7 @@ public class AtividadeController {
      * @return filteredActivities Uma lista apenas com as atividades realizadas naquela semana
      * @author            João Mafra
      */
-    public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week){
+    public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week) throws ParseException {
         Collection<Atividade> filteredActivities = new ArrayList<>();
 
         for (Atividade atividade: allActivities){
