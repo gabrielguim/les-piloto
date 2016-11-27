@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(final List<Atividade> data) {
                 System.out.println("gg");
-                unlockWaiter();
+          
 
             }
         });
