@@ -24,6 +24,7 @@ import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
 import com.example.semtempo.database.FirebaseController;
+import com.example.semtempo.utils.Utils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -150,17 +151,18 @@ public class MainActivity extends AppCompatActivity
             a.registrarNovoHorario(horario2);
             b.registrarNovoHorario(horario3);
 
-//            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
-//            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
+            //FirebaseController.saveActivity(currentUser.getDisplayName(), a);
+            //FirebaseController.saveActivity(currentUser.getDisplayName(), b);
 
-//
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
-//
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
+
+            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario2);
+            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
+
+            //FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
 
             List<Atividade> lista = FirebaseController.retrieveActivities(currentUser.getDisplayName());
             System.out.println(lista);
+
 
         }
     }
@@ -209,6 +211,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_report) {
             fragment = new ReportFragment();
+            System.out.println(Utils.getLista());
             callFragment(fragment);
 
         } else if (id == R.id.nav_rank) {

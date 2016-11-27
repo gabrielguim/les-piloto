@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.example.semtempo.controllers.model.Atividade;
  */
 
 public class Utils {
+    private static List<Atividade> lista = new ArrayList<>();
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
 
@@ -47,4 +49,11 @@ public class Utils {
         Collections.reverse(atividades);
     }
 
+    public static void addLista(Atividade a) {
+        lista.add(a);
+    }
+
+    public static List<Atividade> getLista() {
+        return lista;
+    }
 }

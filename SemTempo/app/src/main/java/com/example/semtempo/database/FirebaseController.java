@@ -3,6 +3,7 @@ package com.example.semtempo.database;
 import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
+import com.example.semtempo.utils.Utils;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -92,6 +93,7 @@ public class FirebaseController {
 
                 atividade.setListaHorarios(horarios_da_atividade);
                 lista.add(atividade);
+                com.example.semtempo.utils.Utils.addLista(atividade);
 
                 System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
                 System.out.println("NOME DA ATIVIDADE " + atividade.getNomeDaAtv());
