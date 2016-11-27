@@ -7,10 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.RecentTasksAdapter;
@@ -19,16 +18,12 @@ import com.example.semtempo.utils.Utils;
 import com.txusballesteros.widgets.FitChart;
 import com.txusballesteros.widgets.FitChartValue;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import com.example.semtempo.controllers.AtividadeController;
@@ -45,6 +40,7 @@ public class HomeFragment extends Fragment {
     private TextView seeMore;
     private List<Atividade> atividades;
     private Map<Atividade, Integer> atividadesDaSemana;
+    private ScrollView scrollView;
     private String[] chartColors = {"#7B68EE", "#4B0082", "#000080", "#4169E1", "#4682B4", "#DB7093", "#CD5C5C", "#00CED1", "#FA8072", "#3CB371", "#FF8C00", "#F4A460", };
 
     @Override
@@ -54,6 +50,8 @@ public class HomeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
+        scrollView = (ScrollView) rootView.findViewById(R.id.scrollHome);
+        scrollView.scrollTo(0,0);
 
         seeMore.setOnClickListener(new View.OnClickListener() {
             @Override

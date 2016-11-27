@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/ripple_effect">
 
     <ImageView
         android:layout_margin="10dp"
@@ -41,8 +42,5 @@
         android:layout_below="@id/task_time"
         android:gravity="end"
         android:layout_marginRight="15dp"/>
-
-
-
 
 </RelativeLayout>
