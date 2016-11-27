@@ -1,5 +1,7 @@
 package com.example.semtempo.database;
 
+import android.provider.ContactsContract;
+
 import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
@@ -9,6 +11,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.GenericTypeIndicator;
+import com.firebase.client.MutableData;
+import com.firebase.client.Transaction;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
@@ -71,13 +75,15 @@ public class FirebaseController {
 
     }
 
-    public static List<Atividade> retrieveActivities(String user){
+
+
+    public static List<Atividade> retrieveActivities(String user, final OnGetDataListener listener){
         System.out.println("Aqui entrou tambem");
         System.out.println(user);
 
         final List<Atividade> lista = new ArrayList<>();
-
         final Firebase atividadesRef = getFirebase().child(user).child("activities");
+
 
         atividadesRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -86,6 +92,7 @@ public class FirebaseController {
                 String nome = (String) message.get("nomeDaAtv");
                 String prioridade = (String) message.get("prioridade");
                 String id = (String) message.get("id");
+
                 GenericTypeIndicator<List<Atividade>> t = new GenericTypeIndicator<List<Atividade>>() {};
                 List<Object> yourStringArray = (List<Object>) message.get("horariosRealizDaAtv");
 
@@ -106,7 +113,7 @@ public class FirebaseController {
 
                 atividade.setListaHorarios(horarios_da_atividade);
                 lista.add(atividade);
-                com.example.semtempo.utils.Utils.addLista(atividade);
+
 
                 System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
                 System.out.println("NOME DA ATIVIDADE " + atividade.getNomeDaAtv());
@@ -120,7 +127,7 @@ public class FirebaseController {
                 System.out.println("-----------------------------------");
 
 
-
+                listener.onSuccess(lista);
 
             }
 
@@ -176,5 +183,6 @@ public class FirebaseController {
             return Prioridade.BAIXA;
         }
     }
+
 
 }

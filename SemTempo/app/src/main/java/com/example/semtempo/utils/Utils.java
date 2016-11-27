@@ -17,6 +17,8 @@ import com.example.semtempo.controllers.model.Atividade;
 
 public class Utils {
     private static List<Atividade> lista = new ArrayList<>();
+    public static final Object monitor = new Object();
+    public static boolean monitorState = false;
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
 
@@ -55,5 +57,23 @@ public class Utils {
 
     public static List<Atividade> getLista() {
         return lista;
+    }
+
+    public static void waitForThread() {
+        monitorState = true;
+        while (monitorState) {
+            synchronized (monitor) {
+                try {
+                    monitor.wait(); // wait until notified
+                } catch (Exception e) {}
+            }
+        }
+    }
+
+    public static void unlockWaiter() {
+        synchronized (monitor) {
+            monitorState = false;
+            monitor.notifyAll(); // unlock again
+        }
     }
 }

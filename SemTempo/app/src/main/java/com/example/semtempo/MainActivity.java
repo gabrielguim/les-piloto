@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity
 //            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
 //
 //            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
-
-            List<Atividade> lista = FirebaseController.retrieveActivities(currentUser.getDisplayName());
-            System.out.println(lista);
+//            FirebaseController.findAllActivities(currentUser.getDisplayName());
+//            List<Atividade> lista = FirebaseController.retrieveActivities(currentUser.getDisplayName());
+//            System.out.println(lista);
 
 
         }

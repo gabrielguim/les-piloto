@@ -15,7 +15,12 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.RecentTasksAdapter;
 import com.example.semtempo.adapters.SubtitlesAdapter;
+import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.database.FirebaseController;
+import com.example.semtempo.database.OnGetDataListener;
 import com.example.semtempo.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.txusballesteros.widgets.FitChart;
 import com.txusballesteros.widgets.FitChartValue;
 
@@ -35,6 +40,9 @@ import com.example.semtempo.controllers.AtividadeController;
 import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
+
+import static com.example.semtempo.utils.Utils.unlockWaiter;
+import static com.example.semtempo.utils.Utils.waitForThread;
 
 public class HomeFragment extends Fragment {
 
@@ -157,9 +165,28 @@ public class HomeFragment extends Fragment {
     private void setUp(){
 
         atividades = new ArrayList<>();
-        atividades = Utils.getLista();
+        GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
 
+        FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+            @Override
+            public void onStart() {
+                //
+            }
+
+            @Override
+            public void onSuccess(final List<Atividade> data) {
+                System.out.println("gg");
+                unlockWaiter();
+
+            }
+        });
+
+
+
+        System.out.println("Init");
+        System.out.println("End");
+       // waitForThread();
         setUpWeek();
 
     }

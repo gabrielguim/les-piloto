@@ -45,7 +45,7 @@ public class AtividadeController {
                         }
                     }
                 }catch(Exception e){
-
+                    System.out.println(e.getMessage());
                 }
             }
         }
