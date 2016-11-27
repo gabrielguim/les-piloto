@@ -93,10 +93,11 @@ public class RecentTasksAdapter extends BaseAdapter{
         holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
-        rowView.setOnClickListener(new OnClickListener() {
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 Toast.makeText(context, atividades.get(position).getNome(), Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
 

@@ -32,6 +32,14 @@ import com.example.semtempo.model.Prioridade;
 
 public class HomeFragment extends Fragment {
 
+    // Lista de cores agradaveis
+    private final String[] niceColors = {"#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF9966",
+            "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6", "#29B8FF", "#009CEB",
+            "#FF7029", "#EB4E00", "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6",
+            "#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF7029",
+            "#EB4E00", "#29B8FF", "#009CEB"};
+
+
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private View rootView;
     private ListView subtitles;
@@ -39,7 +47,7 @@ public class HomeFragment extends Fragment {
     private TextView seeMore;
     private List<Atividade> atividades;
     private Map<Atividade, Integer> atividadesDaSemana;
-    private String[] chartColors = {"#7B68EE", "#4B0082", "#000080", "#4169E1", "#4682B4", "#DB7093", "#CD5C5C", "#00CED1", "#FA8072", "#3CB371", "#FF8C00", "#F4A460", };
+    private List<Integer> chartColors;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,8 +70,10 @@ public class HomeFragment extends Fragment {
 
         setUp();
         setFab();
-        if (atividadesDaSemana != null)
+        if (atividadesDaSemana != null) {
+            fillChartCollors();
             plotChart();
+        }
         loadRecentTasks();
 
         return rootView;
@@ -107,25 +117,20 @@ public class HomeFragment extends Fragment {
         subtitles = (ListView) rootView.findViewById(R.id.subtitles);
         TextView perc_text =(TextView) rootView.findViewById(R.id.text_perc);
 
-        List<Integer> colors = new ArrayList<>();
         List<String> valores = new ArrayList<>();
         List<Float> perc = new ArrayList<>();
         float totalHours = 0;
 
-        int index_values = 0;
-
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
             valores.add(entry.getKey().getNome());
             totalHours += entry.getValue();
-            colors.add(Color.parseColor(chartColors[index_values]));
-            index_values++;
         }
 
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
-        subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, colors, perc, perc_text, rootView));
+        subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
         subtitles.setDivider(null);
         Utils.setListViewHeightBasedOnChildren(subtitles);
 
@@ -137,11 +142,21 @@ public class HomeFragment extends Fragment {
         Collection<FitChartValue> values = new ArrayList<>();
 
         for (int i = 0; i < valores.size(); i++) {
-            values.add(new FitChartValue(perc.get(i), colors.get(i)));
+            values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
         }
 
         fitChart.setValues(values);
     }
+
+    private void fillChartCollors(){
+        chartColors = new ArrayList<>();
+
+        for (int i = 0; i < atividadesDaSemana.size(); i++) {
+            int color = Color.parseColor(niceColors[i]);
+            chartColors.add(color);
+        }
+    }
+
 
     private void setUp(){
 

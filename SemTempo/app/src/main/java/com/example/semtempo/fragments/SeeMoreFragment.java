@@ -83,8 +83,8 @@ public class SeeMoreFragment extends Fragment {
         });
 
         List<String> categories = new ArrayList<String>();
-        categories.add("Menor prioridade - Maior prioridade");
         categories.add("Maior prioridade - Menor prioridade");
+        categories.add("Menor prioridade - Maior prioridade");
         categories.add("Menos horas - Mais horas");
         categories.add("Mais horas - Menos horas");
 
