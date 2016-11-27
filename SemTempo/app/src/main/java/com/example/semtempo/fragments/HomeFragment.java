@@ -41,8 +41,6 @@ import com.example.semtempo.controllers.model.Atividade;
 import com.example.semtempo.controllers.model.Horario;
 import com.example.semtempo.controllers.model.Prioridade;
 
-import static com.example.semtempo.utils.Utils.unlockWaiter;
-import static com.example.semtempo.utils.Utils.waitForThread;
 
 public class HomeFragment extends Fragment {
 
@@ -171,13 +169,17 @@ public class HomeFragment extends Fragment {
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
             @Override
             public void onStart() {
-                //
+                //Colocar hmm waiting talvez..
             }
 
             @Override
             public void onSuccess(final List<Atividade> data) {
-                System.out.println("gg");
-          
+                atividades = data;
+                setUpWeek();
+                setFab();
+                if (atividadesDaSemana != null)
+                    plotChart();
+                loadRecentTasks();
 
             }
         });
@@ -186,7 +188,6 @@ public class HomeFragment extends Fragment {
 
         System.out.println("Init");
         System.out.println("End");
-       // waitForThread();
         setUpWeek();
 
     }

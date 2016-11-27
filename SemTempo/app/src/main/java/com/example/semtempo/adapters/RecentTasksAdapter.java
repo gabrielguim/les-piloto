@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -92,7 +93,11 @@ public class RecentTasksAdapter extends BaseAdapter{
 
         holder.task_name.setText(atividades.get(position).getNomeDaAtv());
         holder.task_time.setText(atividades.get(position).getTotalDeHorasGasto() + horasGastas);
-//        holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
+        try {
+            holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
         rowView.setOnClickListener(new OnClickListener() {

@@ -36,6 +36,7 @@ public class AtividadeController {
         for (Atividade atividade: allActivities){
             for (Horario horario: atividade.getHorariosRealizDaAtv()){
                 try {
+                    System.out.println(horario.getDataQueRealizou());
                     if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week) {
                         if (filteredActivities.containsKey(atividade)) {
                             int actualTime = filteredActivities.get(atividade);
@@ -45,6 +46,7 @@ public class AtividadeController {
                         }
                     }
                 }catch(Exception e){
+                    System.out.println("Aquiii");
                     System.out.println(e.getMessage());
                 }
             }

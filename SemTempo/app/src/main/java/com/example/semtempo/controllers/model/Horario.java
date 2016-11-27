@@ -36,6 +36,10 @@ public class Horario {
         this.dataQueRealizou = dataQueRealizou.getTime().toString();
     }
 
+    public void setDataString(String dataQueRealizou) {
+        this.dataQueRealizou = dataQueRealizou;
+    }
+
     public int getTotalHorasInvestidas() {
         return totalHorasInvestidas;
     }
