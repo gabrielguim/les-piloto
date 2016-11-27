@@ -82,7 +82,7 @@ public class FirebaseController {
 
                 if (yourStringArray != null){
                     for (int i = 0; i < yourStringArray.size(); i++){
-                        Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
+                        Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(i);
                         Integer totalDeHorasInvestidas = (int) (long) horarios.get("totalHorasInvestidas");
                         Integer semanaDoAno = (int) (long) horarios.get("semana");
                         Horario horario = new Horario(totalDeHorasInvestidas, semanaDoAno);
