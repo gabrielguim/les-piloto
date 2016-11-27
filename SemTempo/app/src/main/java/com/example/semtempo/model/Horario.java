@@ -6,7 +6,6 @@ import java.util.*;
 public class Horario {
 
     private int totalHorasInvestidas;
-    private Calendar dataQueRealizou;
     private String data;
     private int semana;
 
@@ -16,11 +15,8 @@ public class Horario {
 
     public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
-        this.dataQueRealizou = dataQueRealizou;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateFormat.setCalendar(dataQueRealizou);
-        data = dateFormat.format(dataQueRealizou.getTime());
-        semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
+        this.data = dataQueRealizou.getTime().toString();
+        this.semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
     }
 
     public int getSemana() { return semana; }
@@ -31,8 +27,5 @@ public class Horario {
         return totalHorasInvestidas;
     }
 
-    public Calendar getDataQueRealizou() {
-        return dataQueRealizou;
-    }
 
 }

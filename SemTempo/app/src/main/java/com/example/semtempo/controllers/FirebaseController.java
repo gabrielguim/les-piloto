@@ -76,35 +76,20 @@ public class FirebaseController {
     public static void retrieveActivities(String user, final OnGetDataListener listener){
         final Firebase atividadesRef = getFirebase().child(user).child(ATIVIDADES);
         final List<Atividade> lista = new ArrayList<>();
+
         atividadesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 Atividade a = (Atividade) dataSnapshot.getValue(Atividade.class);
-
-                System.out.println(a.getNomeDaAtv());
+                lista.add(a);
                 listener.onSuccess(lista);
-                //Consertar essa merda;
-
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("Edit");
-                Map<String, Object> message = (Map<String, Object>)dataSnapshot.getValue();
-                System.out.println(message.get("totalDeHorasGasto"));
-                System.out.println(message.get("prioridade"));
-                System.out.println(message.get("totalDeHorasGasto"));
-                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                try{
-                    List<Object> yourStringArray = (ArrayList<Object>) message.get("horariosRealizDaAtv");
-                    Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
-                    System.out.println(horarios.get("totalHorasInvestidas"));
-                    System.out.println(horarios.get("dataQueRealizou"));
-                }catch(Exception e){
-                    System.out.println(e.getMessage());
-                }
 
-        }
+
+            }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {}

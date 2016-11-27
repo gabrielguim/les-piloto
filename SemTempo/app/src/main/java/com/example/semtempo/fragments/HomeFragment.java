@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
 
         subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
         subtitles.setDivider(null);
-//        Utils.setListViewHeightBasedOnChildren(subtitles);
+        Utils.setListViewHeightBasedOnChildren(subtitles);
 
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onSuccess(final List<Atividade> data) {
-                atividades = data;
+                atividades.addAll(data);
                 setUpWeek();
                 setFab();
                 if (atividadesDaSemana != null)

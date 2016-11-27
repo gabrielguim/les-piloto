@@ -107,5 +107,16 @@ public class Atividade {
 //        return total;
 //    }
 
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Atividade)){
+            return false;
+        }
+
+        Atividade atv = (Atividade) obj;
+
+        return atv.getNomeDaAtv().equals(atv.getNomeDaAtv());
+    }
+
 
 }

@@ -69,7 +69,7 @@ public class SubtitlesAdapter extends BaseAdapter{
             holder.subtitle_text.setText(valores.get(position));
             holder.subtitle_color.setColorFilter(colors.get(position));
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         rowView.setOnClickListener(new OnClickListener() {
             @Override
@@ -80,9 +80,13 @@ public class SubtitlesAdapter extends BaseAdapter{
                 rootView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        perc_text.setText(Math.round(perc.get(position)) + "%");
-                        perc_text.setTextColor(colors.get(position));
-                        perc_text.animate().scaleX(1).scaleY(1).start();
+                        try {
+                            perc_text.setText(Math.round(perc.get(position)) + "%");
+                            perc_text.setTextColor(colors.get(position));
+                            perc_text.animate().scaleX(1).scaleY(1).start();
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
                     }
                 }, 200);
             }

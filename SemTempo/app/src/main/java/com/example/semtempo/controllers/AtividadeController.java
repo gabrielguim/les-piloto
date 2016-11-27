@@ -14,6 +14,7 @@ import java.util.Map;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.utils.Utils;
 
 /**
  * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios
@@ -26,31 +27,26 @@ public class AtividadeController {
      * @param allActivities Lista a ser filtrada
      * @param week    Semana pela qual será filtrada
      * @return filteredActivities Um mapa que relaciona atividade e horas gastas levando em conta apenas aquela semana
-     * @author            João Mafra
+     *
      */
     public static Map<Atividade, Integer> filterActivitiesByWeekAndSpentHours(Collection<Atividade> allActivities, int week){
         Map<Atividade, Integer> filteredActivities = new HashMap<>();
 
 
 
-//        for (Atividade atividade: allActivities){
-//            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-//                try {
-//                    System.out.println(horario.getDataQueRealizou());
-//                    if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week) {
-//                        if (filteredActivities.containsKey(atividade)) {
-//                            int actualTime = filteredActivities.get(atividade);
-//                            filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
-//                        } else {
-//                            filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
-//                        }
-//                    }
-//                }catch(Exception e){
-//                    System.out.println("Aquiii");
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-//        }
+        for (Atividade atividade: allActivities){
+            Calendar atvCal = Utils.convertDateToCalendar(atividade.getHorariosRealizDaAtv().getData());
+            Horario horario = atividade.getHorariosRealizDaAtv();
+
+            if (atvCal.get(Calendar.WEEK_OF_YEAR) == week) {
+                if (filteredActivities.containsKey(atividade)) {
+                    int actualTime = filteredActivities.get(atividade);
+                    filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
+                } else {
+                    filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
+                }
+            }
+        }
 
         return filteredActivities;
     }
@@ -61,7 +57,6 @@ public class AtividadeController {
      * @param allActivities Lista a ser filtrada
      * @param week    Semana pela qual será filtrada
      * @return filteredActivities Uma lista apenas com as atividades realizadas naquela semana
-     * @author            João Mafra
      */
     public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week) throws ParseException {
         Collection<Atividade> filteredActivities = new ArrayList<>();
@@ -84,7 +79,6 @@ public class AtividadeController {
      *
      * @param allActivities Lista a ser filtrada
      * @return filteredActivities Um mapa que relaciona a prioridade das atividades e horas gastas com cada prioridade
-     * @author            João Mafra
      */
     public static Map<Prioridade, Integer> groupByPriority(Collection<Atividade> allActivities){
 
@@ -95,6 +89,24 @@ public class AtividadeController {
 //        }
 
         return filteredActivities;
+    }
+
+    public static Map<Atividade, Integer> TimeCalcuation(Collection<Atividade> allActivities){
+        Map<Atividade, Integer> calculaTion = new HashMap<>();
+
+        for (Atividade atividade: allActivities){
+            if(calculaTion.containsKey(atividade)){
+                int actualTime = calculaTion.get(atividade);
+                calculaTion.put(atividade, actualTime +
+                        atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
+            }else{
+                calculaTion.put(atividade,
+                        atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
+            }
+        }
+
+
+        return calculaTion;
     }
 
 }

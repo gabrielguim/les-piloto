@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import com.example.semtempo.model.Atividade;
 
@@ -72,7 +73,7 @@ public class Utils {
 
     public static Calendar convertDateToCalendar(String data) {
         Calendar calendar = new GregorianCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
             calendar.setTime(sdf.parse(data));
         } catch (ParseException e) {

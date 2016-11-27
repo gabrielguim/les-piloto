@@ -93,11 +93,11 @@ public class MainActivity extends AppCompatActivity
         initUserInfor(navigationView);
 
 
-//        HomeFragment fragment = new HomeFragment();
-//        android.support.v4.app.FragmentTransaction fragmentTransaction =
-//                getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
-//        fragmentTransaction.commit();
+        HomeFragment fragment = new HomeFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+        fragmentTransaction.commit();
 
 
     }

@@ -83,14 +83,16 @@ public class RecentTasksAdapter extends BaseAdapter{
         String horasGastas = " Hora investida";
 //        if (atividades.get(position).getTotalDeHorasGasto() > 1)
 //            horasGastas = " Horas investidas";
-//
+
 //        List<Horario> horarios = (List<Horario>) atividades.get(position).getHorariosRealizDaAtv();
 //        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-//
-//        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
-//        holder.task_time.setText(atividades.get(position).getTotalDeHorasGasto() + horasGastas);
-//        holder.task_date.setText(horarios.get(horarios.size() - 1).getData());
+        Horario horario = atividades.get(position).getHorariosRealizDaAtv();
+
+        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
+        holder.task_time.setText(atividades.get(position).getHorariosRealizDaAtv().getTotalHorasInvestidas() + horasGastas);
+        holder.task_date.setText(horario.getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
+
 
         rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -15,7 +15,9 @@ import com.example.semtempo.R;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
+import com.example.semtempo.controllers.AtividadeController;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
@@ -84,14 +86,14 @@ public class AllTasksAdapter extends BaseAdapter{
         String horasGastas = " Hora investida";
 //        if (atividades.get(position).getTotalDeHorasGasto() > 1)
 //            horasGastas = " Horas investidas";
-//
-//        List<Horario> horarios = (List<Horario>) atividades.get(position).getHorariosRealizDaAtv();
-//        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-//
-//        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
-//        holder.task_time.setText(atividades.get(position).getTotalDeHorasGasto() + horasGastas);
-//        holder.task_date.setText(horarios.get(horarios.size() - 1).getData());
-//        holder.task_prority.setColorFilter(Color.parseColor(color));
+
+
+        Horario horario = atividades.get(position).getHorariosRealizDaAtv();
+
+        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
+        holder.task_time.setText(atividades.get(position).getHorariosRealizDaAtv().getTotalHorasInvestidas() + horasGastas);
+        holder.task_date.setText(horario.getData());
+        holder.task_prority.setColorFilter(Color.parseColor(color));
 
         rowView.setOnClickListener(new OnClickListener() {
             @Override
