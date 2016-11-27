@@ -33,24 +33,24 @@ public class AtividadeController {
 
 
 
-        for (Atividade atividade: allActivities){
-            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                try {
-                    System.out.println(horario.getDataQueRealizou());
-                    if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week) {
-                        if (filteredActivities.containsKey(atividade)) {
-                            int actualTime = filteredActivities.get(atividade);
-                            filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
-                        } else {
-                            filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
-                        }
-                    }
-                }catch(Exception e){
-                    System.out.println("Aquiii");
-                    System.out.println(e.getMessage());
-                }
-            }
-        }
+//        for (Atividade atividade: allActivities){
+//            for (Horario horario: atividade.getHorariosRealizDaAtv()){
+//                try {
+//                    System.out.println(horario.getDataQueRealizou());
+//                    if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week) {
+//                        if (filteredActivities.containsKey(atividade)) {
+//                            int actualTime = filteredActivities.get(atividade);
+//                            filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
+//                        } else {
+//                            filteredActivities.put(atividade, horario.getTotalHorasInvestidas());
+//                        }
+//                    }
+//                }catch(Exception e){
+//                    System.out.println("Aquiii");
+//                    System.out.println(e.getMessage());
+//                }
+//            }
+//        }
 
         return filteredActivities;
     }
@@ -67,12 +67,12 @@ public class AtividadeController {
         Collection<Atividade> filteredActivities = new ArrayList<>();
 
         for (Atividade atividade: allActivities){
-            for (Horario horario: atividade.getHorariosRealizDaAtv()){
-                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
-                    filteredActivities.add(atividade);
-                    break;
-                }
-            }
+//            for (Horario horario: atividade.getHorariosRealizDaAtv()){
+//                if (horario.getDataQueRealizou().get(Calendar.WEEK_OF_YEAR) == week){
+//                    filteredActivities.add(atividade);
+//                    break;
+//                }
+//            }
         }
 
         return filteredActivities;
@@ -90,9 +90,9 @@ public class AtividadeController {
 
         Map<Prioridade, Integer> filteredActivities = new HashMap<>();
 
-        for (Atividade atividade: allActivities){
-            filteredActivities.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
-        }
+//        for (Atividade atividade: allActivities){
+//            filteredActivities.put(atividade.getPrioridade(), atividade.getTotalDeHorasGasto());
+//        }
 
         return filteredActivities;
     }

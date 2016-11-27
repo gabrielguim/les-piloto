@@ -67,7 +67,7 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
-                    Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), priority);
+                    Atividade atividade = new Atividade();
                     Calendar creation_date = new GregorianCalendar();
                     atividade.registrarNovoHorario(new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
 
@@ -157,40 +157,40 @@ public class AddFragment extends Fragment {
 
     private void setUp() {
         atividades = new ArrayList<>();
-
-        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
-        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
-        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
-
-        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
-        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
-
-        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
-        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
-
-        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
-        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
-
-        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
-        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
-        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
-        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        atividades.add(atv1);
-        atividades.add(atv2);
-        atividades.add(atv3);
-        atividades.add(atv4);
-        atividades.add(atv5);
-        atividades.add(atv6);
-        atividades.add(atv7);
-        atividades.add(atv8);
+//
+//        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA);
+//        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+//
+//        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA);
+//        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
+//
+//        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA);
+//        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+//
+//        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA);
+//        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+//        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
+//
+//        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA);
+//        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
+//
+//        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA);
+//        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+//
+//        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA);
+//        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+//
+//        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA);
+//        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+//
+//        atividades.add(atv1);
+//        atividades.add(atv2);
+//        atividades.add(atv3);
+//        atividades.add(atv4);
+//        atividades.add(atv5);
+//        atividades.add(atv6);
+//        atividades.add(atv7);
+//        atividades.add(atv8);
 
     }
 

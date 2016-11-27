@@ -41,13 +41,13 @@ public class FirebaseController {
     }
 
     public static void saveUser(String user){
-        Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
-        Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
+//        Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
+//        Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
         List<Atividade> atv = new ArrayList<>();
-        a.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
-        atv.add(a);
-        atv.add(b);
-        getFirebase().child(user).setValue(atv);
+//        a.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+//        atv.add(a);
+//        atv.add(b);
+//        getFirebase().child(user).setValue(atv);
     }
 
     public static void saveActivity(String user, Atividade activity){
@@ -73,47 +73,15 @@ public class FirebaseController {
 
     }
 
-
-
     public static void retrieveActivities(String user, final OnGetDataListener listener){
-        System.out.println("Aqui entrou tambem");
-        System.out.println(user);
-
-        final List<Atividade> lista = new ArrayList<>();
         final Firebase atividadesRef = getFirebase().child(user).child(ATIVIDADES);
-
-
+        final List<Atividade> lista = new ArrayList<>();
         atividadesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Map<String, Object> atividade = (Map<String, Object>)dataSnapshot.getValue();
-                String nome = (String) atividade.get(NOME);
-                String prioridade = (String) atividade.get(PRIORIDADE);
-                String id = (String) atividade.get(ID);
+                Atividade a = (Atividade) dataSnapshot.getValue(Atividade.class);
 
-                GenericTypeIndicator<List<Atividade>> t = new GenericTypeIndicator<List<Atividade>>() {};
-                List<Object> lista_horarios = (List<Object>) atividade.get(HORARIOS);
-
-                Atividade novaAtividade = new Atividade(nome, convertePrioridade(prioridade));
-                novaAtividade.setId(id);
-
-                List<Horario> horarios_da_atividade = recuperaListaDeHorarios(lista_horarios);
-
-                novaAtividade.setListaHorarios(horarios_da_atividade);
-                lista.add(novaAtividade);
-
-                System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
-                System.out.println("NOME DA ATIVIDADE " + novaAtividade.getNomeDaAtv());
-                System.out.println("PRIORIDADE = " + novaAtividade.getPrioridade());
-                System.out.println("IMPRIMINDO HORARIOS DESSA ATIVIDADE");
-                System.out.println("-----------------------------------");
-                for (Horario horario: novaAtividade.getHorariosRealizDaAtv()){
-                    System.out.println("SEMANA DO ANO: " + horario.getSemana());
-                    System.out.println("TEMPO GASTO: " + horario.getTotalHorasInvestidas());
-                }
-                System.out.println("-----------------------------------");
-
-
+                System.out.println(a.getNomeDaAtv());
                 listener.onSuccess(lista);
                 //Consertar essa merda;
 
@@ -152,6 +120,84 @@ public class FirebaseController {
 
         });
     }
+
+//    public static void retrieveActivities(String user, final OnGetDataListener listener){
+//        System.out.println("Aqui entrou tambem");
+//        System.out.println(user);
+//
+//        final List<Atividade> lista = new ArrayList<>();
+//        final Firebase atividadesRef = getFirebase().child(user).child(ATIVIDADES);
+//
+//
+//        atividadesRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+//                Map<String, Object> atividade = (Map<String, Object>)dataSnapshot.getValue();
+//                String nome = (String) atividade.get(NOME);
+//                String prioridade = (String) atividade.get(PRIORIDADE);
+//                String id = (String) atividade.get(ID);
+//
+//                GenericTypeIndicator<List<Atividade>> t = new GenericTypeIndicator<List<Atividade>>() {};
+//                List<Object> lista_horarios = (List<Object>) atividade.get(HORARIOS);
+//
+//                Atividade novaAtividade = new Atividade(nome, convertePrioridade(prioridade));
+//                novaAtividade.setId(id);
+//
+//                List<Horario> horarios_da_atividade = recuperaListaDeHorarios(lista_horarios);
+//
+//                novaAtividade.setListaHorarios(horarios_da_atividade);
+//                lista.add(novaAtividade);
+//
+//                System.out.println("IMPRIMINDO STATUS DA ATIVIDADE " + nome);
+//                System.out.println("NOME DA ATIVIDADE " + novaAtividade.getNomeDaAtv());
+//                System.out.println("PRIORIDADE = " + novaAtividade.getPrioridade());
+//                System.out.println("IMPRIMINDO HORARIOS DESSA ATIVIDADE");
+//                System.out.println("-----------------------------------");
+//                for (Horario horario: novaAtividade.getHorariosRealizDaAtv()){
+//                    System.out.println("SEMANA DO ANO: " + horario.getSemana());
+//                    System.out.println("TEMPO GASTO: " + horario.getTotalHorasInvestidas());
+//                }
+//                System.out.println("-----------------------------------");
+//
+//
+//                listener.onSuccess(lista);
+//                //Consertar essa merda;
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+//                System.out.println("Edit");
+//                Map<String, Object> message = (Map<String, Object>)dataSnapshot.getValue();
+//                System.out.println(message.get("totalDeHorasGasto"));
+//                System.out.println(message.get("prioridade"));
+//                System.out.println(message.get("totalDeHorasGasto"));
+//                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+//                try{
+//                    List<Object> yourStringArray = (ArrayList<Object>) message.get("horariosRealizDaAtv");
+//                    Map<String, Object> horarios = (Map<String, Object>) yourStringArray.get(0);
+//                    System.out.println(horarios.get("totalHorasInvestidas"));
+//                    System.out.println(horarios.get("dataQueRealizou"));
+//                }catch(Exception e){
+//                    System.out.println(e.getMessage());
+//                }
+//
+//        }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//
+//
+//        });
+//    }
 
 
     public static void cleanUserDate(String user){

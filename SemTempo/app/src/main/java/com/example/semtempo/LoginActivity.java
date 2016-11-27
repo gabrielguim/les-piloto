@@ -221,10 +221,10 @@ public class LoginActivity extends AppCompatActivity implements
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Entrando...");
         dialog.setCancelable(false);
-        dialog.show();
+//        dialog.show();
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                dialog.dismiss();
+//                dialog.dismiss();
             }
         }, TIME);
     }

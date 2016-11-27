@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
 
         subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
         subtitles.setDivider(null);
-        Utils.setListViewHeightBasedOnChildren(subtitles);
+//        Utils.setListViewHeightBasedOnChildren(subtitles);
 
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
@@ -149,8 +149,12 @@ public class HomeFragment extends Fragment {
 
         Collection<FitChartValue> values = new ArrayList<>();
 
-        for (int i = 0; i < valores.size(); i++) {
-            values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
+        try{
+            for (int i = 0; i < valores.size(); i++) {
+                values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
         fitChart.setValues(values);

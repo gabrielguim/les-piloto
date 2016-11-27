@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.database.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.fragments.AddFragment;
@@ -92,11 +93,11 @@ public class MainActivity extends AppCompatActivity
         initUserInfor(navigationView);
 
 
-        HomeFragment fragment = new HomeFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
-        fragmentTransaction.commit();
+//        HomeFragment fragment = new HomeFragment();
+//        android.support.v4.app.FragmentTransaction fragmentTransaction =
+//                getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+//        fragmentTransaction.commit();
 
 
     }
@@ -112,55 +113,49 @@ public class MainActivity extends AppCompatActivity
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
         if (opr.isDone()) {
-            GoogleSignInResult result = opr.get();
-            View header = navigationView.getHeaderView(0);
-            photo = (ImageView)header.findViewById(R.id.imageView);
-            email = (TextView)header.findViewById(R.id.textView);
-            name = (TextView)header.findViewById(R.id.nameUserView);
-
-            System.out.println(result.getSignInAccount().getEmail());
-            email.setText(result.getSignInAccount().getEmail());
-            System.out.println(result.getSignInAccount().getDisplayName());
-            name.setText(result.getSignInAccount().getDisplayName());
-            photo.setImageURI(result.getSignInAccount().getPhotoUrl());
-            Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
-                    .resize(115, 115)
-                    .into(photo);
+            mountView(opr);
 
             GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-
             System.out.println("Logado como " + currentUser.getEmail());
-
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
-            Atividade b = new Atividade("Estudar", Prioridade.BAIXA);
-            List<Atividade> atv = new ArrayList<>();
-
             Horario horario = new Horario(2, new GregorianCalendar());
-
             Horario horario2 = new Horario(3, new GregorianCalendar());
 
-            Horario horario3 = new Horario(4, new GregorianCalendar());
-
-            a.registrarNovoHorario(horario);
-            a.registrarNovoHorario(horario2);
-            b.registrarNovoHorario(horario3);
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario);
+            Atividade b = new Atividade("Estudar", Prioridade.BAIXA, horario2);
+            List<Atividade> atv = new ArrayList<>();
 
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
-//
-//
-//            a.setId("-KXaQHqxuqEPqs-33hhd");
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario3);
-//
-//            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), b, horario2);
-//            FirebaseController.findAllActivities(currentUser.getDisplayName());
-//                FirebaseController.retrieveActivities(currentUser.getDisplayName());
-//            System.out.println(lista);
+            FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+                @Override
+                public void onStart() {
+                    //Colocar hmm waiting talvez..
+                }
 
+                @Override
+                public void onSuccess(final List<Atividade> data) {
+                 System.out.println("cabo");
 
+                }
+            });
         }
     }
+
+    private void mountView( OptionalPendingResult<GoogleSignInResult> opr ){
+        GoogleSignInResult result = opr.get();
+        View header = navigationView.getHeaderView(0);
+        photo = (ImageView)header.findViewById(R.id.imageView);
+        email = (TextView)header.findViewById(R.id.textView);
+        name = (TextView)header.findViewById(R.id.nameUserView);
+
+        email.setText(result.getSignInAccount().getEmail());
+        name.setText(result.getSignInAccount().getDisplayName());
+        photo.setImageURI(result.getSignInAccount().getPhotoUrl());
+        Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
+                .resize(115, 115)
+                .into(photo);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -207,8 +202,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_rank) {
             fragment = new HomeFragment();
             GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA);
             Horario horario = new Horario(5, new GregorianCalendar());
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario);
             FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario);
             callFragment(fragment);
 

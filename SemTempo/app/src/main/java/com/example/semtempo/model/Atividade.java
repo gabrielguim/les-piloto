@@ -16,23 +16,27 @@ public class Atividade {
 
     private String nomeDaAtv;
     private Foto fotoDaAtividade;
-    private List<Horario> horariosRealizDaAtv;
+    private Horario horariosRealizDaAtv;
     private Tag categoria;
     private Prioridade prioridade;
     private String id;
 
-    public Atividade(String nomeDaAtv, Prioridade prioridade){
-        this.nomeDaAtv = nomeDaAtv;
-        this.prioridade = prioridade;
-        this.horariosRealizDaAtv = new ArrayList<Horario>();
+    public Atividade(){
+
     }
 
-    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Tag categoria, Prioridade prioridade){
+    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario){
+        this.nomeDaAtv = nomeDaAtv;
+        this.prioridade = prioridade;
+        this.horariosRealizDaAtv = horario;
+    }
+
+    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Tag categoria, Prioridade prioridade, Horario horario){
         this.nomeDaAtv = nomeDaAtv;
         this.fotoDaAtividade = fotoDaAtividade;
         this.categoria = categoria;
         this.prioridade = prioridade;
-        this.horariosRealizDaAtv = new ArrayList<com.example.semtempo.model.Horario>();
+        this.horariosRealizDaAtv = horario;
     }
 
     public String getId(){
@@ -51,12 +55,12 @@ public class Atividade {
         this.fotoDaAtividade = fotoDaAtividade;
     }
 
-    public List<Horario> getHorariosRealizDaAtv() {
+    public Horario getHorariosRealizDaAtv() {
         return horariosRealizDaAtv;
     }
 
-    public void setListaHorarios(List<Horario> lista){
-        this.horariosRealizDaAtv = lista;
+    public void setListaHorarios(Horario horario){
+        this.horariosRealizDaAtv = horario;
     }
 
     public Tag getCategoria() {
@@ -84,24 +88,24 @@ public class Atividade {
     }
 
     public void registrarNovoHorario(Horario tempoInvestido){
-        horariosRealizDaAtv.add(tempoInvestido);
+        horariosRealizDaAtv = tempoInvestido;
     }
 
     /**
      * Retorna boolean pelo fato de que se um horário não consta na coleção, ele retornará falso.
      * */
-    public boolean removerHorario(Horario horarioEscolhido){
-        return horariosRealizDaAtv.remove(horarioEscolhido);
-    }
+//    public boolean removerHorario(Horario horarioEscolhido){
+//        return horariosRealizDaAtv.remove(horarioEscolhido);
+//    }
 
-    public int getTotalDeHorasGasto(){
-        int total = 0;
-        for (Horario horario: getHorariosRealizDaAtv()){
-            total += horario.getTotalHorasInvestidas();
-        }
-
-        return total;
-    }
+//    public int getTotalDeHorasGasto(){
+//        int total = 0;
+//        for (Horario horario: getHorariosRealizDaAtv()){
+//            total += horario.getTotalHorasInvestidas();
+//        }
+//
+//        return total;
+//    }
 
 
 }

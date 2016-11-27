@@ -47,18 +47,18 @@ public class Utils {
     }
 
     public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
-        Collections.sort(atividades, new Comparator<Atividade>() {
-            @Override
-            public int compare(Atividade atv1, Atividade atv2) {
-                int result = 0;
-                if (atv1.getTotalDeHorasGasto()  < atv2.getTotalDeHorasGasto())
-                    result =  -1;
-                else if (atv1.getTotalDeHorasGasto()  > atv2.getTotalDeHorasGasto())
-                    result = 1;
-
-                return result;
-            }
-        });
+//        Collections.sort(atividades, new Comparator<Atividade>() {
+//            @Override
+//            public int compare(Atividade atv1, Atividade atv2) {
+//                int result = 0;
+//                if (atv1.getTotalDeHorasGasto()  < atv2.getTotalDeHorasGasto())
+//                    result =  -1;
+//                else if (atv1.getTotalDeHorasGasto()  > atv2.getTotalDeHorasGasto())
+//                    result = 1;
+//
+//                return result;
+//            }
+//        });
     }
 
     public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {

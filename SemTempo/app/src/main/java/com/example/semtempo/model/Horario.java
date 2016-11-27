@@ -10,6 +10,10 @@ public class Horario {
     private String data;
     private int semana;
 
+    public Horario(){
+
+    }
+
     public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
         this.dataQueRealizou = dataQueRealizou;

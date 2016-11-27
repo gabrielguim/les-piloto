@@ -65,9 +65,12 @@ public class SubtitlesAdapter extends BaseAdapter{
         rowView = inflater.inflate(R.layout.subtitles_item, null);
         holder.subtitle_text = (TextView) rowView.findViewById(R.id.subtitle_text);
         holder.subtitle_color = (ImageView) rowView.findViewById(R.id.subtitle_color);
-
-        holder.subtitle_text.setText(valores.get(position));
-        holder.subtitle_color.setColorFilter(colors.get(position));
+        try {
+            holder.subtitle_text.setText(valores.get(position));
+            holder.subtitle_color.setColorFilter(colors.get(position));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
