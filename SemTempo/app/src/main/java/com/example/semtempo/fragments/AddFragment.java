@@ -171,10 +171,12 @@ public class AddFragment extends Fragment {
             public void onSuccess(final List<Atividade> data) {
                 atividades = data;
                 configureAutoComplete();
-                ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
-                autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
-                autoCompleteTextView.setThreshold(1);
-                autoCompleteTextView.setAdapter(adapter);
+                if(getActivity() != null) {
+                    ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
+                    autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
+                    autoCompleteTextView.setThreshold(1);
+                    autoCompleteTextView.setAdapter(adapter);
+                }
             }
         });
 
