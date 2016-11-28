@@ -183,7 +183,6 @@ public class HomeFragment extends Fragment {
 
 
     private void setUp(){
-        System.out.println("Aqui esta a porra do erro");
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
@@ -206,12 +205,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
-
-        System.out.println("Init");
-        System.out.println("End");
-//        setUpWeek();
-//
     }
 
     private void setUpWeek(){

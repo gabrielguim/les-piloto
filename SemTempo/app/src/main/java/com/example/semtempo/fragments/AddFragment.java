@@ -71,20 +71,6 @@ public class AddFragment extends Fragment {
                     }
 
                     Calendar creation_date = new GregorianCalendar();
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-
-                    System.out.println();
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
                     Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);

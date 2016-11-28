@@ -120,9 +120,6 @@ public class Atividade {
 
 
         Atividade atv = (Atividade) obj;
-        System.out.println("Equals");
-        System.out.println(this.nomeDaAtv);
-        System.out.println(atv.getNomeDaAtv());
         return this.nomeDaAtv.equals(atv.getNomeDaAtv());
     }
 
