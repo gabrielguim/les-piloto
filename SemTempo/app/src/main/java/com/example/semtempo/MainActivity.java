@@ -126,18 +126,7 @@ public class MainActivity extends AppCompatActivity
 
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
-            FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
-                @Override
-                public void onStart() {
-                    //Colocar hmm waiting talvez..
-                }
 
-                @Override
-                public void onSuccess(final List<Atividade> data) {
-                 System.out.println("cabo");
-
-                }
-            });
         }
     }
 
