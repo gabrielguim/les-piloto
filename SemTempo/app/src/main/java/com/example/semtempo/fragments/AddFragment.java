@@ -71,20 +71,6 @@ public class AddFragment extends Fragment {
                     }
 
                     Calendar creation_date = new GregorianCalendar();
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-                    System.out.println("Init.");
-
-                    System.out.println();
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
-                    System.out.println("Acabou.");
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
                     Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
@@ -98,10 +84,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
-        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
-        autoCompleteTextView.setThreshold(1);
-        autoCompleteTextView.setAdapter(adapter);
 
         high_priority = (ImageView) rootView.findViewById(R.id.high_priority);
         medium_priority = (ImageView) rootView.findViewById(R.id.medium_priority);
@@ -146,10 +128,13 @@ public class AddFragment extends Fragment {
     }
 
     private void configureAutoComplete(){
-        ATIVIDADES = new ArrayList<>();
+        ATIVIDADES = new ArrayList<String>();
 
         for (int i = 0; i < atividades.size(); i++) {
-            ATIVIDADES.add(atividades.get(i).getNomeDaAtv());
+            if(!(ATIVIDADES.contains(atividades.get(i).getNomeDaAtv()))){
+                System.out.println(atividades.get(i).getNomeDaAtv());
+                ATIVIDADES.add(atividades.get(i).getNomeDaAtv());
+            }
         }
     }
 
@@ -185,6 +170,13 @@ public class AddFragment extends Fragment {
             @Override
             public void onSuccess(final List<Atividade> data) {
                 atividades = data;
+                configureAutoComplete();
+                if(getActivity() != null) {
+                    ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
+                    autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
+                    autoCompleteTextView.setThreshold(1);
+                    autoCompleteTextView.setAdapter(adapter);
+                }
             }
         });
 
