@@ -1,7 +1,9 @@
 package com.example.semtempo.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -73,13 +75,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-            setUp();
-//        setFab();
-//        if (atividadesDaSemana != null) {
-//            fillChartCollors();
-//            plotChart();
-//        }
-//        loadRecentTasks();
+        setFab();
+        setUp();
 
         return rootView;
     }
@@ -92,18 +89,20 @@ public class HomeFragment extends Fragment {
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final int TIME = 1000;
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Carregando...");
+                dialog.setCancelable(false);
+                dialog.show();
 
-                Fragment fragment = new AddFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction =        fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-//                AddFragment fragment = new AddFragment();
-//                android.support.v4.app.FragmentTransaction fragmentTransaction =
-//                        getActivity().getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                fragmentTransaction.commit();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        dialog.dismiss();
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                        ft.commit();
+                    }
+                }, TIME);
 
             }
         });
@@ -124,8 +123,10 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
-        Utils.setListViewHeightBasedOnChildren(recentTasks);
+        if(getActivity() != null) {
+            recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
+            Utils.setListViewHeightBasedOnChildren(recentTasks);
+        }
 
     }
 
@@ -146,9 +147,13 @@ public class HomeFragment extends Fragment {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
-        subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
-        subtitles.setDivider(null);
-        Utils.setListViewHeightBasedOnChildren(subtitles);
+        if (getActivity() != null) {
+            subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
+            subtitles.setDivider(null);
+            Utils.setListViewHeightBasedOnChildren(subtitles);
+        }
+
+
 
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
@@ -179,14 +184,6 @@ public class HomeFragment extends Fragment {
 
     private void setUp(){
         System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
-        System.out.println("Aqui esta a porra do erro");
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
@@ -201,7 +198,6 @@ public class HomeFragment extends Fragment {
             public void onSuccess(final List<Atividade> data) {
                 atividades = data;
                 setUpWeek();
-                setFab();
                 if (atividadesDaSemana != null)
                     fillChartCollors();
                     plotChart();

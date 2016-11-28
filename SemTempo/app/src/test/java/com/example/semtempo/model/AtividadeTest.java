@@ -22,11 +22,11 @@ public class AtividadeTest {
         p3 = Prioridade.BAIXA;
         t1 = Tag.LAZER;
         t2 = Tag.TRABALHO;
-        atv1 = new Atividade("Chutar cu de bebo", p3);
-        atv2 = new Atividade("Comer pudim", p3);
-        atv3 = new Atividade("Escrever artigo de ES", p1);
-        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2);
-        h1 = new Horario(3, new GregorianCalendar(2016,6,12));
+//        atv1 = new Atividade("Chutar cu de bebo", p3);
+//        atv2 = new Atividade("Comer pudim", p3);
+//        atv3 = new Atividade("Escrever artigo de ES", p1);
+//        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2);
+//        h1 = new Horario(3, new GregorianCalendar(2016,6,12));
         h2 = new Horario(1, new GregorianCalendar(2016,7,22));
         h3 = new Horario(8, new GregorianCalendar(2016,8,11));
         h4 = new Horario(4, new GregorianCalendar(2016,9,18));

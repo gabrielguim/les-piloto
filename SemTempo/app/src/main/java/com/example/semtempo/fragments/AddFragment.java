@@ -167,9 +167,6 @@ public class AddFragment extends Fragment {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_container, new HomeFragment(), "NewFragmentTag");
                 ft.commit();
-//                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
-//                fragmentTransaction.commit();
             }
         }, TIME);
     }

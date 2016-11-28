@@ -25,7 +25,7 @@ public class RecentTasksAdapter extends BaseAdapter{
     private View rootView;
     private Context context;
 
-    private static LayoutInflater inflater = null;
+    private LayoutInflater inflater;
 
     public RecentTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
 

@@ -23,7 +23,7 @@ public class SubtitlesAdapter extends BaseAdapter{
     private TextView perc_text;
     private View rootView;
 
-    private static LayoutInflater inflater = null;
+    private LayoutInflater inflater;
     public SubtitlesAdapter(Context context, List<String> valores, List<Integer> colors, List<Float> perc, TextView perc_text, View rootView) {
 
         this.valores = valores;
