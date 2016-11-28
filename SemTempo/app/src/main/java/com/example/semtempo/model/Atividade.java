@@ -91,6 +91,11 @@ public class Atividade {
         horariosRealizDaAtv = tempoInvestido;
     }
 
+    @Override
+    public int hashCode() {
+        return nomeDaAtv.hashCode();
+    }
+
     /**
      * Retorna boolean pelo fato de que se um horário não consta na coleção, ele retornará falso.
      * */
@@ -113,9 +118,12 @@ public class Atividade {
             return false;
         }
 
-        Atividade atv = (Atividade) obj;
 
-        return atv.getNomeDaAtv().equals(atv.getNomeDaAtv());
+        Atividade atv = (Atividade) obj;
+        System.out.println("Equals");
+        System.out.println(this.nomeDaAtv);
+        System.out.println(atv.getNomeDaAtv());
+        return this.nomeDaAtv.equals(atv.getNomeDaAtv());
     }
 
 

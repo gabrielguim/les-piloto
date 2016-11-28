@@ -39,8 +39,6 @@ public class AtividadeController {
             Horario horario = atividade.getHorariosRealizDaAtv();
 
             if (atvCal.get(Calendar.WEEK_OF_YEAR) == week) {
-                System.out.println("Atividade: " + atividade.getNomeDaAtv());
-                System.out.println("Horario: " + horario.getTotalHorasInvestidas());
                 if (filteredActivities.containsKey(atividade)) {
                     int actualTime = filteredActivities.get(atividade);
                     filteredActivities.put(atividade, actualTime + horario.getTotalHorasInvestidas());
