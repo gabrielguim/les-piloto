@@ -52,6 +52,7 @@ public class AddFragment extends Fragment {
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
         addFab.setVisibility(View.VISIBLE);
+        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
 
         setUp();
         configureAutoComplete();
@@ -73,9 +74,9 @@ public class AddFragment extends Fragment {
                     Calendar creation_date = new GregorianCalendar();
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
 
-                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), a);
+                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 
                     showProgressDialog();
 
@@ -132,7 +133,6 @@ public class AddFragment extends Fragment {
 
         for (int i = 0; i < atividades.size(); i++) {
             if(!(ATIVIDADES.contains(atividades.get(i).getNomeDaAtv()))){
-                System.out.println(atividades.get(i).getNomeDaAtv());
                 ATIVIDADES.add(atividades.get(i).getNomeDaAtv());
             }
         }
@@ -144,7 +144,6 @@ public class AddFragment extends Fragment {
         dialog.setMessage("Adicionando atividade...");
         dialog.setCancelable(false);
         dialog.show();
-
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -160,15 +159,20 @@ public class AddFragment extends Fragment {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
+        final int TIME = 3000; //Timeout
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+
             @Override
-            public void onStart() {
-                //Colocar hmm waiting talvez..
-            }
+            public void onStart() {}
 
             @Override
             public void onSuccess(final List<Atividade> data) {
+                dialog.dismiss();
                 atividades = data;
                 configureAutoComplete();
                 if(getActivity() != null) {
@@ -179,6 +183,12 @@ public class AddFragment extends Fragment {
                 }
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, TIME);
 
     }
 

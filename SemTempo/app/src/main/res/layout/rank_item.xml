@@ -9,7 +9,7 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         card_view:cardCornerRadius="5dp"
         android:focusable="true"
         android:clickable="true"
@@ -20,21 +20,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_margin="15dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="?android:attr/textSelectHandleLeft"
-                android:id="@+id/task_priority"
-                android:tint="@color/colorAccent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="40sp"
+                android:id="@+id/task_rank"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"/>
 
             <TextView
                 android:text="{{ nome da atividade }}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/task_name"
-                android:layout_toRightOf="@id/task_priority"
-                android:layout_centerVertical="true" />
+                android:layout_marginTop="27dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/task_rank"/>
 
             <TextView
                 android:text="{{ horas gastas }}"
@@ -45,7 +49,7 @@
                 android:layout_toRightOf="@id/task_name"
                 android:gravity="end"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="20dp"/>
 
             <TextView
                 android:text="{{ data de att }}"

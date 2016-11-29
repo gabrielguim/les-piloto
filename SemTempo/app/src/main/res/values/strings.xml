@@ -60,5 +60,9 @@
     <string name="task_name">Nome da Atividade *</string>
     <string name="task_priority">Prioridade *</string>
     <string name="registered_tasks">Atividades registradas</string>
+    <string name="no_tasks_warn">Sem atividades :(</string>
+    <string name="history">Histórico Comparativo</string>
+    <string name="total_hours">Horas investidas na semana:</string>
+    <string name="text_rank">Rank de Atividades</string>
 
 </resources>

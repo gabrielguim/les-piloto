@@ -1,5 +1,6 @@
 package com.example.semtempo.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.example.semtempo.R;
-import com.example.semtempo.adapters.RecentTasksAdapter;
+import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.database.OnGetDataListener;
@@ -20,12 +21,9 @@ import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
 
 public class SeeMoreFragment extends Fragment {
 
@@ -63,18 +61,23 @@ public class SeeMoreFragment extends Fragment {
                 String item = parent.getItemAtPosition(position).toString();
 
                 if (item.equals("Menor prioridade - Maior prioridade")){
-                    Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                    Utils.sortByPriority(atividades);
                     Collections.reverse(atividades);
                 } else if (item.equals("Menos horas - Mais horas")){
-                    Utils.sortByHours(atividades, 0, atividades.size()-1);
+                    Utils.sortByHours(atividades);
                 } else if (item.equals("Maior prioridade - Menor prioridade")){
-                    Utils.sortByPriority(atividades, 0, atividades.size()-1);
+                    Utils.sortByPriority(atividades);
+                } else if (item.equals("Mais horas - Menos horas")) {
+                    Utils.sortByHours(atividades);
+                    Collections.reverse(atividades);
+                } else if (item.equals("Mais recente - Menos recente")){
+                    Utils.sortByDate(atividades);
                 } else {
-                    Utils.sortByHours(atividades, 0, atividades.size()-1);
+                    Utils.sortByDate(atividades);
                     Collections.reverse(atividades);
                 }
 
-                allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
+                allTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades, rootView));
                 Utils.setListViewHeightBasedOnChildren(allTasks);
 
             }
@@ -90,6 +93,8 @@ public class SeeMoreFragment extends Fragment {
         categories.add("Menor prioridade - Maior prioridade");
         categories.add("Menos horas - Mais horas");
         categories.add("Mais horas - Menos horas");
+        categories.add("Mais recente - Menos recente");
+        categories.add("Menos recente - Mais recente");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categories);
 
@@ -100,23 +105,30 @@ public class SeeMoreFragment extends Fragment {
 
     private void setUp() {
         allTasks = (ListView) rootView.findViewById(R.id.all_tasks);
+        allTasks.setDivider(null);
         atividades = new ArrayList<>();
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         FirebaseController.retrieveActivities(UsuarioController.getInstance().getCurrentUser().getDisplayName(), new OnGetDataListener() {
             @Override
-            public void onStart() {
-                //Colocar hmm waiting talvez..
-            }
+            public void onStart() {}
 
             @Override
             public void onSuccess(final List<Atividade> data) {
-                System.out.println("cabo");
+                dialog.dismiss();
+
                 atividades = data;
-                allTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades, rootView));
-                Utils.setListViewHeightBasedOnChildren(allTasks);
+
+                if (getActivity() != null) {
+                    allTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades, rootView));
+                    Utils.setListViewHeightBasedOnChildren(allTasks);
+                }
             }
         });
-
 
     }
 

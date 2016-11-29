@@ -1,10 +1,17 @@
 package com.example.semtempo.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +54,7 @@ public class Utils {
 
     }
 
-    public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByHours(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
@@ -62,11 +69,20 @@ public class Utils {
         });
     }
 
-    public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByPriority(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 return atv1.getPrioridade().compareTo(atv2.getPrioridade());
+            }
+        });
+    }
+
+    public static void sortByDate(List<Atividade> atividades) {
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                return convertDateToCalendar(atv2.getHorariosRealizDaAtv().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorariosRealizDaAtv().getData()).getTime());
             }
         });
     }
@@ -90,6 +106,5 @@ public class Utils {
     public static List<Atividade> getLista() {
         return lista;
     }
-
 
 }

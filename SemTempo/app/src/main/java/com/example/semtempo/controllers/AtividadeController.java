@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.semtempo.model.Atividade;
@@ -58,12 +59,10 @@ public class AtividadeController {
      * @param week    Semana pela qual será filtrada
      * @return filteredActivities Uma lista apenas com as atividades realizadas naquela semana
      */
-    public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week) throws ParseException {
+    public static Collection<Atividade> filterActivitiesByWeek(Collection<Atividade> allActivities, int week) {
         Collection<Atividade> filteredActivities = new ArrayList<>();
 
         for (Atividade atividade: allActivities){
-            System.out.println("filterActivitiesByWeek");
-            System.out.println("Atividade: " + atividade.getNomeDaAtv());
             Calendar horario = Utils.convertDateToCalendar(atividade.getHorariosRealizDaAtv().getData());
             if (horario.get(Calendar.WEEK_OF_YEAR) == week){
                 filteredActivities.add(atividade);
@@ -84,7 +83,7 @@ public class AtividadeController {
     public static Map<Prioridade, Integer> groupByPriority(Collection<Atividade> allActivities){
 
         Map<Prioridade, Integer> filteredActivities = new HashMap<>();
-        Map<Atividade, Integer> allTimeActivity = TimeCalcuation(allActivities);
+        Map<Atividade, Integer> allTimeActivity = TimeCalculation(allActivities);
 
         for (Map.Entry<Atividade, Integer> entry : allTimeActivity.entrySet())
         {
@@ -94,22 +93,53 @@ public class AtividadeController {
         return filteredActivities;
     }
 
-    public static Map<Atividade, Integer> TimeCalcuation(Collection<Atividade> allActivities){
-        Map<Atividade, Integer> calculaTion = new HashMap<>();
+    public static Map<Atividade, Integer> TimeCalculation(Collection<Atividade> allActivities){
+        Map<Atividade, Integer> calculation = new HashMap<>();
 
         for (Atividade atividade: allActivities){
-            if(calculaTion.containsKey(atividade)){
-                int actualTime = calculaTion.get(atividade);
-                calculaTion.put(atividade, actualTime +
+            if(calculation.containsKey(atividade)){
+                int actualTime = calculation.get(atividade);
+                calculation.put(atividade, actualTime +
                         atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
             }else{
-                calculaTion.put(atividade,
+                calculation.put(atividade,
                         atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
             }
         }
 
 
-        return calculaTion;
+        return calculation;
     }
 
+    public static List<Integer> filterByDayAndSpentHours(List<Atividade> atividades) {
+        List<Integer> filteredTasks = new ArrayList<>();
+
+        Map<Integer, Integer> atividades_data = new HashMap<>();
+        int[] weekDays = {Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY};
+
+        for (int i = 0; i < weekDays.length; i++) {
+            atividades_data.put(weekDays[i], 0);
+        }
+
+        for (Atividade atividade: atividades){
+            Calendar horario = Utils.convertDateToCalendar(atividade.getHorariosRealizDaAtv().getData());
+            atividades_data.put(horario.get(Calendar.DAY_OF_WEEK), atividades_data.get(horario.get(Calendar.DAY_OF_WEEK)) + atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
+        }
+
+        for (int i = 0; i < weekDays.length; i++) {
+            filteredTasks.add(atividades_data.get(weekDays[i]));
+        }
+
+        return filteredTasks;
+    }
+
+    public static int getTotalSpentHoursByWeek(List<Atividade> atividades) {
+        int totalDeHoras = 0;
+
+        for (int i = 0; i < atividades.size(); i++) {
+            totalDeHoras += atividades.get(i).getHorariosRealizDaAtv().getTotalHorasInvestidas();
+        }
+
+        return totalDeHoras;
+    }
 }

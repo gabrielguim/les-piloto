@@ -13,11 +13,8 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
-import com.example.semtempo.controllers.AtividadeController;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
@@ -84,9 +81,9 @@ public class AllTasksAdapter extends BaseAdapter{
         }
 
         String horasGastas = " Hora investida";
-//        if (atividades.get(position).getTotalDeHorasGasto() > 1)
-//            horasGastas = " Horas investidas";
 
+        if (atividades.get(position).getHorariosRealizDaAtv().getTotalHorasInvestidas() > 1)
+            horasGastas = " Horas investidas";
 
         Horario horario = atividades.get(position).getHorariosRealizDaAtv();
 
@@ -95,11 +92,14 @@ public class AllTasksAdapter extends BaseAdapter{
         holder.task_date.setText(horario.getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
-        rowView.setOnClickListener(new OnClickListener() {
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
+
+                return false;
             }
+
         });
 
         return rowView;

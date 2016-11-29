@@ -68,27 +68,28 @@ public class SubtitlesAdapter extends BaseAdapter{
         try {
             holder.subtitle_text.setText(valores.get(position));
             holder.subtitle_color.setColorFilter(colors.get(position));
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        }catch(Exception e){}
+
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                perc_text.animate().scaleX(0).scaleY(0).start();
+                if (perc_text != null) {
+                    perc_text.animate().scaleX(0).scaleY(0).start();
 
-                rootView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            perc_text.setText(Math.round(perc.get(position)) + "%");
-                            perc_text.setTextColor(colors.get(position));
-                            perc_text.animate().scaleX(1).scaleY(1).start();
-                        }catch(Exception e){
-                            System.out.println(e.getMessage());
+                    rootView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                perc_text.setText(Math.round(Math.ceil(perc.get(position)))+ "%");
+                                perc_text.setTextColor(colors.get(position));
+                                perc_text.animate().scaleX(1).scaleY(1).start();
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
-                    }
-                }, 200);
+                    }, 200);
+                }
             }
         });
 

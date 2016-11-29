@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.semtempo.fragments.ReportFragment">
+    tools:context="com.example.semtempo.fragments.PreferenceFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="REPORT" />
+        android:text="PREFERÊNCIAS" />
 
 </FrameLayout>

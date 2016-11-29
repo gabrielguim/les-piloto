@@ -35,5 +35,6 @@ dependencies {
     compile 'im.dacer:AndroidCharts:1.0.2'
     compile 'com.txusballesteros:FitChart:1.0'
     apply plugin: 'com.google.gms.google-services'
-    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:cardview-v7:23.3.+'
+
 }
