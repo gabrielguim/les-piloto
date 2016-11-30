@@ -1,17 +1,10 @@
 package com.example.semtempo.utils;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,9 +52,9 @@ public class Utils {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 int result = 0;
-                if (atv1.getHorariosRealizDaAtv().getTotalHorasInvestidas()  < atv2.getHorariosRealizDaAtv().getTotalHorasInvestidas())
+                if (atv1.getHorario().getTotalHorasInvestidas()  < atv2.getHorario().getTotalHorasInvestidas())
                     result =  -1;
-                else if (atv1.getHorariosRealizDaAtv().getTotalHorasInvestidas()  > atv2.getHorariosRealizDaAtv().getTotalHorasInvestidas())
+                else if (atv1.getHorario().getTotalHorasInvestidas()  > atv2.getHorario().getTotalHorasInvestidas())
                     result = 1;
 
                 return result;
@@ -82,7 +75,7 @@ public class Utils {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
-                return convertDateToCalendar(atv2.getHorariosRealizDaAtv().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorariosRealizDaAtv().getData()).getTime());
+                return convertDateToCalendar(atv2.getHorario().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorario().getData()).getTime());
             }
         });
     }

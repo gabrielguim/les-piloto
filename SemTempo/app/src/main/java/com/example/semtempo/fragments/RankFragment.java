@@ -11,15 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.semtempo.R;
-import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.adapters.RankTasksAdapter;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,10 +79,11 @@ public class RankFragment extends Fragment {
             public void onSuccess(final List<Atividade> data) {
                 dialog.dismiss();
 
-                atividadesRank = data;
+                int semanaAtual = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+                atividadesRank = AtividadeService.filterActivitiesByWeek(data, semanaAtual);
 
-                Utils.sortByHours(data);
-                Collections.reverse(data);
+                Utils.sortByHours(atividadesRank);
+                Collections.reverse(atividadesRank);
 
                 if (getActivity() != null) {
                     rankList.setAdapter(new RankTasksAdapter(getActivity(), atividadesRank, rootView));

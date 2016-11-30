@@ -39,7 +39,7 @@ public class AtividadeTest {
         String expected = "Chutar cu de bebo";
         String newName = "Quebrar o dedo";
         Assert.assertEquals(expected, atv1.getNomeDaAtv());
-        atv1.alterarNomeDaAtv(newName);
+        atv1.setNomeDaAtv(newName);
         Assert.assertNotEquals(expected, atv1.getNomeDaAtv());
         Assert.assertEquals(newName, atv1.getNomeDaAtv());
     }

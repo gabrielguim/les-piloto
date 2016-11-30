@@ -15,20 +15,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.SubtitlesAdapter;
-import com.example.semtempo.controllers.AtividadeController;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -118,7 +116,7 @@ public class HistoryFragment extends Fragment {
     private List<String> listaDeSemanas(){
         List<String> semanas = new ArrayList<>();
         for (int i = 0; i < atividades.size(); i++) {
-            int semana = atividades.get(i).getHorariosRealizDaAtv().getSemana();
+            int semana = atividades.get(i).getHorario().getSemana();
             if (!semanas.contains(String.valueOf(semana)))
                 semanas.add(String.valueOf(semana));
         }
@@ -138,10 +136,10 @@ public class HistoryFragment extends Fragment {
             chartWeekDays.add(weekDays[i]);
         }
 
-        List<Atividade> lista1 = (List<Atividade>) AtividadeController.filterActivitiesByWeek(atividades, week1);
-        hoursWeek1 = AtividadeController.filterByDayAndSpentHours(lista1);
-        List<Atividade> lista2 = (List<Atividade>) AtividadeController.filterActivitiesByWeek(atividades, week2);
-        hoursWeek2 = AtividadeController.filterByDayAndSpentHours(lista2);
+        List<Atividade> lista1 = (List<Atividade>) AtividadeService.filterActivitiesByWeek(atividades, week1);
+        hoursWeek1 = AtividadeService.filterByDayAndSpentHours(lista1);
+        List<Atividade> lista2 = (List<Atividade>) AtividadeService.filterActivitiesByWeek(atividades, week2);
+        hoursWeek2 = AtividadeService.filterByDayAndSpentHours(lista2);
 
         dataLists.add((ArrayList<Integer>) hoursWeek1);
         dataLists.add((ArrayList<Integer>) hoursWeek2);
@@ -155,8 +153,8 @@ public class HistoryFragment extends Fragment {
         int[] cores = {Color.parseColor("#66CCFF"), Color.parseColor("#EB4E00")};
 
         List<String> valores = new ArrayList<>();
-        valores.add("Semana " + week1 + " - Total de horas: " + AtividadeController.getTotalSpentHoursByWeek(lista1));
-        valores.add("Semana " + week2 + " - Total de horas: " + AtividadeController.getTotalSpentHoursByWeek(lista2));
+        valores.add("Semana " + week1 + " - Total de horas: " + AtividadeService.getTotalSpentHours(lista1));
+        valores.add("Semana " + week2 + " - Total de horas: " + AtividadeService.getTotalSpentHours(lista2));
 
         lineView.setColorArray(cores);
         lineView.setDrawDotLine(true);

@@ -63,6 +63,6 @@
     <string name="no_tasks_warn">Sem atividades :(</string>
     <string name="history">Histórico Comparativo</string>
     <string name="total_hours">Horas investidas na semana:</string>
-    <string name="text_rank">Rank de Atividades</string>
+    <string name="text_rank">Ranking semanal</string>
 
 </resources>

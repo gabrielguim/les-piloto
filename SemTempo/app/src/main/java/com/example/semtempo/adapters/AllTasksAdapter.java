@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -82,13 +81,13 @@ public class AllTasksAdapter extends BaseAdapter{
 
         String horasGastas = " Hora investida";
 
-        if (atividades.get(position).getHorariosRealizDaAtv().getTotalHorasInvestidas() > 1)
+        if (atividades.get(position).getHorario().getTotalHorasInvestidas() > 1)
             horasGastas = " Horas investidas";
 
-        Horario horario = atividades.get(position).getHorariosRealizDaAtv();
+        Horario horario = atividades.get(position).getHorario();
 
         holder.task_name.setText(atividades.get(position).getNomeDaAtv());
-        holder.task_time.setText(atividades.get(position).getHorariosRealizDaAtv().getTotalHorasInvestidas() + horasGastas);
+        holder.task_time.setText(atividades.get(position).getHorario().getTotalHorasInvestidas() + horasGastas);
         holder.task_date.setText(horario.getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
 

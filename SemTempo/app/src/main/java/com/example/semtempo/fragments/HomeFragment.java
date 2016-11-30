@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.semtempo.R;
@@ -19,7 +18,7 @@ import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.adapters.SubtitlesAdapter;
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.FirebaseController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.txusballesteros.widgets.FitChart;
@@ -33,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.semtempo.controllers.AtividadeController;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.model.Atividade;
 
 public class HomeFragment extends Fragment {
@@ -148,10 +147,11 @@ public class HomeFragment extends Fragment {
         int week = cal.get(Calendar.WEEK_OF_YEAR);
 
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
-        totalHoras.setText("Horas investidas na semana: " + AtividadeController.getTotalSpentHoursByWeek((List<Atividade>) AtividadeController.filterActivitiesByWeek(atividades, week)));
+        List<Atividade> atividades_da_semana = AtividadeService.filterActivitiesByWeek(atividades, week);
+        totalHoras.setText("Horas investidas na semana: " + AtividadeService.getTotalSpentHours(atividades_da_semana));
 
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
-            valores.add(entry.getKey().getNomeDaAtv() + " - Total de horas: " + entry.getKey().getHorariosRealizDaAtv().getTotalHorasInvestidas());
+            valores.add(entry.getKey().getNomeDaAtv() + " - Total de horas: " + entry.getValue());
             totalHours += entry.getValue();
         }
 
@@ -256,7 +256,7 @@ public class HomeFragment extends Fragment {
         Calendar cal = new GregorianCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
 
-        atividadesDaSemana = AtividadeController.filterActivitiesByWeekAndSpentHours(atividades, week);
+        atividadesDaSemana = AtividadeService.groupActivitiesByWeekAndSpentHours(atividades, week);
     }
 
 }

@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;

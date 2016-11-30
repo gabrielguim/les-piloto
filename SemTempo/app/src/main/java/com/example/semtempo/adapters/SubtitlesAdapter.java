@@ -81,7 +81,7 @@ public class SubtitlesAdapter extends BaseAdapter{
                         @Override
                         public void run() {
                             try {
-                                perc_text.setText(Math.round(Math.ceil(perc.get(position)))+ "%");
+                                perc_text.setText(Math.round(Math.floor(perc.get(position)))+ "%");
                                 perc_text.setTextColor(colors.get(position));
                                 perc_text.animate().scaleX(1).scaleY(1).start();
                             } catch (Exception e) {

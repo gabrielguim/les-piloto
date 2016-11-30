@@ -16,7 +16,7 @@ import com.example.semtempo.R;
 import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.utils.Utils;
 
 import java.util.ArrayList;
