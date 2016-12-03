@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.HistoryFragment;
 import com.example.semtempo.fragments.RankFragment;
 import com.example.semtempo.model.Atividade;
@@ -90,13 +91,20 @@ public class MainActivity extends AppCompatActivity
 
         initUserInfor(navigationView);
 
-
-        HomeFragment fragment = new HomeFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
-        fragmentTransaction.commit();
-
+        if(getIntent().getExtras() != null){
+            String value = getIntent().getExtras().getString("flag");
+            System.out.println(value);
+            if (value.equals("notificacao")){
+                Fragment fragment1 = new AddFragment();
+                callFragment(fragment1);
+            }
+        }else {
+            HomeFragment fragment = new HomeFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+            fragmentTransaction.commit();
+        }
 
     }
 

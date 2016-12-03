@@ -8,19 +8,43 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.semtempo.fragments.AddFragment;
+import com.example.semtempo.fragments.HomeFragment;
+
+import static android.R.attr.fragment;
+
 public class PreferenciasActivity extends AppCompatActivity {
 
-
+    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferencias);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(0);
+
+        if(getIntent().getExtras() != null){
+            String value = getIntent().getExtras().getString("flag");
+            if (value == "notificacao"){
+                AddFragment fragment = new AddFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment, "Add_FRAGMENT");
+                fragmentTransaction.commit();
+            }
+        }
+
+
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,7 +54,6 @@ public class PreferenciasActivity extends AppCompatActivity {
 
     }
 
-
     public void notification(View view){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -38,35 +61,21 @@ public class PreferenciasActivity extends AppCompatActivity {
                         .setContentTitle("Registre seu tempo investido!")
                         .setContentText("Você não registrou nenhuma atividade ontem. Clique para registrar.")
                         .setAutoCancel(true);
-
         mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText("Você não registrou nenhuma atividade ontem. Clique para registrar."));
 
         Intent resultIntent = new Intent(this, MainActivity.class);
-        //Bundle extras = resultIntent.getExtras();
-        //extras.putString("flag", "notificacao");
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+        Bundle mBundle = new Bundle();
+        mBundle.putString("flag", "notificacao");
+        resultIntent.putExtras(mBundle);
 
-        /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);*/
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT, mBundle);
         mBuilder.setContentIntent(resultPendingIntent);
+
         Intent preferencias = new Intent(this, PreferenciasActivity.class);
-        PendingIntent prefs = PendingIntent.getActivity(this, 1, preferencias, PendingIntent.FLAG_CANCEL_CURRENT);
-        /*TaskStackBuilder prefStackBuilder = TaskStackBuilder.create(this);
-        prefStackBuilder.addParentStack(MainActivity.class);
-        prefStackBuilder.addNextIntent(preferencias);
-        PendingIntent prefs =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );*/
+
+
+        PendingIntent prefs = PendingIntent.getActivity(this, 0, preferencias, PendingIntent.FLAG_UPDATE_CURRENT);
+
         mBuilder.addAction(new NotificationCompat.Action(R.drawable.ic_menu_manage, "Alterar preferências", prefs));
 
         NotificationManager mNotificationManager =
@@ -83,4 +92,18 @@ public class PreferenciasActivity extends AppCompatActivity {
             toque.play();
         }catch(Exception e){}
     }
+
+    private void callFragment(Fragment fragment){
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+    }
+
+    public void startNotManager(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
