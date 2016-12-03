@@ -49,6 +49,7 @@ public class PreferenciasActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 notification(view);
+                finish();
             }
         });
 
