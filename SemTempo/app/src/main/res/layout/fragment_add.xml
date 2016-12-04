@@ -150,6 +150,36 @@
 
             </LinearLayout>
 
+            <EditText
+                android:hint="@string/categories_default"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_group_work_black_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="#c6000000"
+                android:layout_marginTop="28dp"
+                android:id="@+id/categorie_text"
+                android:layout_below="@id/view3"
+                android:background="#00000000"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/line_text"
+                android:layout_below="@id/categorie_text"></View>
+
+            <!--<Button-->
+                <!--android:id="@+id/button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/view3"-->
+                <!--android:text="Show Input Dialog" />-->
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_fab"
                 android:layout_width="wrap_content"

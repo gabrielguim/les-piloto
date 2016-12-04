@@ -14,7 +14,10 @@ import java.util.Map;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Tag;
 import com.example.semtempo.utils.Utils;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios
@@ -98,5 +101,35 @@ public class AtividadeService {
         }
 
         return totalDeHoras;
+    }
+
+    /**
+     * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
+     *
+     * @param activities List of user activities
+     * @return categoriesHours A map with information of how many time the user spent in every TAG(SemCategoria, Lazer, Trabalho)
+     */
+    public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
+        Map<Tag, Integer> categoriesHours = new HashMap<>();
+
+        categoriesHours.put(Tag.SEMCATEGORIA, 0);
+        categoriesHours.put(Tag.LAZER, 0);
+        categoriesHours.put(Tag.TRABALHO, 0);
+
+        for (int i = 0; i < activities.size(); i++) {
+            Atividade atv = activities.get(i);
+            Tag tag = atv.getTag();
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+
+            if(tag == null){
+                int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
+                categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+            }else{
+                int actualTime = categoriesHours.get(tag);
+                categoriesHours.put(tag, actualTime + horas);
+            }
+        }
+
+        return categoriesHours;
     }
 }

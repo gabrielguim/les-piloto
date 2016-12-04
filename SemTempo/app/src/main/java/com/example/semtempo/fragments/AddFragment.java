@@ -1,11 +1,13 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Tag;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
@@ -40,9 +43,11 @@ public class AddFragment extends Fragment {
     private ImageView low_priority;
     private EditText spent_time;
     private EditText label_priority;
+    private EditText categories_selection;
     private AutoCompleteTextView autoCompleteTextView;
-
+    private AlertDialog levelDialog;
     private View rootView;
+    private Tag tag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,10 +76,12 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
+
+
                     Calendar creation_date = new GregorianCalendar();
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, tag);
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 
@@ -125,7 +132,58 @@ public class AddFragment extends Fragment {
 
         spent_time = (EditText) rootView.findViewById(R.id.spent_hours);
 
+        tag = Tag.SEMCATEGORIA;
+        categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
+        categories_selection.setFocusable(false);
+        categories_selection.setClickable(true);
+
+        categories_selection.setClickable(true);
+        categories_selection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initAlertDialog();
+            }
+        });
+
         return rootView;
+    }
+
+    private void initAlertDialog(){
+        final CharSequence[] items = {" Sem Categoria "," Lazer "," Trabalho "};
+
+        // Creating and Building the Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione uma categoria: ");
+
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+
+                switch(item)
+                {
+                    case 0:
+                        categories_selection.setHint("Categoria: Sem Categoria");
+                        tag = Tag.SEMCATEGORIA;
+                        break;
+                    case 1:
+                        categories_selection.setHint("Categoria: Lazer");
+                        tag = Tag.LAZER;
+                        break;
+                    case 2:
+                        categories_selection.setHint("Categoria: Trabalho");
+                        tag = Tag.TRABALHO;
+                        break;
+                }
+
+                levelDialog.dismiss();
+
+            }
+        });
+
+        levelDialog = builder.create();
+        levelDialog.show();
+
+
     }
 
     private void configureAutoComplete(){
