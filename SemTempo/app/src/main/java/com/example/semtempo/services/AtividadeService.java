@@ -14,7 +14,10 @@ import java.util.Map;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Tag;
 import com.example.semtempo.utils.Utils;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios
@@ -98,5 +101,73 @@ public class AtividadeService {
         }
 
         return totalDeHoras;
+    }
+
+    /**
+     * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
+     *
+     * @param activities List of all user activities
+     * @return categoriesHours A map with informations about how much time
+     * the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
+     */
+    public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
+        Map<Tag, Integer> categoriesHours = new HashMap<>();
+
+        categoriesHours.put(Tag.SEMCATEGORIA, 0);
+        categoriesHours.put(Tag.LAZER, 0);
+        categoriesHours.put(Tag.TRABALHO, 0);
+
+        for (int i = 0; i < activities.size(); i++) {
+            Atividade atv = activities.get(i);
+            Tag tag = atv.getTag();
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+
+            if(tag == null){
+                int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
+                categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+            }else{
+                int actualTime = categoriesHours.get(tag);
+                categoriesHours.put(tag, actualTime + horas);
+            }
+        }
+
+        return categoriesHours;
+    }
+
+    /**
+     * Inform the quantity of hours spent by the user on the actual week categorized by Tag(SemCategoria, Lazer, Trabalho)
+     *
+     * @param activities List of all user activities
+     * @param actualWeek Actual system week
+     * @return categoriesHours A map with informations about how much time in the actual week
+     *  the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
+     */
+    public static Map<Tag, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
+        Map<Tag, Integer> categoriesHours = new HashMap<>();
+
+        categoriesHours.put(Tag.SEMCATEGORIA, 0);
+        categoriesHours.put(Tag.LAZER, 0);
+        categoriesHours.put(Tag.TRABALHO, 0);
+
+        for (int i = 0; i < activities.size(); i++) {
+            Atividade atv = activities.get(i);
+            Horario horario = atv.getHorario();
+            int atvWeek = horario.getSemana();
+
+            if(atvWeek == actualWeek){
+                Tag tag = atv.getTag();
+                int horas = atv.getHorario().getTotalHorasInvestidas();
+
+                if(tag == null){
+                    int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
+                    categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+                }else{
+                    int actualTime = categoriesHours.get(tag);
+                    categoriesHours.put(tag, actualTime + horas);
+                }
+            }
+        }
+
+        return categoriesHours;
     }
 }
