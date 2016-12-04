@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.SubtitlesAdapter;
@@ -46,26 +48,38 @@ public class CategoriesFragment extends Fragment {
     private View rootView;
     private List<Atividade> activities;
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
+    private ToggleButton toggle;
+    private String option;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_categories, container, false);
-
+        option = "Hist. Geral";
         TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
         warn.setVisibility(View.INVISIBLE);
         setUp();
         setFab();
-
-
-//        SwitchCompat simpleSwitch = (SwitchCompat) rootView.findViewById(R.id.mySwitch); // initiate Switch
-//
-//        simpleSwitch.setTextOn("On"); // displayed text of the Switch whenever it is in checked or on state
-//        simpleSwitch.setTextOff("Off");
+        initToogleButton();
         return rootView;
     }
 
+    private void initToogleButton(){
+        toggle = (ToggleButton) rootView.findViewById(R.id.toogle_hist_type);
+
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    option = "Hist. Week";
+                } else {
+                    option = "Hist. Geral";
+                }
+
+                plotChart();
+            }
+        });
+    }
     private void setUp(){
         activities = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
@@ -131,18 +145,15 @@ public class CategoriesFragment extends Fragment {
         List<Float> perc = new ArrayList<Float>();
         float totalHours = 0;
 
-        Calendar cal = new GregorianCalendar();
-        int week = cal.get(Calendar.WEEK_OF_YEAR);
-
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
         Map<Tag, Integer> categoriesHours = getCategoriesHoursPerOption();
-
-        totalHoras.setText("Horas investidas na semana: " + AtividadeService.getTotalSpentHours(activities));
 
         for (Map.Entry<Tag, Integer> entry : categoriesHours.entrySet()) {
             categories.add(entry.getKey().toString() + " - Total de horas: " + entry.getValue());
             totalHours += entry.getValue();
         }
+
+        setTotalHorasTextAndDescription(totalHours);
 
         for (Map.Entry<Tag, Integer> entry : categoriesHours.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
@@ -192,10 +203,10 @@ public class CategoriesFragment extends Fragment {
     }
 
     private Map<Tag, Integer> getCategoriesHoursPerOption(){
-        String option = "";
         Map<Tag, Integer> categoriesHours;
+        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
-        if(option.equals("Hist. Geral")){
+        if(option.equals("Hist. Week")){
             Calendar cal = new GregorianCalendar();
             int week = cal.get(Calendar.WEEK_OF_YEAR);
             categoriesHours = AtividadeService.getTotalSpentHoursByCategoriesActWeek(activities, week);
@@ -204,5 +215,18 @@ public class CategoriesFragment extends Fragment {
         }
 
         return categoriesHours;
+    }
+
+    private void setTotalHorasTextAndDescription(float totalHours){
+        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
+        TextView textChart = (TextView) rootView.findViewById(R.id.text_chart);
+
+        if(option.equals("Hist. Week")){
+            totalHoras.setText("Horas investidas na semana: " + totalHours);
+            textChart.setText("Acompanhamento Semanal");
+        }else{
+            totalHoras.setText("Horas investidas ao total: " + totalHours);
+            textChart.setText("Acompanhamento Geral");
+        }
     }
 }

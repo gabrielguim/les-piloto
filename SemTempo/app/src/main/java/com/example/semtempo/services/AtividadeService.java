@@ -106,8 +106,9 @@ public class AtividadeService {
     /**
      * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
      *
-     * @param activities Lista com todas as atividades cadastradas no sistema
-     * @return categoriesHours Uma lista apenas com as atividades realizadas naquela semana
+     * @param activities List of all user activities
+     * @return categoriesHours A map with informations about how much time
+     * the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
     public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
         Map<Tag, Integer> categoriesHours = new HashMap<>();
@@ -134,10 +135,12 @@ public class AtividadeService {
     }
 
     /**
-     * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
+     * Inform the quantity of hours spent by the user on the actual week categorized by Tag(SemCategoria, Lazer, Trabalho)
      *
-     * @param activities Lista com todas as atividades cadastradas no sistema
-     * @return categoriesHours Uma lista apenas com as atividades realizadas naquela semana
+     * @param activities List of all user activities
+     * @param actualWeek Actual system week
+     * @return categoriesHours A map with informations about how much time in the actual week
+     *  the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
     public static Map<Tag, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
         Map<Tag, Integer> categoriesHours = new HashMap<>();
@@ -150,7 +153,7 @@ public class AtividadeService {
             Atividade atv = activities.get(i);
             Horario horario = atv.getHorario();
             int atvWeek = horario.getSemana();
-            
+
             if(atvWeek == actualWeek){
                 Tag tag = atv.getTag();
                 int horas = atv.getHorario().getTotalHorasInvestidas();
