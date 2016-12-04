@@ -175,7 +175,7 @@
                 android:layout_below="@id/categorie_text"></View>
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/add_fab"
+                android:id="@+id/photo_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
@@ -186,6 +186,38 @@
                 android:layout_above="@+id/view1"
                 android:layout_alignRight="@+id/view1"
                 android:layout_alignEnd="@+id/view1" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/gallery_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fabSize="mini"
+                android:layout_gravity="bottom|end"
+                app:srcCompat="@drawable/ic_photo_library_white_18dp"
+                android:layout_marginBottom="53dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginEnd="7dp"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:layout_above="@+id/view1"
+                android:layout_alignRight="@+id/photo_fab"
+                android:layout_alignEnd="@+id/photo_fab"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/camera_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_camera_alt_white_18dp"
+                android:layout_marginBottom="53dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginEnd="7dp"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:layout_above="@+id/view1"
+                android:layout_alignRight="@+id/photo_fab"
+                android:layout_alignEnd="@+id/photo_fab"/>
 
 
         </RelativeLayout>

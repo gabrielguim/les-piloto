@@ -28,10 +28,10 @@ public class AtividadeTest {
         h2 = new Horario(1, new GregorianCalendar(2016,7,22));
         h3 = new Horario(8, new GregorianCalendar(2016,8,11));
         h4 = new Horario(4, new GregorianCalendar(2016,9,18));
-        atv1 = new Atividade("Chutar cu de bebo", p3, h0);
-        atv2 = new Atividade("Comer pudim", p3, h0);
-        atv3 = new Atividade("Escrever artigo de ES", p1, h0);
-        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2, h0);
+        atv1 = new Atividade("Chutar cu de bebo", p3, h0, t1);
+        atv2 = new Atividade("Comer pudim", p3, h0, t1);
+        atv3 = new Atividade("Escrever artigo de ES", p1, h0, t1);
+        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2, h0, t1);
     }
 
     @Test

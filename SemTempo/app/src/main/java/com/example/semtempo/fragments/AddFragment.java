@@ -1,10 +1,16 @@
 package com.example.semtempo.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -27,8 +33,14 @@ import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.model.Tag;
+import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -50,6 +62,9 @@ public class AddFragment extends Fragment {
     private AlertDialog levelDialog;
     private View rootView;
     private Tag tag;
+    private FloatingActionButton camera_fab;
+    private FloatingActionButton gallery_fab;
+    private ImageView taskImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +74,51 @@ public class AddFragment extends Fragment {
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
         addFab.setVisibility(View.VISIBLE);
+
+        taskImage = (ImageView) rootView.findViewById(R.id.atv_photo);
+
+        FloatingActionButton photoFab = (FloatingActionButton) rootView.findViewById(R.id.photo_fab);
+        camera_fab = (FloatingActionButton) rootView.findViewById(R.id.camera_fab);
+        gallery_fab = (FloatingActionButton) rootView.findViewById(R.id.gallery_fab);
+        photoFab.bringToFront();
+        photoFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (camera_fab.getScaleX() == 0f){
+                    camera_fab.animate().scaleX(1f).scaleY(1f).x(v.getX() - 140).setDuration(100);
+                    gallery_fab.animate().scaleX(1f).scaleY(1f).x(v.getX() - 280).setDuration(100);
+                } else {
+                    gallery_fab.animate().scaleX(0f).scaleY(0f).x(v.getX()).setDuration(100);
+                    camera_fab.animate().scaleX(0f).scaleY(0f).x(v.getX()).setDuration(100);
+                }
+
+            }
+        });
+
+        View.OnClickListener listenerIntent = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = null;
+
+                switch (v.getId()){
+                    case R.id.camera_fab:
+                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, 5678);
+                        break;
+                    case R.id.gallery_fab:
+                        intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Select File"), 1234);
+                        break;
+                }
+            }
+        };
+
+        camera_fab.setOnClickListener(listenerIntent);
+        gallery_fab.setOnClickListener(listenerIntent);
+
         autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
 
         setUp();
@@ -77,8 +137,6 @@ public class AddFragment extends Fragment {
                     } else {
                         priority = Prioridade.BAIXA;
                     }
-
-
 
                     Calendar creation_date = new GregorianCalendar();
 
@@ -151,6 +209,51 @@ public class AddFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1234)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == 5678)
+                onCaptureImageResult(data);
+        }
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Bitmap bm=null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        taskImage.setImageBitmap(bm);
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        taskImage.setImageBitmap(thumbnail);
+    }
+
     private void initAlertDialog(){
         final CharSequence[] items = {" Sem Categoria "," Lazer "," Trabalho "};
 
@@ -220,7 +323,7 @@ public class AddFragment extends Fragment {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
-        final int TIME = 3000; //Timeout
+        final int TIME = 1000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
@@ -245,6 +348,12 @@ public class AddFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, TIME);
 
     }
 
