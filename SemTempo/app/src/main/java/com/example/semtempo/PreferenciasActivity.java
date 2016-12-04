@@ -1,5 +1,6 @@
 package com.example.semtempo;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,19 +9,16 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.example.semtempo.fragments.AddFragment;
-import com.example.semtempo.fragments.HomeFragment;
 
-import static android.R.attr.fragment;
+import java.util.Calendar;
 
 public class PreferenciasActivity extends AppCompatActivity {
 
@@ -44,7 +42,6 @@ public class PreferenciasActivity extends AppCompatActivity {
             }
         }
 
-
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +50,28 @@ public class PreferenciasActivity extends AppCompatActivity {
             }
         });
 
+        final CheckBox satView = (CheckBox)findViewById(R.id.checkBox);
+        satView.setChecked(true);
+
+        if(satView.isChecked()) {
+            startRepeatingNotification();
+        }
+
+        satView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(satView.isChecked()){
+                    System.out.println("Checked");
+                    startRepeatingNotification();
+                }else{
+                    System.out.println("Un-Checked");
+                    Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+                    PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    alarmManager.cancel(sender);
+                }
+            }
+        });
     }
 
     public void notification(View view){
@@ -105,6 +124,17 @@ public class PreferenciasActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void startRepeatingNotification(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 05);
+        calendar.set(calendar.SECOND, 10);
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY , pendIntent);
     }
 
 }

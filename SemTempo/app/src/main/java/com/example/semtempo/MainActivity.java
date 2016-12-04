@@ -21,6 +21,7 @@ import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.CategoriesFragment;
 import com.example.semtempo.fragments.HistoryFragment;
+import com.example.semtempo.fragments.PreferenceFragment;
 import com.example.semtempo.fragments.RankFragment;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
             fragmentTransaction.commit();
         }
+
 
     }
 
