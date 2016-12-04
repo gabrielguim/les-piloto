@@ -230,7 +230,6 @@ public class AddFragment extends Fragment {
 
             @Override
             public void onSuccess(final List<Atividade> data) {
-                dialog.dismiss();
                 atividades = data;
                 configureAutoComplete();
                 if(getActivity() != null) {
@@ -239,14 +238,10 @@ public class AddFragment extends Fragment {
                     autoCompleteTextView.setThreshold(1);
                     autoCompleteTextView.setAdapter(adapter);
                 }
-            }
-        });
 
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
                 dialog.dismiss();
             }
-        }, TIME);
+        });
 
     }
 

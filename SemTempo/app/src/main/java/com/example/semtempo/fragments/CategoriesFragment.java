@@ -4,11 +4,14 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 
 import com.example.semtempo.R;
@@ -42,6 +45,7 @@ public class CategoriesFragment extends Fragment {
     private ListView subtitles;
     private View rootView;
     private List<Atividade> activities;
+    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +56,13 @@ public class CategoriesFragment extends Fragment {
         TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
         warn.setVisibility(View.INVISIBLE);
         setUp();
+        setFab();
 
+
+//        SwitchCompat simpleSwitch = (SwitchCompat) rootView.findViewById(R.id.mySwitch); // initiate Switch
+//
+//        simpleSwitch.setTextOn("On"); // displayed text of the Switch whenever it is in checked or on state
+//        simpleSwitch.setTextOff("Off");
         return rootView;
     }
 
@@ -125,7 +135,8 @@ public class CategoriesFragment extends Fragment {
         int week = cal.get(Calendar.WEEK_OF_YEAR);
 
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
-        Map<Tag, Integer> categoriesHours = AtividadeService.getTotalSpentHoursByCategories(activities);
+        Map<Tag, Integer> categoriesHours = getCategoriesHoursPerOption();
+
         totalHoras.setText("Horas investidas na semana: " + AtividadeService.getTotalSpentHours(activities));
 
         for (Map.Entry<Tag, Integer> entry : categoriesHours.entrySet()) {
@@ -160,5 +171,38 @@ public class CategoriesFragment extends Fragment {
         }
 
         fitChart.setValues(values);
+    }
+
+    private void setFab(){
+
+        FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
+        addFab.setImageResource(ADD_ICON);
+        addFab.setVisibility(View.VISIBLE);
+
+        addFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.commit();
+
+
+            }
+        });
+    }
+
+    private Map<Tag, Integer> getCategoriesHoursPerOption(){
+        String option = "";
+        Map<Tag, Integer> categoriesHours;
+
+        if(option.equals("Hist. Geral")){
+            Calendar cal = new GregorianCalendar();
+            int week = cal.get(Calendar.WEEK_OF_YEAR);
+            categoriesHours = AtividadeService.getTotalSpentHoursByCategoriesActWeek(activities, week);
+        }else{
+            categoriesHours = AtividadeService.getTotalSpentHoursByCategories(activities);
+        }
+
+        return categoriesHours;
     }
 }

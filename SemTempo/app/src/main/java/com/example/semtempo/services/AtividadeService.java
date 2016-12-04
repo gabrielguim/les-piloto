@@ -106,8 +106,8 @@ public class AtividadeService {
     /**
      * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
      *
-     * @param activities List of user activities
-     * @return categoriesHours A map with information of how many time the user spent in every TAG(SemCategoria, Lazer, Trabalho)
+     * @param activities Lista com todas as atividades cadastradas no sistema
+     * @return categoriesHours Uma lista apenas com as atividades realizadas naquela semana
      */
     public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
         Map<Tag, Integer> categoriesHours = new HashMap<>();
@@ -127,6 +127,41 @@ public class AtividadeService {
             }else{
                 int actualTime = categoriesHours.get(tag);
                 categoriesHours.put(tag, actualTime + horas);
+            }
+        }
+
+        return categoriesHours;
+    }
+
+    /**
+     * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
+     *
+     * @param activities Lista com todas as atividades cadastradas no sistema
+     * @return categoriesHours Uma lista apenas com as atividades realizadas naquela semana
+     */
+    public static Map<Tag, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
+        Map<Tag, Integer> categoriesHours = new HashMap<>();
+
+        categoriesHours.put(Tag.SEMCATEGORIA, 0);
+        categoriesHours.put(Tag.LAZER, 0);
+        categoriesHours.put(Tag.TRABALHO, 0);
+
+        for (int i = 0; i < activities.size(); i++) {
+            Atividade atv = activities.get(i);
+            Horario horario = atv.getHorario();
+            int atvWeek = horario.getSemana();
+            
+            if(atvWeek == actualWeek){
+                Tag tag = atv.getTag();
+                int horas = atv.getHorario().getTotalHorasInvestidas();
+
+                if(tag == null){
+                    int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
+                    categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+                }else{
+                    int actualTime = categoriesHours.get(tag);
+                    categoriesHours.put(tag, actualTime + horas);
+                }
             }
         }
 

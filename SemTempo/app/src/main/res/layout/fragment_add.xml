@@ -174,12 +174,6 @@
                 android:id="@+id/line_text"
                 android:layout_below="@id/categorie_text"></View>
 
-            <!--<Button-->
-                <!--android:id="@+id/button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@id/view3"-->
-                <!--android:text="Show Input Dialog" />-->
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_fab"
                 android:layout_width="wrap_content"
