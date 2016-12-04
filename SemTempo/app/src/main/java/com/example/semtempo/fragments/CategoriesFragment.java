@@ -42,7 +42,7 @@ import java.util.Map;
 
 public class CategoriesFragment extends Fragment {
 
-    private final String[] categoriesColors = {"#A52A2A", "#6495ED", "#A9A9A9"};
+    private final String[] categoriesColors = {"#EB4E00", "#667FFF", "#D3D3D3"};
     private List<Integer> chartColors;
     private ListView subtitles;
     private View rootView;

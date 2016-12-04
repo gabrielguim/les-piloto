@@ -136,6 +136,7 @@ public class AddFragment extends Fragment {
 
         tag = Tag.SEMCATEGORIA;
         categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
+        categories_selection.setText("Sem categoria");
         categories_selection.setFocusable(false);
         categories_selection.setClickable(true);
 
@@ -164,15 +165,15 @@ public class AddFragment extends Fragment {
                 switch(item)
                 {
                     case 0:
-                        categories_selection.setHint("Categoria: Sem Categoria");
+                        categories_selection.setText("Sem categoria");
                         tag = Tag.SEMCATEGORIA;
                         break;
                     case 1:
-                        categories_selection.setHint("Categoria: Lazer");
+                        categories_selection.setText("Lazer");
                         tag = Tag.LAZER;
                         break;
                     case 2:
-                        categories_selection.setHint("Categoria: Trabalho");
+                        categories_selection.setText("Trabalho");
                         tag = Tag.TRABALHO;
                         break;
                 }
