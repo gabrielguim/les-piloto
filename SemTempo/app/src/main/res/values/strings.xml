@@ -64,5 +64,6 @@
     <string name="history">Histórico Comparativo</string>
     <string name="total_hours">Horas investidas na semana:</string>
     <string name="text_rank">Ranking semanal</string>
+    <string name="categories_default">Categoria</string>
 
 </resources>

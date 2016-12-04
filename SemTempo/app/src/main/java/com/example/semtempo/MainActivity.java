@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.fragments.CategoriesFragment;
 import com.example.semtempo.fragments.HistoryFragment;
 import com.example.semtempo.fragments.RankFragment;
 import com.example.semtempo.model.Atividade;
@@ -64,18 +66,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.add_fab);
-//        addFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                AddFragment fragment = new AddFragment();
-//                android.support.v4.app.FragmentTransaction fragmentTransaction =
-//                        getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                fragmentTransaction.commit();
-//
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -177,7 +167,10 @@ public class MainActivity extends AppCompatActivity
             fragment = new HistoryFragment();
             callFragment(fragment);
 
-        } else if (id == R.id.nav_logout) {
+        } else if(id == R.id.nav_categories) {
+            fragment = new CategoriesFragment();
+            callFragment(fragment);
+        }else if (id == R.id.nav_logout) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
