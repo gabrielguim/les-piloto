@@ -1,7 +1,12 @@
 package com.example.semtempo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -41,6 +46,7 @@ import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView = null;
     private Toolbar toolbar = null;
 
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +103,18 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefs.getString("notificacao", "erro").equals("erro")){
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("notificacao", "ativa");
+            editor.putString("checkbox", "checked");
+            editor.commit();
+        }
 
+        if(prefs.getString("notificacao", "erro").equals("ativa")){
+            System.out.println(prefs.getString("notificacao", "erro"));
+            startRepeatingNotification();
+        }
     }
 
     private void initUserInfor(NavigationView navigationView ) {
@@ -211,5 +229,15 @@ public class MainActivity extends AppCompatActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         //Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+    public void startRepeatingNotification(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 2);
+        calendar.set(calendar.SECOND, 10);
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000, pendIntent);
     }
 }

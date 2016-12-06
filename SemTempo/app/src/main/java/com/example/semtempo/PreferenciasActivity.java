@@ -6,9 +6,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +23,7 @@ import com.example.semtempo.fragments.AddFragment;
 import java.util.Calendar;
 
 public class PreferenciasActivity extends AppCompatActivity {
-
+    SharedPreferences prefs;
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class PreferenciasActivity extends AppCompatActivity {
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(0);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if(getIntent().getExtras() != null){
             String value = getIntent().getExtras().getString("flag");
@@ -51,10 +55,10 @@ public class PreferenciasActivity extends AppCompatActivity {
         });
 
         final CheckBox satView = (CheckBox)findViewById(R.id.checkBox);
-        satView.setChecked(true);
-
-        if(satView.isChecked()) {
-            startRepeatingNotification();
+        if(prefs.getString("checkbox", "erro").equals("checked")){
+            satView.setChecked(true);
+        }else {
+            satView.setChecked(false);
         }
 
         satView.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +66,17 @@ public class PreferenciasActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(satView.isChecked()){
                     System.out.println("Checked");
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("notificacao", "ativa");
+                    editor.putString("checkbox", "checked");
+                    editor.commit();
                     startRepeatingNotification();
                 }else{
                     System.out.println("Un-Checked");
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("notificacao", "desativa");
+                    editor.putString("checkbox", "unchecked");
+                    editor.commit();
                     Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
                     PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -92,7 +104,6 @@ public class PreferenciasActivity extends AppCompatActivity {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Intent preferencias = new Intent(this, PreferenciasActivity.class);
-
 
         PendingIntent prefs = PendingIntent.getActivity(this, 0, preferencias, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -128,13 +139,13 @@ public class PreferenciasActivity extends AppCompatActivity {
 
     public void startRepeatingNotification(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 05);
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 2);
         calendar.set(calendar.SECOND, 10);
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY , pendIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 , pendIntent);
     }
 
 }
