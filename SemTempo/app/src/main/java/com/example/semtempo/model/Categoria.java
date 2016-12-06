@@ -1,6 +1,6 @@
 package com.example.semtempo.model;
 
-public enum Tag {
+public enum Categoria {
 
     TRABALHO, LAZER
 }

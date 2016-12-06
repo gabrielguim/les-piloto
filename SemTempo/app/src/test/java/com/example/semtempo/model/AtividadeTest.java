@@ -13,15 +13,15 @@ public class AtividadeTest {
     private Atividade atv1, atv2, atv3, atv4;
     private Prioridade p1, p2, p3;
     private Horario h1, h2, h3, h4;
-    private Tag t1, t2;
+    private Categoria t1, t2;
 
     @Before
     public void instanciacao(){
         p1 = Prioridade.ALTA;
         p2 = Prioridade.MEDIA;
         p3 = Prioridade.BAIXA;
-        t1 = Tag.LAZER;
-        t2 = Tag.TRABALHO;
+        t1 = Categoria.LAZER;
+        t2 = Categoria.TRABALHO;
 //        atv1 = new Atividade("Chutar cu de bebo", p3);
 //        atv2 = new Atividade("Comer pudim", p3);
 //        atv3 = new Atividade("Escrever artigo de ES", p1);

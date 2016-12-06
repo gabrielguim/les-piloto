@@ -1,14 +1,5 @@
 package com.example.semtempo.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.example.semtempo.model.Foto;
-import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
-
 /**
  * Created by Lucas on 20/11/2016.
  */
@@ -17,7 +8,7 @@ public class Atividade {
     private String nomeDaAtv;
     private Foto fotoDaAtividade;
     private Horario horariosRealizDaAtv;
-    private Tag categoria;
+    private Categoria categoria;
     private Prioridade prioridade;
     private String id;
 
@@ -31,7 +22,7 @@ public class Atividade {
         this.horariosRealizDaAtv = horario;
     }
 
-    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Tag categoria, Prioridade prioridade, Horario horario){
+    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Categoria categoria, Prioridade prioridade, Horario horario){
         this.nomeDaAtv = nomeDaAtv;
         this.fotoDaAtividade = fotoDaAtividade;
         this.categoria = categoria;
@@ -63,11 +54,11 @@ public class Atividade {
         this.horariosRealizDaAtv = horario;
     }
 
-    public Tag getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void alterarCategoria(Tag categoria) {
+    public void alterarCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
