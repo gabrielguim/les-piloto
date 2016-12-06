@@ -1,24 +1,30 @@
 package com.example.semtempo.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -33,18 +39,19 @@ import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.model.Tag;
-import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class AddFragment extends Fragment {
 
@@ -65,9 +72,10 @@ public class AddFragment extends Fragment {
     private FloatingActionButton camera_fab;
     private FloatingActionButton gallery_fab;
     private ImageView taskImage;
+    private Bitmap currentImage;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
@@ -76,6 +84,24 @@ public class AddFragment extends Fragment {
         addFab.setVisibility(View.VISIBLE);
 
         taskImage = (ImageView) rootView.findViewById(R.id.atv_photo);
+
+        taskImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog settingsDialog = new Dialog(getActivity());
+
+                View newView = inflater.inflate(R.layout.image_layout, null);
+
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                settingsDialog.setContentView(newView);
+
+                ImageView imageView = (ImageView) newView.findViewById(R.id.task_image);
+                imageView.setImageBitmap(currentImage);
+
+                settingsDialog.show();
+
+            }
+        });
 
         FloatingActionButton photoFab = (FloatingActionButton) rootView.findViewById(R.id.photo_fab);
         camera_fab = (FloatingActionButton) rootView.findViewById(R.id.camera_fab);
@@ -100,17 +126,27 @@ public class AddFragment extends Fragment {
             public void onClick(View v) {
 
                 Intent intent = null;
-
                 switch (v.getId()){
                     case R.id.camera_fab:
-                        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 5678);
+                        if (ContextCompat.checkSelfPermission(getActivity(), CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{CAMERA},0);
+                        } else {
+                            intent = new Intent();
+                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, 0);
+                        }
+
                         break;
                     case R.id.gallery_fab:
-                        intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select File"), 1234);
+                        if (ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE},0);
+                        } else {
+                            intent = new Intent();
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(Intent.createChooser(intent, "Select File"), 1234);
+                        }
+
                         break;
                 }
             }
@@ -215,43 +251,53 @@ public class AddFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1234)
                 onSelectFromGalleryResult(data);
-            else if (requestCode == 5678)
+            else if (requestCode == 0)
                 onCaptureImageResult(data);
         }
     }
 
     private void onSelectFromGalleryResult(Intent data) {
-        Bitmap bm=null;
+        Bitmap img = null;
         if (data != null) {
             try {
-                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                img = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        taskImage.setImageBitmap(bm);
+        Bitmap decoded = img;
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        decoded.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        decoded = Bitmap.createScaledBitmap(img, decoded.getWidth() - 200, decoded.getHeight()  - 200, false);
+        taskImage.setImageBitmap(decoded);
+
+        img = Bitmap.createScaledBitmap(img, img.getWidth() - 150, img.getHeight()  - 150, false);
+        currentImage = img;
     }
 
     private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if (data != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null){
+                Bitmap img = (Bitmap) bundle.get("data");
 
-        taskImage.setImageBitmap(thumbnail);
+                taskImage.setImageBitmap(img);
+
+                currentImage = img;
+            }
+        }
+    }
+
+
+    public static Bitmap scaleBitmap(Bitmap originalImage, int wantedWidth, int wantedHeight) {
+        Bitmap output = Bitmap.createBitmap(wantedWidth, wantedHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        Matrix m = new Matrix();
+        m.setScale((float)wantedWidth / originalImage.getWidth(), (float)wantedHeight / originalImage.getHeight());
+        canvas.drawBitmap(originalImage, m, new Paint());
+        return output;
     }
 
     private void initAlertDialog(){
