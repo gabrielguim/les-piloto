@@ -1,18 +1,20 @@
 package com.example.semtempo.model;
 
+import android.net.Uri;
+
 public class Foto {
 
-    private String idFoto;
+    private Uri uriFoto;
 
-    public Foto(String idFoto){
-        this.idFoto = idFoto;
+    public Foto(Uri uriFoto){
+        this.uriFoto = uriFoto;
     }
 
-    public String getIdFoto() {
-        return idFoto;
+    public Uri getUriFoto() {
+        return uriFoto;
     }
 
-    public void setIdFoto(String idFoto) {
-        this.idFoto = idFoto;
+    public void setUriFoto(Uri newUriFoto) {
+        this.uriFoto = newUriFoto;
     }
 }

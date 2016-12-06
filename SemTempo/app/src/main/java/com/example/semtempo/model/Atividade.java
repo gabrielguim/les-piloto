@@ -1,5 +1,7 @@
 package com.example.semtempo.model;
 
+import android.net.Uri;
+
 /**
  * Created by Lucas on 20/11/2016.
  */
@@ -9,6 +11,8 @@ public class Atividade {
     private Horario horario;
     private Prioridade prioridade;
     private Tag tag;
+    private Foto foto;
+    private final Uri DEFAULT_PHOTO_URI = Uri.parse("android.resource://com.example.semtempo/drawable/doge_img");
 
     public Atividade(){}
 
@@ -17,6 +21,18 @@ public class Atividade {
         this.prioridade = prioridade;
         this.horario = horario;
         this.tag = tag;
+        this.foto = new Foto(DEFAULT_PHOTO_URI);
+    }
+
+    public void setFoto(Uri foto){
+        this.foto.setUriFoto(foto);
+    }
+
+    public Uri getFoto(){
+        if (foto != null)
+            return foto.getUriFoto();
+        else
+            return DEFAULT_PHOTO_URI;
     }
 
     public Horario getHorario() { return horario; }

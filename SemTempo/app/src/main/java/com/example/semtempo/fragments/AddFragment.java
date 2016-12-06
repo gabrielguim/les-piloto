@@ -273,7 +273,6 @@ public class AddFragment extends Fragment {
         decoded = Bitmap.createScaledBitmap(img, decoded.getWidth() - 200, decoded.getHeight()  - 200, false);
         taskImage.setImageBitmap(decoded);
 
-        img = Bitmap.createScaledBitmap(img, img.getWidth() - 150, img.getHeight()  - 150, false);
         currentImage = img;
     }
 
@@ -288,16 +287,6 @@ public class AddFragment extends Fragment {
                 currentImage = img;
             }
         }
-    }
-
-
-    public static Bitmap scaleBitmap(Bitmap originalImage, int wantedWidth, int wantedHeight) {
-        Bitmap output = Bitmap.createBitmap(wantedWidth, wantedHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        Matrix m = new Matrix();
-        m.setScale((float)wantedWidth / originalImage.getWidth(), (float)wantedHeight / originalImage.getHeight());
-        canvas.drawBitmap(originalImage, m, new Paint());
-        return output;
     }
 
     private void initAlertDialog(){
