@@ -4,17 +4,17 @@ import android.net.Uri;
 
 public class Foto {
 
-    private Uri uriFoto;
+    private String base64Imagem;
 
-    public Foto(Uri uriFoto){
-        this.uriFoto = uriFoto;
+    public Foto(String base64Imagem){
+        this.base64Imagem = base64Imagem;
     }
 
-    public Uri getUriFoto() {
-        return uriFoto;
+    public String getBase64Imagem() {
+        return base64Imagem;
     }
 
-    public void setUriFoto(Uri newUriFoto) {
-        this.uriFoto = newUriFoto;
+    public void setBase64Imagem(String base64Imagem) {
+        this.base64Imagem = base64Imagem;
     }
 }

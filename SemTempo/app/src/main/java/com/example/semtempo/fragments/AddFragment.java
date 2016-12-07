@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,8 +177,14 @@ public class AddFragment extends Fragment {
 
                     Calendar creation_date = new GregorianCalendar();
 
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    currentImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bytes = baos.toByteArray();
+                    String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
+
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
                     Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, tag);
+                    atv.setFoto(base64Image);
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 

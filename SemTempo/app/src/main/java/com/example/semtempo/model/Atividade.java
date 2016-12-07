@@ -11,7 +11,8 @@ public class Atividade {
     private Horario horario;
     private Prioridade prioridade;
     private Tag tag;
-    private Foto foto;
+    //private Foto foto;
+    private String base64Imagem;
     private final Uri DEFAULT_PHOTO_URI = Uri.parse("android.resource://com.example.semtempo/drawable/doge_img");
 
     public Atividade(){}
@@ -21,18 +22,17 @@ public class Atividade {
         this.prioridade = prioridade;
         this.horario = horario;
         this.tag = tag;
-        this.foto = new Foto(DEFAULT_PHOTO_URI);
     }
 
-    public void setFoto(Uri foto){
-        this.foto.setUriFoto(foto);
+    public void setFoto(String base64Imagem){
+        this.base64Imagem = base64Imagem;
     }
 
-    public Uri getFoto(){
-        if (foto != null)
-            return foto.getUriFoto();
+    public String getFoto(){
+        if (base64Imagem != null)
+           return base64Imagem;
         else
-            return DEFAULT_PHOTO_URI;
+            return "teste";
     }
 
     public Horario getHorario() { return horario; }
