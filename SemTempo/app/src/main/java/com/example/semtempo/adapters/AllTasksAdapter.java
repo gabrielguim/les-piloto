@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import com.example.semtempo.model.Atividade;
@@ -102,8 +103,17 @@ public class AllTasksAdapter extends BaseAdapter{
         holder.task_time.setText(atividades.get(position).getHorario().getTotalHorasInvestidas() + horasGastas);
         holder.task_date.setText(horario.getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
-        holder.task_photo.setImageURI(convertImageToUri(atividades.get(position).getFoto()));
-        Picasso.with(context).load(atividades.get(position).getFoto()).transform(new CircleTransform()).resize(160, 160).into(holder.task_photo);
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), convertImageToUri(atividades.get(position).getFoto()));
+        } catch (IOException e) {}
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+
+        holder.task_photo.setImageBitmap(bitmap);
+        Picasso.with(context).load(convertImageToUri(atividades.get(position).getFoto())).transform(new CircleTransform()).resize(160, 160).into(holder.task_photo);
 
         holder.task_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,9 +129,18 @@ public class AllTasksAdapter extends BaseAdapter{
                 ImageView imageView = (ImageView) newView.findViewById(R.id.task_image);
 
                 Uri image = convertImageToUri(atividades.get(position).getFoto());
-                imageView.setImageURI(image);
 
-                Picasso.with(context).load(atividades.get(position).getFoto()).resize(350, 350).into(imageView);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), image);
+                } catch (IOException e) {}
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+
+                imageView.setImageBitmap(bitmap);
+
+                Picasso.with(context).load(image).resize(350, 350).into(imageView);
 
                 settingsDialog.show();
             }
@@ -143,7 +162,7 @@ public class AllTasksAdapter extends BaseAdapter{
         byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
         Bitmap inImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
 
         return Uri.parse(path);

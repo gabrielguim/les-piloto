@@ -41,9 +41,7 @@ import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.model.Tag;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -177,8 +175,16 @@ public class AddFragment extends Fragment {
 
                     Calendar creation_date = new GregorianCalendar();
 
+                    if (currentImage == null){
+                        try {
+                            currentImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse("android.resource://com.example.semtempo/drawable/doge_img"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    currentImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    currentImage.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                     byte[] bytes = baos.toByteArray();
                     String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
 

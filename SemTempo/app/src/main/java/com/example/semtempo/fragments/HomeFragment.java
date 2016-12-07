@@ -106,7 +106,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadRecentTasks(){
+    private void loadRecentTasks(ProgressDialog dialog){
         recentTasks = (ListView) rootView.findViewById(R.id.recent_tasks);
         recentTasks.setDivider(null);
         List<Atividade> atividades_recentes= new ArrayList<>();
@@ -132,6 +132,8 @@ public class HomeFragment extends Fragment {
             recentTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades_recentes, rootView));
             Utils.setListViewHeightBasedOnChildren(recentTasks);
         }
+
+        dialog.dismiss();
 
     }
 
@@ -195,7 +197,6 @@ public class HomeFragment extends Fragment {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
-        final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
@@ -211,8 +212,6 @@ public class HomeFragment extends Fragment {
 
                 changeVisibility(!atividades.isEmpty());
 
-                dialog.dismiss();
-
                 atividades = data;
                 setUpWeek();
                 if (atividadesDaSemana != null) {
@@ -220,16 +219,9 @@ public class HomeFragment extends Fragment {
                     plotChart();
                 }
 
-                loadRecentTasks();
+                loadRecentTasks(dialog);
             }
         });
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                dialog.dismiss();
-                changeVisibility(!atividades.isEmpty());
-            }
-        }, TIME);
 
     }
 
@@ -244,9 +236,13 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
         super.onResume();
         setUp();
-        loadRecentTasks();
+        loadRecentTasks(dialog);
     }
 
     private void setUpWeek(){

@@ -1,7 +1,5 @@
 package com.example.semtempo.model;
 
-import android.net.Uri;
-
 public class Foto {
 
     private String base64Imagem;
