@@ -6,23 +6,23 @@ import java.util.*;
 public class Horario {
 
     private int totalHorasInvestidas;
-    private String data;
-    private int semana;
-
-    public Horario(){}
+    private Calendar dataQueRealizou;
 
     public Horario(int totalHorasInvestidas, Calendar dataQueRealizou){
         this.totalHorasInvestidas = totalHorasInvestidas;
-        this.data = dataQueRealizou.getTime().toString();
-        this.semana = dataQueRealizou.get(Calendar.WEEK_OF_YEAR);
+        this.dataQueRealizou = dataQueRealizou;
     }
 
-    public int getSemana() { return semana; }
+    public int getSemana() { return dataQueRealizou.get(Calendar.WEEK_OF_YEAR); }
 
-    public String getData(){ return data; }
+    public String getData(){ return dataQueRealizou.getTime().toString(); }
 
     public int getTotalHorasInvestidas() {
         return totalHorasInvestidas;
+    }
+
+    public Calendar getDataQueRealizou(){
+        return dataQueRealizou;
     }
 
 

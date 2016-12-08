@@ -7,6 +7,7 @@ package com.example.semtempo.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,5 +170,22 @@ public class AtividadeService {
         }
 
         return categoriesHours;
+    }
+
+    public static boolean registerActivityYesterday(List<Atividade> activities){
+        Calendar yesterday = new GregorianCalendar();
+        yesterday.add(Calendar.DATE, -1);
+        int month = yesterday.get(Calendar.MONTH);
+        int day = yesterday.get(Calendar.DAY_OF_MONTH);
+        int year = yesterday.get(Calendar.YEAR);
+
+        for (Atividade activity : activities){
+            Calendar data = activity.getHorario().getDataQueRealizou();
+            if (data.get(Calendar.MONTH) == month && data.get(Calendar.DAY_OF_MONTH) == day && data.get(Calendar.YEAR) == year){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
