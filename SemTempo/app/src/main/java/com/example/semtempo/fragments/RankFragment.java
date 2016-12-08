@@ -2,6 +2,7 @@ package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -64,6 +65,8 @@ public class RankFragment extends Fragment {
         rankList.setDivider(null);
         atividadesRank = new ArrayList<>();
 
+        final int TIME = 3000;
+
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
@@ -91,6 +94,12 @@ public class RankFragment extends Fragment {
                 }
             }
         });
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, TIME);
 
     }
 

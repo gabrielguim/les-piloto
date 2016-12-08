@@ -245,6 +245,11 @@ public class AddFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, TIME);
 
     }
 

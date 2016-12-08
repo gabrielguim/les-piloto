@@ -108,6 +108,12 @@ public class CategoriesFragment extends Fragment {
             }
         });
 
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, TIME);
+
     }
 
     private void initDialog(ProgressDialog dialog){

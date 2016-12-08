@@ -180,8 +180,10 @@ public class AtividadeService {
         int year = yesterday.get(Calendar.YEAR);
 
         for (Atividade activity : activities){
-            Calendar data = activity.getHorario().getDataQueRealizou();
-            if (data.get(Calendar.MONTH) == month && data.get(Calendar.DAY_OF_MONTH) == day && data.get(Calendar.YEAR) == year){
+            int monthOfActivity = activity.getHorario().getMes();
+            int dayOfActivity = activity.getHorario().getDia();
+            int yearOfActivity = activity.getHorario().getAno();
+            if (monthOfActivity == month && dayOfActivity == day && yearOfActivity == year){
                 return true;
             }
         }
