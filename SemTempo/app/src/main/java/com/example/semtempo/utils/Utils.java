@@ -52,9 +52,9 @@ public class Utils {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 int result = 0;
-                if (atv1.getHorario().getTotalHorasInvestidas()  < atv2.getHorario().getTotalHorasInvestidas())
+                if (atv1.getHorariosRealizDaAtv().getTotalHorasInvestidas()  < atv2.getHorariosRealizDaAtv().getTotalHorasInvestidas())
                     result =  -1;
-                else if (atv1.getHorario().getTotalHorasInvestidas()  > atv2.getHorario().getTotalHorasInvestidas())
+                else if (atv1.getHorariosRealizDaAtv().getTotalHorasInvestidas()  > atv2.getHorariosRealizDaAtv().getTotalHorasInvestidas())
                     result = 1;
 
                 return result;
@@ -75,7 +75,7 @@ public class Utils {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
-                return convertDateToCalendar(atv2.getHorario().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorario().getData()).getTime());
+                return convertDateToCalendar(atv2.getHorariosRealizDaAtv().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorariosRealizDaAtv().getData()).getTime());
             }
         });
     }

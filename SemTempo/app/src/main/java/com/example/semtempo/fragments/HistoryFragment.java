@@ -116,7 +116,7 @@ public class HistoryFragment extends Fragment {
     private List<String> listaDeSemanas(){
         List<String> semanas = new ArrayList<>();
         for (int i = 0; i < atividades.size(); i++) {
-            int semana = atividades.get(i).getHorario().getSemana();
+            int semana = atividades.get(i).getHorariosRealizDaAtv().getSemana();
             if (!semanas.contains(String.valueOf(semana)))
                 semanas.add(String.valueOf(semana));
         }

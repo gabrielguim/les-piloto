@@ -14,7 +14,7 @@ import java.util.Map;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
+import com.example.semtempo.model.Categoria;
 import com.example.semtempo.utils.Utils;
 
 import static android.content.ContentValues.TAG;
@@ -36,7 +36,7 @@ public class AtividadeService {
         Map<Atividade, Integer> filteredActivities = new HashMap<>();
 
         for (Atividade atividade: allActivities){
-            Horario horario = atividade.getHorario();
+            Horario horario = atividade.getHorariosRealizDaAtv();
 
             if (horario.getSemana() == week) {
                 if (filteredActivities.containsKey(atividade)) {
@@ -62,7 +62,7 @@ public class AtividadeService {
         List<Atividade> filteredActivities = new ArrayList<>();
 
         for (Atividade atividade: allActivities){
-            if (atividade.getHorario().getSemana() == week){
+            if (atividade.getHorariosRealizDaAtv().getSemana() == week){
                 filteredActivities.add(atividade);
             }
 
@@ -82,8 +82,8 @@ public class AtividadeService {
         }
 
         for (Atividade atividade: atividades){
-            Calendar horario = Utils.convertDateToCalendar(atividade.getHorario().getData());
-            atividades_data.put(horario.get(Calendar.DAY_OF_WEEK), atividades_data.get(horario.get(Calendar.DAY_OF_WEEK)) + atividade.getHorario().getTotalHorasInvestidas());
+            Calendar horario = Utils.convertDateToCalendar(atividade.getHorariosRealizDaAtv().getData());
+            atividades_data.put(horario.get(Calendar.DAY_OF_WEEK), atividades_data.get(horario.get(Calendar.DAY_OF_WEEK)) + atividade.getHorariosRealizDaAtv().getTotalHorasInvestidas());
         }
 
         for (int i = 0; i < weekDays.length; i++) {
@@ -97,7 +97,7 @@ public class AtividadeService {
         int totalDeHoras = 0;
 
         for (int i = 0; i < atividades.size(); i++) {
-            totalDeHoras += atividades.get(i).getHorario().getTotalHorasInvestidas();
+            totalDeHoras += atividades.get(i).getHorariosRealizDaAtv().getTotalHorasInvestidas();
         }
 
         return totalDeHoras;
@@ -110,24 +110,24 @@ public class AtividadeService {
      * @return categoriesHours A map with informations about how much time
      * the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
-    public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
-        Map<Tag, Integer> categoriesHours = new HashMap<>();
+    public static Map<Categoria, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
+        Map<Categoria, Integer> categoriesHours = new HashMap<>();
 
-        categoriesHours.put(Tag.SEMCATEGORIA, 0);
-        categoriesHours.put(Tag.LAZER, 0);
-        categoriesHours.put(Tag.TRABALHO, 0);
+        categoriesHours.put(Categoria.SEMCATEGORIA, 0);
+        categoriesHours.put(Categoria.LAZER, 0);
+        categoriesHours.put(Categoria.TRABALHO, 0);
 
         for (int i = 0; i < activities.size(); i++) {
             Atividade atv = activities.get(i);
-            Tag tag = atv.getTag();
-            int horas = atv.getHorario().getTotalHorasInvestidas();
+            Categoria categoria = atv.getCategoria();
+            int horas = atv.getHorariosRealizDaAtv().getTotalHorasInvestidas();
 
-            if(tag == null){
-                int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
-                categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+            if(categoria == null){
+                int actualTime = categoriesHours.get(Categoria.SEMCATEGORIA);
+                categoriesHours.put(Categoria.SEMCATEGORIA, actualTime + horas);
             }else{
-                int actualTime = categoriesHours.get(tag);
-                categoriesHours.put(tag, actualTime + horas);
+                int actualTime = categoriesHours.get(categoria);
+                categoriesHours.put(categoria, actualTime + horas);
             }
         }
 
@@ -142,25 +142,25 @@ public class AtividadeService {
      * @return categoriesHours A map with informations about how much time in the actual week
      *  the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
-    public static Map<Tag, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
-        Map<Tag, Integer> categoriesHours = new HashMap<>();
+    public static Map<Categoria, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
+        Map<Categoria, Integer> categoriesHours = new HashMap<>();
 
-        categoriesHours.put(Tag.SEMCATEGORIA, 0);
-        categoriesHours.put(Tag.LAZER, 0);
-        categoriesHours.put(Tag.TRABALHO, 0);
+        categoriesHours.put(Categoria.SEMCATEGORIA, 0);
+        categoriesHours.put(Categoria.LAZER, 0);
+        categoriesHours.put(Categoria.TRABALHO, 0);
 
         for (int i = 0; i < activities.size(); i++) {
             Atividade atv = activities.get(i);
-            Horario horario = atv.getHorario();
+            Horario horario = atv.getHorariosRealizDaAtv();
             int atvWeek = horario.getSemana();
 
             if(atvWeek == actualWeek){
-                Tag tag = atv.getTag();
-                int horas = atv.getHorario().getTotalHorasInvestidas();
+                Categoria tag = atv.getCategoria();
+                int horas = atv.getHorariosRealizDaAtv().getTotalHorasInvestidas();
 
                 if(tag == null){
-                    int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
-                    categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+                    int actualTime = categoriesHours.get(Categoria.SEMCATEGORIA);
+                    categoriesHours.put(Categoria.SEMCATEGORIA, actualTime + horas);
                 }else{
                     int actualTime = categoriesHours.get(tag);
                     categoriesHours.put(tag, actualTime + horas);

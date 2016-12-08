@@ -1,7 +1,6 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -26,7 +24,7 @@ import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
+import com.example.semtempo.model.Categoria;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
@@ -49,7 +47,7 @@ public class AddFragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
     private AlertDialog levelDialog;
     private View rootView;
-    private Tag tag;
+    private Categoria categoria;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +81,7 @@ public class AddFragment extends Fragment {
                     Calendar creation_date = new GregorianCalendar();
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, tag);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria, new ArrayList<String>());
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 
@@ -134,7 +132,7 @@ public class AddFragment extends Fragment {
 
         spent_time = (EditText) rootView.findViewById(R.id.spent_hours);
 
-        tag = Tag.SEMCATEGORIA;
+        categoria = Categoria.SEMCATEGORIA;
         categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
         categories_selection.setText("Sem categoria");
         categories_selection.setFocusable(false);
@@ -166,15 +164,15 @@ public class AddFragment extends Fragment {
                 {
                     case 0:
                         categories_selection.setText("Sem categoria");
-                        tag = Tag.SEMCATEGORIA;
+                        categoria = Categoria.SEMCATEGORIA;
                         break;
                     case 1:
                         categories_selection.setText("Lazer");
-                        tag = Tag.LAZER;
+                        categoria = Categoria.LAZER;
                         break;
                     case 2:
                         categories_selection.setText("Trabalho");
-                        tag = Tag.TRABALHO;
+                        categoria = Categoria.TRABALHO;
                         break;
                 }
 
@@ -219,12 +217,11 @@ public class AddFragment extends Fragment {
     private void setUp() {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-
         final int TIME = 3000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage("Carregando dados...");
-        dialog.setCancelable(false);
-        dialog.show();
+//        dialog.setMessage("Carregando dados...");
+//        dialog.setCancelable(false);
+//        dialog.show();
 
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
 

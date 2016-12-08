@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
@@ -14,24 +14,24 @@ public class AtividadeTest {
     private Atividade atv1, atv2, atv3, atv4;
     private Prioridade p1, p2, p3;
     private Horario h0, h1, h2, h3, h4;
-    private Tag t1, t2;
+    private Categoria t1, t2;
 
     @Before
     public void instanciacao(){
         p1 = Prioridade.ALTA;
         p2 = Prioridade.MEDIA;
         p3 = Prioridade.BAIXA;
-        t1 = Tag.LAZER;
-        t2 = Tag.TRABALHO;
+        t1 = Categoria.LAZER;
+        t2 = Categoria.TRABALHO;
         h0 = new Horario(4, new GregorianCalendar(2016,5,13));
         h1 = new Horario(3, new GregorianCalendar(2016,6,12));
         h2 = new Horario(1, new GregorianCalendar(2016,7,22));
         h3 = new Horario(8, new GregorianCalendar(2016,8,11));
         h4 = new Horario(4, new GregorianCalendar(2016,9,18));
-        atv1 = new Atividade("Chutar cu de bebo", p3, h0);
-        atv2 = new Atividade("Comer pudim", p3, h0);
-        atv3 = new Atividade("Escrever artigo de ES", p1, h0);
-        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2, h0);
+        atv1 = new Atividade("Chutar cu de bebo", p3, h0, t1, new ArrayList<String>());
+        atv2 = new Atividade("Comer pudim", p3, h0, t1, new ArrayList<String>());
+        atv3 = new Atividade("Escrever artigo de ES", p1, h0, t2, new ArrayList<String>());
+        atv4 = new Atividade("Escutar Polentinha do Arrocha", p2, h0, t2, new ArrayList<String>());
     }
 
     @Test
