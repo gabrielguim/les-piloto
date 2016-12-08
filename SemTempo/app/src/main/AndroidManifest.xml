@@ -23,7 +23,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".PreferenciasActivity"></activity>
+        <activity android:label="Preferências" android:name=".PreferenciasActivity"></activity>
         <receiver android:name=".NotificationReceiver"/>
 
     </application>

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,15 +17,20 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.semtempo.fragments.AddFragment;
 
 import java.util.Calendar;
 
 public class PreferenciasActivity extends AppCompatActivity {
-    SharedPreferences prefs;
-    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
+    private SharedPreferences prefs;
+    private EditText notificationHour;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,42 @@ public class PreferenciasActivity extends AppCompatActivity {
         mNotificationManager.cancel(0);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        notificationHour = (EditText) findViewById(R.id.notification_hour);
+        notificationHour.setText(prefs.getString("time", "08:00"));
+
+        notificationHour.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(PreferenciasActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String selectedMinuteString = String.valueOf(selectedMinute);
+                        String selectedHourString = String.valueOf(selectedHour);
+
+                        if (selectedHour < 10)
+                            selectedHourString = "0" + selectedHour;
+                        if (selectedMinute < 10)
+                            selectedMinuteString = "0" + selectedMinute;
+
+                        notificationHour.setText(selectedHourString + ":" + selectedMinuteString);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("time", selectedHourString + ":" + selectedMinuteString);
+                        editor.commit();
+
+                        Toast.makeText(PreferenciasActivity.this, "Notificação alterada para as " + selectedHourString + ":" + selectedMinuteString, Toast.LENGTH_SHORT).show();
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.show();
+
+            }
+        });
 
         if(getIntent().getExtras() != null){
             String value = getIntent().getExtras().getString("flag");
@@ -54,7 +96,7 @@ public class PreferenciasActivity extends AppCompatActivity {
             }
         });
 
-        final CheckBox satView = (CheckBox)findViewById(R.id.checkBox);
+        final CheckBox satView = (CheckBox)findViewById(R.id.notification_check);
         if(prefs.getString("checkbox", "erro").equals("checked")){
             satView.setChecked(true);
         }else {
@@ -65,14 +107,14 @@ public class PreferenciasActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(satView.isChecked()){
-                    System.out.println("Checked");
+                    Toast.makeText(PreferenciasActivity.this, "Notificação ativada", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("notificacao", "ativa");
                     editor.putString("checkbox", "checked");
                     editor.commit();
                     startRepeatingNotification();
                 }else{
-                    System.out.println("Un-Checked");
+                    Toast.makeText(PreferenciasActivity.this, "Notificação desativada", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("notificacao", "desativa");
                     editor.putString("checkbox", "unchecked");
@@ -138,14 +180,17 @@ public class PreferenciasActivity extends AppCompatActivity {
     }
 
     public void startRepeatingNotification(){
+        int hourNotification = Integer.parseInt(prefs.getString("time", "08:00").split(":")[0]);
+        int minuteNotification = Integer.parseInt(prefs.getString("time", "08:00").split(":")[1]);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 2);
+        calendar.set(Calendar.HOUR_OF_DAY, hourNotification);
+        calendar.set(Calendar.MINUTE, minuteNotification);
         calendar.set(calendar.SECOND, 10);
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 , pendIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY , pendIntent);
     }
 
 }
