@@ -5,9 +5,15 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import com.example.semtempo.model.Atividade;
 
@@ -16,6 +22,7 @@ import com.example.semtempo.model.Atividade;
  */
 
 public class Utils {
+    private static List<Atividade> lista = new ArrayList<>();
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
 
@@ -40,14 +47,14 @@ public class Utils {
 
     }
 
-    public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByHours(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 int result = 0;
-                if (atv1.calcularTotalDeHorasInvestidas()  < atv2.calcularTotalDeHorasInvestidas())
+                if (atv1.getHorario().getTotalHorasInvestidas()  < atv2.getHorario().getTotalHorasInvestidas())
                     result =  -1;
-                else if (atv1.calcularTotalDeHorasInvestidas()  > atv2.calcularTotalDeHorasInvestidas())
+                else if (atv1.getHorario().getTotalHorasInvestidas()  > atv2.getHorario().getTotalHorasInvestidas())
                     result = 1;
 
                 return result;
@@ -55,13 +62,42 @@ public class Utils {
         });
     }
 
-    public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByPriority(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 return atv1.getPrioridade().compareTo(atv2.getPrioridade());
             }
         });
+    }
+
+    public static void sortByDate(List<Atividade> atividades) {
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                return convertDateToCalendar(atv2.getHorario().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorario().getData()).getTime());
+            }
+        });
+    }
+
+    public static Calendar convertDateToCalendar(String data) {
+        Calendar calendar = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            calendar.setTime(sdf.parse(data));
+        } catch (ParseException e) {
+            System.out.println("Erro ao converter a data");
+        }
+
+        return calendar;
+    }
+
+    public static void addLista(Atividade a) {
+        lista.add(a);
+    }
+
+    public static List<Atividade> getLista() {
+        return lista;
     }
 
 }

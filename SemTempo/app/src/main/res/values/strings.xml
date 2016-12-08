@@ -53,5 +53,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="recent_task">Atividades recentes</string>
+    <string name="see_more">Visualizar mais...</string>
+    <string name="weekly">Acompanhamento semanal</string>
+    <string name="time_spent">Tempo gasto *</string>
+    <string name="task_name">Nome da Atividade *</string>
+    <string name="task_priority">Prioridade *</string>
+    <string name="registered_tasks">Atividades registradas</string>
+    <string name="no_tasks_warn">Sem atividades :(</string>
+    <string name="history">Histórico Comparativo</string>
+    <string name="total_hours">Horas investidas na semana:</string>
+    <string name="text_rank">Ranking semanal</string>
+    <string name="categories_default">Categoria</string>
 
 </resources>

@@ -23,7 +23,7 @@ public class SubtitlesAdapter extends BaseAdapter{
     private TextView perc_text;
     private View rootView;
 
-    private static LayoutInflater inflater = null;
+    private LayoutInflater inflater;
     public SubtitlesAdapter(Context context, List<String> valores, List<Integer> colors, List<Float> perc, TextView perc_text, View rootView) {
 
         this.valores = valores;
@@ -65,23 +65,31 @@ public class SubtitlesAdapter extends BaseAdapter{
         rowView = inflater.inflate(R.layout.subtitles_item, null);
         holder.subtitle_text = (TextView) rowView.findViewById(R.id.subtitle_text);
         holder.subtitle_color = (ImageView) rowView.findViewById(R.id.subtitle_color);
+        try {
+            holder.subtitle_text.setText(valores.get(position));
+            holder.subtitle_color.setColorFilter(colors.get(position));
+        }catch(Exception e){}
 
-        holder.subtitle_text.setText(valores.get(position));
-        holder.subtitle_color.setColorFilter(colors.get(position));
         rowView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                perc_text.animate().scaleX(0).scaleY(0).start();
+                if (perc_text != null) {
+                    perc_text.animate().scaleX(0).scaleY(0).start();
 
-                rootView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        perc_text.setText(Math.round(perc.get(position)) + "%");
-                        perc_text.setTextColor(colors.get(position));
-                        perc_text.animate().scaleX(1).scaleY(1).start();
-                    }
-                }, 200);
+                    rootView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                perc_text.setText(Math.round(Math.floor(perc.get(position)))+ "%");
+                                perc_text.setTextColor(colors.get(position));
+                                perc_text.animate().scaleX(1).scaleY(1).start();
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    }, 200);
+                }
             }
         });
 

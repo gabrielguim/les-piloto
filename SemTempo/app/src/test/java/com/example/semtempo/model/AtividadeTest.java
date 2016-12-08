@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Mafra on 26/11/2016.
+ * Created by Lucas on 28/11/2016.
  */
 public class AtividadeTest {
     private Atividade atv1, atv2, atv3, atv4;
@@ -35,42 +35,39 @@ public class AtividadeTest {
     }
 
     @Test
-    public void testarSeAddHorarioIncrementaHrs(){
-        Assert.assertTrue(atv1.calcularTotalDeHorasInvestidas() == 4);
-        atv1.registrarNovoHorario(h1);
-        Assert.assertTrue(atv1.calcularTotalDeHorasInvestidas() == 7);
-        atv1.registrarNovoHorario(h3);
-        Assert.assertTrue(atv1.calcularTotalDeHorasInvestidas() == 15);
-        atv1.registrarNovoHorario(h2);
-        Assert.assertTrue(atv1.calcularTotalDeHorasInvestidas() == 16);
-        atv1.registrarNovoHorario(h4);
-        Assert.assertTrue(atv1.calcularTotalDeHorasInvestidas() == 20);
-    }
-
-    @Test
     public void testarGetESetNomeAtv(){
         String expected = "Chutar cu de bebo";
         String newName = "Quebrar o dedo";
-        Assert.assertEquals(expected, atv1.getNome());
-        atv1.setNome(newName);
-        Assert.assertNotEquals(expected, atv1.getNome());
-        Assert.assertEquals(newName, atv1.getNome());
+        Assert.assertEquals(expected, atv1.getNomeDaAtv());
+        atv1.setNomeDaAtv(newName);
+        Assert.assertNotEquals(expected, atv1.getNomeDaAtv());
+        Assert.assertEquals(newName, atv1.getNomeDaAtv());
     }
 
     @Test
-    public void testarGetESetPrioridadeAtv(){
-        Prioridade expected = Prioridade.BAIXA;
-        Assert.assertTrue(expected == atv1.getPrioridade());
-        Assert.assertTrue(expected.getPeso() == atv1.retornarPesoDaPrioridade());
-        Prioridade newPrioridade = Prioridade.ALTA;
-        atv1.setPrioridade(newPrioridade);
-        Assert.assertNotEquals(expected, atv1.getPrioridade());
-        Assert.assertEquals(newPrioridade, atv1.getPrioridade());
+    public void testeGetSemanaHorario(){
+        Horario h10 = new Horario(3,new GregorianCalendar());
+        Assert.assertFalse(h10.getSemana() == h1.getSemana());
+
     }
 
     @Test
-    public void testGetDataQRealizou(){
-        Assert.assertFalse(h1.getDataQueRealizou() == h2.getDataQueRealizou() );
+    public void testeGetDataHorario(){
+        Horario h10 = new Horario(3,new GregorianCalendar());
+        Assert.assertFalse(h10.getData() == h1.getData());
+        Assert.assertTrue(h10.getTotalHorasInvestidas() == h1.getTotalHorasInvestidas());
+
     }
+
+    @Test
+    public void testeEqualsAtv(){
+        Assert.assertFalse(atv1.equals(atv2));
+        Assert.assertFalse(atv1.equals(h1));
+
+    }
+
+
+
+
 
 }

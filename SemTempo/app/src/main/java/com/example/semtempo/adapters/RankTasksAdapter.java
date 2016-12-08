@@ -1,26 +1,20 @@
 package com.example.semtempo.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.semtempo.R;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
-
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
 
-public class RecentTasksAdapter extends BaseAdapter{
+import java.util.List;
+
+public class RankTasksAdapter extends BaseAdapter{
 
     private List<Atividade> atividades;
     private View rootView;
@@ -28,7 +22,7 @@ public class RecentTasksAdapter extends BaseAdapter{
 
     private static LayoutInflater inflater = null;
 
-    public RecentTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
+    public RankTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
 
         this.rootView = rootView;
         this.atividades = atividades;
@@ -54,9 +48,9 @@ public class RecentTasksAdapter extends BaseAdapter{
 
     public class Holder {
         TextView task_name;
-        TextView task_date;
         TextView task_time;
-        ImageView task_prority;
+        TextView task_date;
+        TextView task_rank;
     }
 
     @Override
@@ -66,41 +60,43 @@ public class RecentTasksAdapter extends BaseAdapter{
 
         View rowView;
 
-        rowView = inflater.inflate(R.layout.recent_task_item, null);
+        rowView = inflater.inflate(R.layout.rank_item, null);
         holder.task_name = (TextView) rowView.findViewById(R.id.task_name);
         holder.task_date = (TextView) rowView.findViewById(R.id.task_date);
         holder.task_time = (TextView) rowView.findViewById(R.id.task_time);
-        holder.task_prority = (ImageView) rowView.findViewById(R.id.task_priority);
+        holder.task_rank = (TextView) rowView.findViewById(R.id.task_rank);
 
-        String color;
-        if (atividades.get(position).getPrioridade() == Prioridade.ALTA){
-            color = "#f10714";
-        } else if (atividades.get(position).getPrioridade() == Prioridade.MEDIA){
-            color = "#ffbf00";
+        if (position == 0){
+            holder.task_rank.animate().scaleX(1.2f).scaleY(1.2f);
+        } else if (position == 1){
+            holder.task_rank.animate().scaleX(1.1f).scaleY(1.1f);
         } else {
-            color = "#4169e1";
+            holder.task_rank.animate().scaleX(1f).scaleY(1f);
         }
 
         String horasGastas = " Hora investida";
-        if (atividades.get(position).calcularTotalDeHorasInvestidas() > 1)
+
+        if (atividades.get(position).getHorario().getTotalHorasInvestidas() > 1)
             horasGastas = " Horas investidas";
 
-        List<Horario> horarios = (List<Horario>) atividades.get(position).getHorarios();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Horario horario = atividades.get(position).getHorario();
 
-        holder.task_name.setText(atividades.get(position).getNome());
-        holder.task_time.setText(atividades.get(position).calcularTotalDeHorasInvestidas() + horasGastas);
-        holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
-        holder.task_prority.setColorFilter(Color.parseColor(color));
+        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
+        holder.task_time.setText(atividades.get(position).getHorario().getTotalHorasInvestidas() + horasGastas);
+        holder.task_date.setText(horario.getData());
+        holder.task_rank.setText(position + 1 + "º");
 
-        rowView.setOnClickListener(new OnClickListener() {
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, atividades.get(position).getNome(), Toast.LENGTH_SHORT).show();
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
+
+                return false;
             }
+
         });
 
         return rowView;
     }
 
-} 
+}

@@ -1,13 +1,18 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -15,32 +20,36 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.semtempo.R;
-import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.FirebaseController;
+import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.controllers.OnGetDataListener;
+import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Horario;
+import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Tag;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
-
 public class AddFragment extends Fragment {
 
     private final int SEND_ICON = R.drawable.ic_send_white_24dp;
 
     private List<Atividade> atividades;
-    private List<String> tasks;
+    private List<String> ATIVIDADES;
     private ImageView high_priority;
     private ImageView medium_priority;
     private ImageView low_priority;
     private EditText spent_time;
     private EditText label_priority;
+    private EditText categories_selection;
     private AutoCompleteTextView autoCompleteTextView;
-
+    private AlertDialog levelDialog;
     private View rootView;
+    private Tag tag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +59,7 @@ public class AddFragment extends Fragment {
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
         addFab.setVisibility(View.VISIBLE);
+        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
 
         setUp();
         configureAutoComplete();
@@ -68,13 +78,14 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
+
+
                     Calendar creation_date = new GregorianCalendar();
-                    Atividade atividade = new Atividade(autoCompleteTextView.getText().toString(), priority, new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date));
 
-                    List<Atividade> lista = new ArrayList<Atividade>();
-                    lista.add(atividade);
+                    Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, tag);
 
-                    FirebaseController.getFirebase().child(UsuarioController.getInstance().getCurrentUser().getDisplayName()).setValue(lista);
+                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 
                     showProgressDialog();
 
@@ -83,10 +94,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, tasks);
-        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
-        autoCompleteTextView.setThreshold(1);
-        autoCompleteTextView.setAdapter(adapter);
 
         high_priority = (ImageView) rootView.findViewById(R.id.high_priority);
         medium_priority = (ImageView) rootView.findViewById(R.id.medium_priority);
@@ -127,14 +134,68 @@ public class AddFragment extends Fragment {
 
         spent_time = (EditText) rootView.findViewById(R.id.spent_hours);
 
+        tag = Tag.SEMCATEGORIA;
+        categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
+        categories_selection.setText("Sem categoria");
+        categories_selection.setFocusable(false);
+        categories_selection.setClickable(true);
+
+        categories_selection.setClickable(true);
+        categories_selection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initAlertDialog();
+            }
+        });
+
         return rootView;
     }
 
+    private void initAlertDialog(){
+        final CharSequence[] items = {" Sem Categoria "," Lazer "," Trabalho "};
+
+        // Creating and Building the Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione uma categoria: ");
+
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+
+                switch(item)
+                {
+                    case 0:
+                        categories_selection.setText("Sem categoria");
+                        tag = Tag.SEMCATEGORIA;
+                        break;
+                    case 1:
+                        categories_selection.setText("Lazer");
+                        tag = Tag.LAZER;
+                        break;
+                    case 2:
+                        categories_selection.setText("Trabalho");
+                        tag = Tag.TRABALHO;
+                        break;
+                }
+
+                levelDialog.dismiss();
+
+            }
+        });
+
+        levelDialog = builder.create();
+        levelDialog.show();
+
+
+    }
+
     private void configureAutoComplete(){
-        tasks = new ArrayList<>();
+        ATIVIDADES = new ArrayList<String>();
 
         for (int i = 0; i < atividades.size(); i++) {
-            tasks.add(atividades.get(i).getNome());
+            if(!(ATIVIDADES.contains(atividades.get(i).getNomeDaAtv()))){
+                ATIVIDADES.add(atividades.get(i).getNomeDaAtv());
+            }
         }
     }
 
@@ -144,54 +205,46 @@ public class AddFragment extends Fragment {
         dialog.setMessage("Adicionando atividade...");
         dialog.setCancelable(false);
         dialog.show();
+
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 dialog.dismiss();
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
-                fragmentTransaction.commit();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new HomeFragment(), "NewFragmentTag");
+                ft.commit();
             }
         }, TIME);
     }
 
     private void setUp() {
         atividades = new ArrayList<>();
-        Horario horario = new Horario(4, new GregorianCalendar());
+        GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
-        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA, horario);
-        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+        final int TIME = 3000; //Timeout
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
 
-        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA, horario);
-        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
+        FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
 
-        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA, horario);
-        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+            @Override
+            public void onStart() {}
 
-        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA, horario);
-        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
+            @Override
+            public void onSuccess(final List<Atividade> data) {
+                atividades = data;
+                configureAutoComplete();
+                if(getActivity() != null) {
+                    ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
+                    autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
+                    autoCompleteTextView.setThreshold(1);
+                    autoCompleteTextView.setAdapter(adapter);
+                }
 
-        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA, horario);
-        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
-
-        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA, horario);
-        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA, horario);
-        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA, horario);
-        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-
-        atividades.add(atv1);
-        atividades.add(atv2);
-        atividades.add(atv3);
-        atividades.add(atv4);
-        atividades.add(atv5);
-        atividades.add(atv6);
-        atividades.add(atv7);
-        atividades.add(atv8);
+                dialog.dismiss();
+            }
+        });
 
     }
 

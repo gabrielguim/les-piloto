@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.example.semtempo.model.Atividade;
@@ -82,25 +80,28 @@ public class AllTasksAdapter extends BaseAdapter{
         }
 
         String horasGastas = " Hora investida";
-        if (atividades.get(position).calcularTotalDeHorasInvestidas() > 1)
+
+        if (atividades.get(position).getHorario().getTotalHorasInvestidas() > 1)
             horasGastas = " Horas investidas";
 
-        List<Horario> horarios = (List<Horario>) atividades.get(position).getHorarios();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Horario horario = atividades.get(position).getHorario();
 
-        holder.task_name.setText(atividades.get(position).getNome());
-        holder.task_time.setText(atividades.get(position).calcularTotalDeHorasInvestidas() + horasGastas);
-        holder.task_date.setText(format.format(horarios.get(horarios.size() - 1).getDataQueRealizou().getTime()));
+        holder.task_name.setText(atividades.get(position).getNomeDaAtv());
+        holder.task_time.setText(atividades.get(position).getHorario().getTotalHorasInvestidas() + horasGastas);
+        holder.task_date.setText(horario.getData());
         holder.task_prority.setColorFilter(Color.parseColor(color));
 
-        rowView.setOnClickListener(new OnClickListener() {
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(context, atividades.get(position).getNome(), Toast.LENGTH_SHORT).show();
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
+
+                return false;
             }
+
         });
 
         return rowView;
     }
 
-} 
+}

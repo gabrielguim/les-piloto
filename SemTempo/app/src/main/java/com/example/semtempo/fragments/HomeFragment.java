@@ -1,9 +1,12 @@
 package com.example.semtempo.fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.semtempo.R;
-import com.example.semtempo.adapters.RecentTasksAdapter;
+import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.adapters.SubtitlesAdapter;
+import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.controllers.FirebaseController;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.utils.Utils;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.txusballesteros.widgets.FitChart;
 import com.txusballesteros.widgets.FitChartValue;
 
@@ -25,12 +32,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.semtempo.controllers.AtividadeController;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
 
 public class HomeFragment extends Fragment {
+
+    // Lista de cores agradaveis
+    private final String[] niceColors = {"#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF9966",
+            "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6", "#29B8FF", "#009CEB",
+            "#FF7029", "#EB4E00", "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6",
+            "#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF7029",
+            "#EB4E00", "#29B8FF", "#009CEB"};
 
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private View rootView;
@@ -39,7 +51,7 @@ public class HomeFragment extends Fragment {
     private TextView seeMore;
     private List<Atividade> atividades;
     private Map<Atividade, Integer> atividadesDaSemana;
-    private String[] chartColors = {"#7B68EE", "#4B0082", "#000080", "#4169E1", "#4682B4", "#DB7093", "#CD5C5C", "#00CED1", "#FA8072", "#3CB371", "#FF8C00", "#F4A460", };
+    private List<Integer> chartColors;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +60,17 @@ public class HomeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
+        TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
+        warn.setVisibility(View.INVISIBLE);
+
+        warn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.commit();
+            }
+        });
 
         seeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +83,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        setUp();
         setFab();
-        if (atividadesDaSemana != null)
-            plotChart();
-        loadRecentTasks();
+        setUp();
 
         return rootView;
     }
@@ -77,12 +97,10 @@ public class HomeFragment extends Fragment {
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.commit();
 
-                AddFragment fragment = new AddFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.commit();
 
             }
         });
@@ -90,16 +108,30 @@ public class HomeFragment extends Fragment {
 
     private void loadRecentTasks(){
         recentTasks = (ListView) rootView.findViewById(R.id.recent_tasks);
+        recentTasks.setDivider(null);
         List<Atividade> atividades_recentes= new ArrayList<>();
+        Utils.sortByDate(atividades);
 
         int i = 0;
         while (i < 5){
-            atividades_recentes.add(atividades.get(i));
-            i++;
+            try {
+                atividades_recentes.add(atividades.get(i));
+                i++;
+            }catch (Exception e){
+                i++;
+            }
         }
 
-        recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
-        Utils.setListViewHeightBasedOnChildren(recentTasks);
+        if (atividades_recentes.isEmpty()){
+            seeMore.setVisibility(View.INVISIBLE);
+        } else {
+            seeMore.setVisibility(View.VISIBLE);
+        }
+
+        if(getActivity() != null) {
+            recentTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades_recentes, rootView));
+            Utils.setListViewHeightBasedOnChildren(recentTasks);
+        }
 
     }
 
@@ -107,27 +139,32 @@ public class HomeFragment extends Fragment {
         subtitles = (ListView) rootView.findViewById(R.id.subtitles);
         TextView perc_text =(TextView) rootView.findViewById(R.id.text_perc);
 
-        List<Integer> colors = new ArrayList<>();
         List<String> valores = new ArrayList<>();
         List<Float> perc = new ArrayList<>();
         float totalHours = 0;
 
-        int index_values = 0;
+        Calendar cal = new GregorianCalendar();
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
+        List<Atividade> atividades_da_semana = AtividadeService.filterActivitiesByWeek(atividades, week);
+        totalHoras.setText("Horas investidas na semana: " + AtividadeService.getTotalSpentHours(atividades_da_semana));
 
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
-            valores.add(entry.getKey().getNome());
+            valores.add(entry.getKey().getNomeDaAtv() + " - Total de horas: " + entry.getValue());
             totalHours += entry.getValue();
-            colors.add(Color.parseColor(chartColors[index_values]));
-            index_values++;
         }
 
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
-        subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, colors, perc, perc_text, rootView));
-        subtitles.setDivider(null);
-        Utils.setListViewHeightBasedOnChildren(subtitles);
+        if (getActivity() != null) {
+            subtitles.setAdapter(new SubtitlesAdapter(getActivity(), valores, chartColors, perc, perc_text, rootView));
+            subtitles.setDivider(null);
+            Utils.setListViewHeightBasedOnChildren(subtitles);
+        }
+
 
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
@@ -136,70 +173,90 @@ public class HomeFragment extends Fragment {
 
         Collection<FitChartValue> values = new ArrayList<>();
 
-        for (int i = 0; i < valores.size(); i++) {
-            values.add(new FitChartValue(perc.get(i), colors.get(i)));
-        }
+        try{
+            for (int i = 0; i < valores.size(); i++) {
+                values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
+            }
+        }catch(Exception e){}
 
         fitChart.setValues(values);
     }
 
+    private void fillChartCollors(){
+        chartColors = new ArrayList<>();
+        for (int i = 0; i < atividadesDaSemana.size(); i++) {
+            int color = Color.parseColor(niceColors[i]);
+            chartColors.add(color);
+        }
+    }
+
+
     private void setUp(){
-
         atividades = new ArrayList<>();
-        Horario horario = new Horario(4, new GregorianCalendar());
+        GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
-        Atividade atv1 = new Atividade("Jogar bola na UFCG", Prioridade.ALTA, horario);
-        atv1.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+        final int TIME = 4000; //Timeout
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
 
-        Atividade atv2 = new Atividade("Fazer cocô", Prioridade.BAIXA, horario);
-        atv2.registrarNovoHorario(new Horario(8, new GregorianCalendar()));
+        FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
 
-        Atividade atv3 = new Atividade("Quebrar o dente", Prioridade.MEDIA, horario);
-        atv3.registrarNovoHorario(new Horario(5, new GregorianCalendar()));
+            @Override
+            public void onStart() {}
 
-        Atividade atv4 = new Atividade("Pular da janela", Prioridade.ALTA, horario);
-        atv4.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
-        atv4.registrarNovoHorario(new Horario(3, new GregorianCalendar()));
+            @Override
+            public void onSuccess(final List<Atividade> data) {
 
-        Atividade atv5 = new Atividade("Quebrar a orelha", Prioridade.MEDIA, horario);
-        atv5.registrarNovoHorario(new Horario(1, new GregorianCalendar()));
+                changeVisibility(!atividades.isEmpty());
 
-        Atividade atv6 = new Atividade("Humilhar no LOL", Prioridade.MEDIA, horario);
-        atv6.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+                dialog.dismiss();
 
-        Atividade atv7 = new Atividade("Cagar no DotA", Prioridade.MEDIA, horario);
-        atv7.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+                atividades = data;
+                setUpWeek();
+                if (atividadesDaSemana != null) {
+                    fillChartCollors();
+                    plotChart();
+                }
 
-        Atividade atv8 = new Atividade("Morrer no CS", Prioridade.MEDIA, horario);
-        atv8.registrarNovoHorario(new Horario(2, new GregorianCalendar()));
+                loadRecentTasks();
+            }
+        });
 
-        atividades.add(atv1);
-        atividades.add(atv2);
-        atividades.add(atv3);
-        atividades.add(atv4);
-        atividades.add(atv5);
-        atividades.add(atv6);
-        atividades.add(atv7);
-        atividades.add(atv8);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+                changeVisibility(!atividades.isEmpty());
+            }
+        }, TIME);
 
-        setUpWeek();
+    }
 
+    private void changeVisibility(boolean condicao){
+        TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
+        if (!condicao){
+            warn.setVisibility(View.VISIBLE);
+        } else {
+            warn.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUp();
+        loadRecentTasks();
     }
 
     private void setUpWeek(){
 
         atividadesDaSemana = new HashMap<>();
 
-        Calendar cal = Calendar.getInstance();
-        GregorianCalendar date = new GregorianCalendar();
-        int month = date.get(GregorianCalendar.MONTH);
-        int day = date.get(GregorianCalendar.DAY_OF_MONTH);
-        int year = date.get(GregorianCalendar.YEAR);
-
-        cal.set(year, month, day);
+        Calendar cal = new GregorianCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
 
-        atividadesDaSemana = AtividadeController.filtrarAtvsPorTempoInvestido(atividades, week);
+        atividadesDaSemana = AtividadeService.groupActivitiesByWeekAndSpentHours(atividades, week);
     }
 
 }

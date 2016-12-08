@@ -1,66 +1,55 @@
 package com.example.semtempo.model;
 
-import java.util.*;
-
+/**
+ * Created by Lucas on 20/11/2016.
+ */
 public class Atividade {
 
-    private String nome;
-    private List<Horario> horarios;
+    private String nomeDaAtv;
+    private Horario horario;
     private Prioridade prioridade;
+    private Tag tag;
 
-    /** Construtor adequado para o caso do usuário
-     *  não querer colocar foto na criação da atividade.
-     */
-    public Atividade(String nome, Prioridade prioridade, Horario horario){
-        this.nome = nome;
+    public Atividade(){}
+
+    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario, Tag tag){
+        this.nomeDaAtv = nomeDaAtv;
         this.prioridade = prioridade;
-        this.horarios = new ArrayList<>();
-        registrarNovoHorario(horario);
+        this.horario = horario;
+        this.tag = tag;
     }
 
-    public String getNome() {
-        return nome;
+    public Horario getHorario() { return horario; }
+
+    public void setHorario(Horario horario){this.horario = horario;}
+
+    public Prioridade getPrioridade() { return prioridade;}
+
+    public void setPrioridade(Prioridade prioridade) { this.prioridade = prioridade;}
+
+    public String getNomeDaAtv() { return nomeDaAtv; }
+
+    public void setNomeDaAtv(String nomeDaAtv) { this.nomeDaAtv = nomeDaAtv; }
+
+    public Tag getTag(){
+        return tag;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTag(Tag tag){
+        this.tag = tag;
     }
 
-    public List<Horario> getHorarios() {
-        return horarios;
-    }
+    @Override
+    public int hashCode() { return nomeDaAtv.hashCode(); }
 
-
-    public Prioridade getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Prioridade prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public void registrarNovoHorario(Horario tempoInvestido){
-        horarios.add(tempoInvestido);
-    }
-
-    /**
-     * Calcula o total de hora de todos os horários cadastrados em uma determinada atividade.
-     * */
-    public int calcularTotalDeHorasInvestidas(){
-        int total = 0;
-        for (Horario horario: getHorarios()){
-            total += horario.getTotalHorasInvestidas();
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Atividade)){
+            return false;
         }
-
-        return total;
+        Atividade atv = (Atividade) obj;
+        return this.nomeDaAtv.equals(atv.getNomeDaAtv());
     }
 
-    /** Esse método se faz necessário para o processo de ordenação, tendo em vista que o sistema não
-     * tem como supor, por exemplo, que a prioridade ALTA deve vir primeiro que Média, que por sua vez
-     * deve vir primeiro que BAIXA.
-     * */
-    public int retornarPesoDaPrioridade(){
-        return prioridade.getPeso();
-    }
 
 }
