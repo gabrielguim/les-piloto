@@ -1,11 +1,13 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,11 @@ import android.widget.Toast;
 import com.example.semtempo.R;
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.model.Categoria;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
@@ -40,9 +43,11 @@ public class AddFragment extends Fragment {
     private ImageView low_priority;
     private EditText spent_time;
     private EditText label_priority;
+    private EditText categories_selection;
     private AutoCompleteTextView autoCompleteTextView;
-
+    private AlertDialog levelDialog;
     private View rootView;
+    private Categoria categoria;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +57,7 @@ public class AddFragment extends Fragment {
         FloatingActionButton addFab = (FloatingActionButton) getActivity().findViewById(R.id.add_fab);
         addFab.setImageResource(SEND_ICON);
         addFab.setVisibility(View.VISIBLE);
+        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
 
         setUp();
         configureAutoComplete();
@@ -70,12 +76,14 @@ public class AddFragment extends Fragment {
                         priority = Prioridade.BAIXA;
                     }
 
+
+
                     Calendar creation_date = new GregorianCalendar();
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, new ArrayList<String>());
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria, new ArrayList<String>());
 
-                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), a);
+                    FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
 
                     showProgressDialog();
 
@@ -124,7 +132,59 @@ public class AddFragment extends Fragment {
 
         spent_time = (EditText) rootView.findViewById(R.id.spent_hours);
 
+        categoria = Categoria.SEMCATEGORIA;
+        categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
+        categories_selection.setText("Sem categoria");
+        categories_selection.setFocusable(false);
+        categories_selection.setClickable(true);
+
+        categories_selection.setClickable(true);
+        categories_selection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initAlertDialog();
+            }
+        });
+
         return rootView;
+    }
+
+    private void initAlertDialog(){
+        final CharSequence[] items = {" Sem Categoria "," Lazer "," Trabalho "};
+
+        // Creating and Building the Dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione uma categoria: ");
+
+        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+
+                switch(item)
+                {
+                    case 0:
+                        categories_selection.setText("Sem categoria");
+                        categoria = Categoria.SEMCATEGORIA;
+                        break;
+                    case 1:
+                        categories_selection.setText("Lazer");
+                        categoria = Categoria.LAZER;
+                        break;
+                    case 2:
+                        categories_selection.setText("Trabalho");
+                        categoria = Categoria.TRABALHO;
+                        break;
+                }
+
+                levelDialog.dismiss();
+
+            }
+        });
+
+        levelDialog = builder.create();
+        levelDialog.show();
+
+
     }
 
     private void configureAutoComplete(){
@@ -132,7 +192,6 @@ public class AddFragment extends Fragment {
 
         for (int i = 0; i < atividades.size(); i++) {
             if(!(ATIVIDADES.contains(atividades.get(i).getNomeDaAtv()))){
-                System.out.println(atividades.get(i).getNomeDaAtv());
                 ATIVIDADES.add(atividades.get(i).getNomeDaAtv());
             }
         }
@@ -144,7 +203,6 @@ public class AddFragment extends Fragment {
         dialog.setMessage("Adicionando atividade...");
         dialog.setCancelable(false);
         dialog.show();
-
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -159,13 +217,16 @@ public class AddFragment extends Fragment {
     private void setUp() {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
+        final int TIME = 3000; //Timeout
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+//        dialog.setMessage("Carregando dados...");
+//        dialog.setCancelable(false);
+//        dialog.show();
 
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+
             @Override
-            public void onStart() {
-                //Colocar hmm waiting talvez..
-            }
+            public void onStart() {}
 
             @Override
             public void onSuccess(final List<Atividade> data) {
@@ -173,9 +234,12 @@ public class AddFragment extends Fragment {
                 configureAutoComplete();
                 if(getActivity() != null) {
                     ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
+                    autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
                     autoCompleteTextView.setThreshold(1);
                     autoCompleteTextView.setAdapter(adapter);
                 }
+
+                dialog.dismiss();
             }
         });
 

@@ -1,4 +1,4 @@
-package com.example.semtempo.database;
+package com.example.semtempo.controllers;
 
 import com.example.semtempo.model.Atividade;
 

@@ -7,10 +7,6 @@
             android:icon="@drawable/ic_dashboard_black_24dp"
             android:title="Visão geral" />
         <item
-            android:id="@+id/nav_report"
-            android:icon="@drawable/ic_show_chart_black_24dp"
-            android:title="Relatórios" />
-        <item
             android:id="@+id/nav_rank"
             android:icon="@drawable/ic_format_list_numbered_black_24dp"
             android:title="Ranking" />
@@ -18,6 +14,10 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="Histórico"/>
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_group_work_black_24dp"
+            android:title="Categorias"/>
     </group>
 
     <item android:title="Configurações">

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +14,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.semtempo.R;
-import com.example.semtempo.adapters.RecentTasksAdapter;
+import com.example.semtempo.adapters.AllTasksAdapter;
 import com.example.semtempo.adapters.SubtitlesAdapter;
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.FirebaseController;
-import com.example.semtempo.database.OnGetDataListener;
+import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.txusballesteros.widgets.FitChart;
@@ -33,9 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.semtempo.controllers.AtividadeController;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.model.Atividade;
-
 
 public class HomeFragment extends Fragment {
 
@@ -45,7 +43,6 @@ public class HomeFragment extends Fragment {
             "#FF7029", "#EB4E00", "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6",
             "#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF7029",
             "#EB4E00", "#29B8FF", "#009CEB"};
-
 
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private View rootView;
@@ -63,6 +60,17 @@ public class HomeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
+        TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
+        warn.setVisibility(View.INVISIBLE);
+
+        warn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.commit();
+            }
+        });
 
         seeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,20 +97,10 @@ public class HomeFragment extends Fragment {
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final int TIME = 1000;
-                final ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Carregando...");
-                dialog.setCancelable(false);
-                dialog.show();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.commit();
 
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        dialog.dismiss();
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
-                        ft.commit();
-                    }
-                }, TIME);
 
             }
         });
@@ -110,7 +108,9 @@ public class HomeFragment extends Fragment {
 
     private void loadRecentTasks(){
         recentTasks = (ListView) rootView.findViewById(R.id.recent_tasks);
+        recentTasks.setDivider(null);
         List<Atividade> atividades_recentes= new ArrayList<>();
+        Utils.sortByDate(atividades);
 
         int i = 0;
         while (i < 5){
@@ -119,12 +119,17 @@ public class HomeFragment extends Fragment {
                 i++;
             }catch (Exception e){
                 i++;
-                System.out.println(e.getMessage());
             }
         }
 
+        if (atividades_recentes.isEmpty()){
+            seeMore.setVisibility(View.INVISIBLE);
+        } else {
+            seeMore.setVisibility(View.VISIBLE);
+        }
+
         if(getActivity() != null) {
-            recentTasks.setAdapter(new RecentTasksAdapter(getActivity(), atividades_recentes, rootView));
+            recentTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades_recentes, rootView));
             Utils.setListViewHeightBasedOnChildren(recentTasks);
         }
 
@@ -138,8 +143,15 @@ public class HomeFragment extends Fragment {
         List<Float> perc = new ArrayList<>();
         float totalHours = 0;
 
+        Calendar cal = new GregorianCalendar();
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
+        List<Atividade> atividades_da_semana = AtividadeService.filterActivitiesByWeek(atividades, week);
+        totalHoras.setText("Horas investidas na semana: " + AtividadeService.getTotalSpentHours(atividades_da_semana));
+
         for (Map.Entry<Atividade, Integer> entry : atividadesDaSemana.entrySet()) {
-            valores.add(entry.getKey().getNomeDaAtv());
+            valores.add(entry.getKey().getNomeDaAtv() + " - Total de horas: " + entry.getValue());
             totalHours += entry.getValue();
         }
 
@@ -154,7 +166,6 @@ public class HomeFragment extends Fragment {
         }
 
 
-
         final FitChart fitChart = (FitChart) rootView.findViewById(R.id.fitChart);
         fitChart.setMinValue(0f);
 
@@ -166,9 +177,7 @@ public class HomeFragment extends Fragment {
             for (int i = 0; i < valores.size(); i++) {
                 values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
             }
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        }catch(Exception e){}
 
         fitChart.setValues(values);
     }
@@ -186,41 +195,68 @@ public class HomeFragment extends Fragment {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
 
+        final int TIME = 4000; //Timeout
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
+
             @Override
-            public void onStart() {
-                //Colocar hmm waiting talvez..
-            }
+            public void onStart() {}
 
             @Override
             public void onSuccess(final List<Atividade> data) {
+
+                changeVisibility(!atividades.isEmpty());
+
+                dialog.dismiss();
+
                 atividades = data;
                 setUpWeek();
-                if (atividadesDaSemana != null)
+                if (atividadesDaSemana != null) {
                     fillChartCollors();
                     plotChart();
-                loadRecentTasks();
+                }
 
+                loadRecentTasks();
             }
         });
 
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+                changeVisibility(!atividades.isEmpty());
+            }
+        }, TIME);
+
+    }
+
+    private void changeVisibility(boolean condicao){
+        TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
+        if (!condicao){
+            warn.setVisibility(View.VISIBLE);
+        } else {
+            warn.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUp();
+        loadRecentTasks();
     }
 
     private void setUpWeek(){
 
         atividadesDaSemana = new HashMap<>();
 
-        Calendar cal = Calendar.getInstance();
-        GregorianCalendar date = new GregorianCalendar();
-        int month = date.get(GregorianCalendar.MONTH);
-        int day = date.get(GregorianCalendar.DAY_OF_MONTH);
-        int year = date.get(GregorianCalendar.YEAR);
-
-        cal.set(year, month, day);
+        Calendar cal = new GregorianCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
 
-        atividadesDaSemana = AtividadeController.filterActivitiesByWeekAndSpentHours(atividades, week);
+        atividadesDaSemana = AtividadeService.groupActivitiesByWeekAndSpentHours(atividades, week);
     }
 
 }

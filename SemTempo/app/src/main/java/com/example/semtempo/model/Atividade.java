@@ -13,14 +13,11 @@ public class Atividade {
     private Horario horariosRealizDaAtv;
     private Categoria categoria;
     private Prioridade prioridade;
-    private String id;
     private List<String> tags;
 
-    public Atividade(){
+    public Atividade(){}
 
-    }
-
-    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario, List<String> tags) {
+    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario, Categoria tag, List<String> tags){
         this.nomeDaAtv = nomeDaAtv;
         this.prioridade = prioridade;
         this.horariosRealizDaAtv = horario;
@@ -36,79 +33,38 @@ public class Atividade {
         setTags(tags);
     }
 
-    public String getId(){
-        return id;
-    }
+    public Foto getFotoDaAtividade() { return fotoDaAtividade; }
 
-    public void setId(String id){
-        this.id = id;
-    }
+    public void alterarFotoDaAtividade(Foto fotoDaAtividade) { this.fotoDaAtividade = fotoDaAtividade; }
 
-    public Foto getFotoDaAtividade() {
-        return fotoDaAtividade;
-    }
+    public Prioridade getPrioridade() { return prioridade; }
 
-    public void alterarFotoDaAtividade(Foto fotoDaAtividade) {
-        this.fotoDaAtividade = fotoDaAtividade;
-    }
+    public Horario getHorariosRealizDaAtv() { return horariosRealizDaAtv; }
 
-    public Horario getHorariosRealizDaAtv() {
-        return horariosRealizDaAtv;
-    }
+    public void setListaHorarios(Horario horario){ this.horariosRealizDaAtv = horario; }
 
-    public void setListaHorarios(Horario horario){
-        this.horariosRealizDaAtv = horario;
-    }
+    public Categoria getCategoria() { return categoria; }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 
-    public void alterarCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+    public void setPrioridade(Prioridade prioridade) { this.prioridade = prioridade;}
 
-    public Prioridade getPrioridade() {
-        return prioridade;
-    }
+    public String getNomeDaAtv() { return nomeDaAtv; }
 
-    public void alterarPrioridade(Prioridade prioridade) {
-        this.prioridade = prioridade;
-    }
+    public void setNomeDaAtv(String nomeDaAtv) { this.nomeDaAtv = nomeDaAtv; }
 
-    public String getNomeDaAtv() {
-        return nomeDaAtv;
-    }
+    public List<String> getTags() { return tags; }
 
-    public void alterarNomeDaAtv(String nomeDaAtv) {
-        this.nomeDaAtv = nomeDaAtv;
-    }
-
-    public void registrarNovoHorario(Horario tempoInvestido){
-        horariosRealizDaAtv = tempoInvestido;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    private void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+    private void setTags(List<String> tags) { this.tags = tags; }
 
     @Override
-    public int hashCode() {
-        return nomeDaAtv.hashCode();
-    }
-
+    public int hashCode() { return nomeDaAtv.hashCode(); }
 
     @Override
     public boolean equals(Object obj){
         if(!(obj instanceof Atividade)){
             return false;
         }
-
-
         Atividade atv = (Atividade) obj;
         return this.nomeDaAtv.equals(atv.getNomeDaAtv());
     }

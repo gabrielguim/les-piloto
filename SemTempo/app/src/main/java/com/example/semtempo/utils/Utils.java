@@ -47,7 +47,7 @@ public class Utils {
 
     }
 
-    public static void sortByHours(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByHours(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
@@ -62,11 +62,20 @@ public class Utils {
         });
     }
 
-    public static void sortByPriority(List<Atividade> atividades, int esquerda, int direita) {
+    public static void sortByPriority(List<Atividade> atividades) {
         Collections.sort(atividades, new Comparator<Atividade>() {
             @Override
             public int compare(Atividade atv1, Atividade atv2) {
                 return atv1.getPrioridade().compareTo(atv2.getPrioridade());
+            }
+        });
+    }
+
+    public static void sortByDate(List<Atividade> atividades) {
+        Collections.sort(atividades, new Comparator<Atividade>() {
+            @Override
+            public int compare(Atividade atv1, Atividade atv2) {
+                return convertDateToCalendar(atv2.getHorariosRealizDaAtv().getData()).getTime().compareTo(convertDateToCalendar(atv1.getHorariosRealizDaAtv().getData()).getTime());
             }
         });
     }
@@ -90,6 +99,5 @@ public class Utils {
     public static List<Atividade> getLista() {
         return lista;
     }
-
 
 }

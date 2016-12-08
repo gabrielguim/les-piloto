@@ -11,20 +11,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.fragments.CategoriesFragment;
+import com.example.semtempo.fragments.HistoryFragment;
+import com.example.semtempo.fragments.RankFragment;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.fragments.HomeFragment;
-import com.example.semtempo.fragments.ReportFragment;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.utils.Utils;
+import com.example.semtempo.utils.CircleTransform;
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -64,18 +66,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.add_fab);
-//        addFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                AddFragment fragment = new AddFragment();
-//                android.support.v4.app.FragmentTransaction fragmentTransaction =
-//                        getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, fragment);
-//                fragmentTransaction.commit();
-//
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -114,16 +104,6 @@ public class MainActivity extends AppCompatActivity
             mountView(opr);
 
             GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-            System.out.println("Logado como " + currentUser.getEmail());
-            Horario horario = new Horario(2, new GregorianCalendar());
-            Horario horario2 = new Horario(3, new GregorianCalendar());
-
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario, new ArrayList<String>());
-            Atividade b = new Atividade("Estudar", Prioridade.BAIXA, horario2, new ArrayList<String>());
-            List<Atividade> atv = new ArrayList<>();
-
-//            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
-//            FirebaseController.saveActivity(currentUser.getDisplayName(), b);
 
         }
     }
@@ -138,9 +118,7 @@ public class MainActivity extends AppCompatActivity
         email.setText(result.getSignInAccount().getEmail());
         name.setText(result.getSignInAccount().getDisplayName());
         photo.setImageURI(result.getSignInAccount().getPhotoUrl());
-        Picasso.with(this).load(result.getSignInAccount().getPhotoUrl())
-                .resize(115, 115)
-                .into(photo);
+        Picasso.with(this).load(result.getSignInAccount().getPhotoUrl()).transform(new CircleTransform()).resize(160, 160).into(photo);
     }
 
 
@@ -181,24 +159,18 @@ public class MainActivity extends AppCompatActivity
             fragment = new HomeFragment();
             callFragment(fragment);
 
-        } else if (id == R.id.nav_report) {
-            fragment = new ReportFragment();
-            System.out.println(Utils.getLista());
-            callFragment(fragment);
-
         } else if (id == R.id.nav_rank) {
-            fragment = new HomeFragment();
-            GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-            Horario horario = new Horario(5, new GregorianCalendar());
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario, new ArrayList<String>());
-            FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario);
+            fragment = new RankFragment();
             callFragment(fragment);
 
         } else if (id == R.id.nav_history) {
-            fragment = new HomeFragment();
+            fragment = new HistoryFragment();
             callFragment(fragment);
 
-        } else if (id == R.id.nav_logout) {
+        } else if(id == R.id.nav_categories) {
+            fragment = new CategoriesFragment();
+            callFragment(fragment);
+        }else if (id == R.id.nav_logout) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
