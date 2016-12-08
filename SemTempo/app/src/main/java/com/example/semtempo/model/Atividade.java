@@ -1,5 +1,9 @@
 package com.example.semtempo.model;
 
+import android.net.Uri;
+
+import com.example.semtempo.utils.Utils;
+
 /**
  * Created by Lucas on 20/11/2016.
  */
@@ -9,6 +13,7 @@ public class Atividade {
     private Horario horario;
     private Prioridade prioridade;
     private Tag tag;
+    private String base64Imagem;
 
     public Atividade(){}
 
@@ -17,6 +22,14 @@ public class Atividade {
         this.prioridade = prioridade;
         this.horario = horario;
         this.tag = tag;
+    }
+
+    public void setFoto(String base64Imagem){
+        this.base64Imagem = base64Imagem;
+    }
+
+    public String getFoto(){
+        return base64Imagem;
     }
 
     public Horario getHorario() { return horario; }

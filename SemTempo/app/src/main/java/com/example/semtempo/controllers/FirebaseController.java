@@ -47,7 +47,7 @@ public class FirebaseController {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-
+                System.out.println("FILHO MODIFICADO!");
 
             }
 
