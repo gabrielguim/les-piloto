@@ -1,5 +1,8 @@
 package com.example.semtempo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lucas on 20/11/2016.
  */
@@ -11,23 +14,26 @@ public class Atividade {
     private Categoria categoria;
     private Prioridade prioridade;
     private String id;
+    private List<String> tags;
 
     public Atividade(){
 
     }
 
-    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario){
+    public Atividade(String nomeDaAtv, Prioridade prioridade, Horario horario, List<String> tags) {
         this.nomeDaAtv = nomeDaAtv;
         this.prioridade = prioridade;
         this.horariosRealizDaAtv = horario;
+        setTags(tags);
     }
 
-    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Categoria categoria, Prioridade prioridade, Horario horario){
+    public Atividade(String nomeDaAtv, Foto fotoDaAtividade, Categoria categoria, Prioridade prioridade, Horario horario, List<String> tags){
         this.nomeDaAtv = nomeDaAtv;
         this.fotoDaAtividade = fotoDaAtividade;
         this.categoria = categoria;
         this.prioridade = prioridade;
         this.horariosRealizDaAtv = horario;
+        setTags(tags);
     }
 
     public String getId(){
@@ -82,26 +88,19 @@ public class Atividade {
         horariosRealizDaAtv = tempoInvestido;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    private void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public int hashCode() {
         return nomeDaAtv.hashCode();
     }
 
-    /**
-     * Retorna boolean pelo fato de que se um horário não consta na coleção, ele retornará falso.
-     * */
-//    public boolean removerHorario(Horario horarioEscolhido){
-//        return horariosRealizDaAtv.remove(horarioEscolhido);
-//    }
-
-//    public int getTotalDeHorasGasto(){
-//        int total = 0;
-//        for (Horario horario: getHorariosRealizDaAtv()){
-//            total += horario.getTotalHorasInvestidas();
-//        }
-//
-//        return total;
-//    }
 
     @Override
     public boolean equals(Object obj){

@@ -73,7 +73,7 @@ public class AddFragment extends Fragment {
                     Calendar creation_date = new GregorianCalendar();
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario);
+                    Atividade a = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, new ArrayList<String>());
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), a);
 
@@ -159,7 +159,7 @@ public class AddFragment extends Fragment {
     private void setUp() {
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
-
+        autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
 
         FirebaseController.retrieveActivities(currentUser.getDisplayName(), new OnGetDataListener() {
             @Override
@@ -173,7 +173,6 @@ public class AddFragment extends Fragment {
                 configureAutoComplete();
                 if(getActivity() != null) {
                     ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.select_dialog_item, ATIVIDADES);
-                    autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.name_atv);
                     autoCompleteTextView.setThreshold(1);
                     autoCompleteTextView.setAdapter(adapter);
                 }

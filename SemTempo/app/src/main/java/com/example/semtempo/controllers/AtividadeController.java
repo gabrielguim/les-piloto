@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.semtempo.model.Atividade;
@@ -110,6 +111,37 @@ public class AtividadeController {
 
 
         return calculaTion;
+    }
+
+    /**
+     * Filtra uma lista de atividades por tags passadas.
+     * @param atividades Lista de atividades a ser filtrada.
+     * @param tagsDaPesquisa Lista de String contendo as tags que devem estar contidas nas atividades.
+     * @return Lista com as atividades que contém todos os filtros buscados.
+     */
+    public static List<Atividade> filterByTag (List<Atividade> atividades, List<String> tagsDaPesquisa){
+        List<Atividade> atividadesFiltradas = new ArrayList<Atividade>();
+
+        for (Atividade atividade : atividades) {
+            List<String> tagsDaAtividade = atividade.getTags();
+
+            if(isGreaterOrEqualThan(tagsDaAtividade, tagsDaPesquisa)) {
+                if (tagsDaAtividade.containsAll(tagsDaPesquisa)){
+                    atividadesFiltradas.add(atividade);
+                }
+            }
+        }
+        return atividadesFiltradas;
+    }
+
+    /**
+     * Verifica se uma lista de tags é maior ou igual que outra
+     * @param tags1 Lista de String a ser comparada
+     * @param tags2 Lista de String base
+     * @return True caso Tags1 tenha mais elementos que Tags2, caso contrario retorna False
+     */
+    private static boolean isGreaterOrEqualThan(List<String> tags1, List<String> tags2) {
+        return tags1.size() >= tags2.size();
     }
 
 }

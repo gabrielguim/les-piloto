@@ -19,10 +19,8 @@ import android.widget.TextView;
 
 import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.UsuarioController;
-import com.example.semtempo.database.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
-import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.HomeFragment;
 import com.example.semtempo.fragments.ReportFragment;
 import com.example.semtempo.model.Prioridade;
@@ -120,8 +118,8 @@ public class MainActivity extends AppCompatActivity
             Horario horario = new Horario(2, new GregorianCalendar());
             Horario horario2 = new Horario(3, new GregorianCalendar());
 
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario);
-            Atividade b = new Atividade("Estudar", Prioridade.BAIXA, horario2);
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario, new ArrayList<String>());
+            Atividade b = new Atividade("Estudar", Prioridade.BAIXA, horario2, new ArrayList<String>());
             List<Atividade> atv = new ArrayList<>();
 
 //            FirebaseController.saveActivity(currentUser.getDisplayName(), a);
@@ -192,7 +190,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new HomeFragment();
             GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
             Horario horario = new Horario(5, new GregorianCalendar());
-            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario);
+            Atividade a = new Atividade("Cachaça", Prioridade.ALTA, horario, new ArrayList<String>());
             FirebaseController.saveNewHourActivity(currentUser.getDisplayName(), a, horario);
             callFragment(fragment);
 
