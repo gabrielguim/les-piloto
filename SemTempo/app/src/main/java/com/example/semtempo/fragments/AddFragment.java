@@ -7,10 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +35,7 @@ import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
+import com.example.semtempo.model.Categoria;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.io.ByteArrayOutputStream;
@@ -67,7 +63,7 @@ public class AddFragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
     private AlertDialog levelDialog;
     private View rootView;
-    private Tag tag;
+    private Categoria categoria;
     private FloatingActionButton camera_fab;
     private FloatingActionButton gallery_fab;
     private ImageView taskImage;
@@ -189,7 +185,7 @@ public class AddFragment extends Fragment {
                     String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
 
                     Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
-                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, tag);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria);
                     atv.setFoto(base64Image);
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
@@ -241,7 +237,7 @@ public class AddFragment extends Fragment {
 
         spent_time = (EditText) rootView.findViewById(R.id.spent_hours);
 
-        tag = Tag.SEMCATEGORIA;
+        categoria = Categoria.SEMCATEGORIA;
         categories_selection = (EditText) rootView.findViewById(R.id.categorie_text);
         categories_selection.setText("Sem categoria");
         categories_selection.setFocusable(false);
@@ -317,15 +313,15 @@ public class AddFragment extends Fragment {
                 {
                     case 0:
                         categories_selection.setText("Sem categoria");
-                        tag = Tag.SEMCATEGORIA;
+                        categoria = Categoria.SEMCATEGORIA;
                         break;
                     case 1:
                         categories_selection.setText("Lazer");
-                        tag = Tag.LAZER;
+                        categoria = Categoria.LAZER;
                         break;
                     case 2:
                         categories_selection.setText("Trabalho");
-                        tag = Tag.TRABALHO;
+                        categoria = Categoria.TRABALHO;
                         break;
                 }
 

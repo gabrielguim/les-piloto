@@ -1,9 +1,9 @@
 package com.example.semtempo;
 
 import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Categoria;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
 import com.example.semtempo.services.AtividadeService;
 
 import junit.framework.Assert;
@@ -34,10 +34,10 @@ public class ExampleUnitTest {
 
     @Test
     public void testRegisterActivityYesterday1(){
-        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
-        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
-        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
-        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
+        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
+        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
+        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
+        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
 
         List<Atividade> lista = new ArrayList<>();
         lista.add(atv1);
@@ -51,10 +51,10 @@ public class ExampleUnitTest {
 
     @Test
     public void testRegisterActivityYesterday2(){
-        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Tag.LAZER);
-        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
-        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
-        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Tag.LAZER);
+        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Categoria.LAZER);
+        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
+        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
+        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar()), Categoria.LAZER);
 
         List<Atividade> lista = new ArrayList<>();
         lista.add(atv1);
@@ -68,10 +68,10 @@ public class ExampleUnitTest {
 
     @Test
     public void testRegisterActivityYesterday3(){
-        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Tag.LAZER);
-        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Tag.LAZER);
-        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Tag.LAZER);
-        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Tag.LAZER);
+        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Categoria.LAZER);
+        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Categoria.LAZER);
+        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Categoria.LAZER);
+        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,7)), Categoria.LAZER);
 
         List<Atividade> lista = new ArrayList<>();
         lista.add(atv1);
@@ -85,10 +85,10 @@ public class ExampleUnitTest {
 
     @Test
     public void testRegisterActivityYesterday4(){
-        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,6)), Tag.LAZER);
-        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,6)), Tag.LAZER);
-        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,8)), Tag.LAZER);
-        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,8)), Tag.LAZER);
+        Atividade atv1 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,6)), Categoria.LAZER);
+        Atividade atv2 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,6)), Categoria.LAZER);
+        Atividade atv3 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,8)), Categoria.LAZER);
+        Atividade atv4 = new Atividade("Chutar cu de bebo", Prioridade.ALTA, new Horario(2, new GregorianCalendar(2016,11,8)), Categoria.LAZER);
 
         List<Atividade> lista = new ArrayList<>();
         lista.add(atv1);

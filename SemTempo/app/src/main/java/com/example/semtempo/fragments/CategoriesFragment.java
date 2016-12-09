@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -22,7 +21,7 @@ import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Tag;
+import com.example.semtempo.model.Categoria;
 import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -152,16 +151,16 @@ public class CategoriesFragment extends Fragment {
         float totalHours = 0;
 
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
-        Map<Tag, Integer> categoriesHours = getCategoriesHoursPerOption();
+        Map<Categoria, Integer> categoriesHours = getCategoriesHoursPerOption();
 
-        for (Map.Entry<Tag, Integer> entry : categoriesHours.entrySet()) {
+        for (Map.Entry<Categoria, Integer> entry : categoriesHours.entrySet()) {
             categories.add(entry.getKey().toString() + " - Total de horas: " + entry.getValue());
             totalHours += entry.getValue();
         }
 
         setTotalHorasTextAndDescription(totalHours);
 
-        for (Map.Entry<Tag, Integer> entry : categoriesHours.entrySet()) {
+        for (Map.Entry<Categoria, Integer> entry : categoriesHours.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
@@ -208,8 +207,8 @@ public class CategoriesFragment extends Fragment {
         });
     }
 
-    private Map<Tag, Integer> getCategoriesHoursPerOption(){
-        Map<Tag, Integer> categoriesHours;
+    private Map<Categoria, Integer> getCategoriesHoursPerOption(){
+        Map<Categoria, Integer> categoriesHours;
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
         if(option.equals("Hist. Week")){
