@@ -2,6 +2,7 @@ package com.example.semtempo;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar = null;
 
     SharedPreferences prefs;
+    public static Context contextOfApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         if(prefs.getString("notificacao", "erro").equals("ativa")){
             startRepeatingNotification();
         }
+        contextOfApplication = getApplicationContext();
     }
 
     private void initUserInfor(NavigationView navigationView ) {
@@ -230,5 +233,9 @@ public class MainActivity extends AppCompatActivity
         PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendIntent);
+    }
+
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
     }
 }

@@ -1,9 +1,11 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -53,6 +55,7 @@ public class HomeFragment extends Fragment {
     private Map<Atividade, Integer> atividadesDaSemana;
     private List<Integer> chartColors;
     private String flag;
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +66,7 @@ public class HomeFragment extends Fragment {
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
         TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
         warn.setVisibility(View.INVISIBLE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -226,6 +230,15 @@ public class HomeFragment extends Fragment {
                 changeVisibility(!atividades.isEmpty());
 
                 atividades = data;
+                if (atividades!= null) {
+                    Boolean registrouAtividadeOntem = AtividadeService.registerActivityYesterday(atividades);
+                    if (registrouAtividadeOntem != null) {
+                        System.out.println(registrouAtividadeOntem.toString());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("ontem", registrouAtividadeOntem.toString());
+                        editor.commit();
+                    }
+                }
                 setUpWeek();
                 if (atividadesDaSemana != null) {
                     fillChartCollors();
