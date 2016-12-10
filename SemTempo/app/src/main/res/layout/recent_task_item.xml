@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -21,12 +22,20 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_launcher"
+                android:id="@+id/task_photo"/>
+
+            <ImageView
                 android:layout_margin="15dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="?android:attr/textSelectHandleLeft"
                 android:id="@+id/task_priority"
-                android:tint="@color/colorAccent"/>
+                android:tint="@color/colorAccent"
+                android:layout_toRightOf="@id/task_photo"/>
 
             <TextView
                 android:text="{{ nome da atividade }}"
