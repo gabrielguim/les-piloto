@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     private List<Atividade> atividades;
     private Map<Atividade, Integer> atividadesDaSemana;
     private List<Integer> chartColors;
+    private String flag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +63,13 @@ public class HomeFragment extends Fragment {
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
         TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
         warn.setVisibility(View.INVISIBLE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            flag = bundle.getString("flag");
+        } else {
+            flag = "not";
+        }
 
         warn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +105,12 @@ public class HomeFragment extends Fragment {
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fragment addFragment = new AddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", flag);
+                addFragment.setArguments(bundle);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.replace(R.id.fragment_container, addFragment , "NewFragmentTag");
                 ft.commit();
 
 

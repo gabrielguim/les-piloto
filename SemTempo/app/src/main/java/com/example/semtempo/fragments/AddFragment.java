@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +37,9 @@ import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.model.Categoria;
+import com.example.semtempo.services.AtividadeService;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,6 +71,8 @@ public class AddFragment extends Fragment {
     private FloatingActionButton gallery_fab;
     private ImageView taskImage;
     private Bitmap currentImage;
+    private String flag;
+    private Horario horario;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -78,11 +83,19 @@ public class AddFragment extends Fragment {
         addFab.setImageResource(SEND_ICON);
         addFab.setVisibility(View.VISIBLE);
 
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            flag = bundle.getString("flag");
+        } else {
+            flag = "not";
+        }
+
         taskImage = (ImageView) rootView.findViewById(R.id.atv_photo);
 
         taskImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Dialog settingsDialog = new Dialog(getActivity());
 
                 View newView = inflater.inflate(R.layout.image_layout, null);
@@ -91,6 +104,10 @@ public class AddFragment extends Fragment {
                 settingsDialog.setContentView(newView);
 
                 ImageView imageView = (ImageView) newView.findViewById(R.id.task_image);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                currentImage.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+
                 imageView.setImageBitmap(currentImage);
 
                 settingsDialog.show();
@@ -184,7 +201,14 @@ public class AddFragment extends Fragment {
                     byte[] bytes = baos.toByteArray();
                     String base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
 
-                    Horario horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
+                    if (flag.equals("notificacao")) {
+                        Calendar ontem = new GregorianCalendar();
+                        ontem.add(Calendar.DATE, -1);
+                        horario = new Horario(Integer.parseInt(spent_time.getText().toString()), ontem);
+                    } else {
+                        horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
+                    }
+
                     Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria);
                     atv.setFoto(base64Image);
 
@@ -251,6 +275,21 @@ public class AddFragment extends Fragment {
             }
         });
 
+        if (flag.equals("notificacao")){
+            new AlertDialog.Builder(getContext())
+                    .setMessage("Esta é uma atividade de ontem?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {}
+                    })
+                    .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            flag = "not";
+                        }
+                    })
+                    .show();
+        }
+
         return rootView;
     }
 
@@ -296,6 +335,16 @@ public class AddFragment extends Fragment {
                 currentImage = img;
             }
         }
+    }
+
+    private Uri convertImageToUri(String base64Image){
+        byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+        Bitmap inImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
+
+        return Uri.parse(path);
     }
 
     private void initAlertDialog(){
@@ -357,7 +406,11 @@ public class AddFragment extends Fragment {
             public void run() {
                 dialog.dismiss();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, new HomeFragment(), "NewFragmentTag");
+                Fragment homeFragment = new HomeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", flag);
+                homeFragment.setArguments(bundle);
+                ft.replace(R.id.fragment_container, homeFragment, "NewFragmentTag");
                 ft.commit();
             }
         }, TIME);

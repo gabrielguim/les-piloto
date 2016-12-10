@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity
             String value = getIntent().getExtras().getString("flag");
             if (value.equals("notificacao")){
                 Fragment fragment1 = new AddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "notificacao");
+                fragment1.setArguments(bundle);
                 callFragment(fragment1);
             }
         }else {
