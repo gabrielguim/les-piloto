@@ -1,9 +1,13 @@
 package com.example.semtempo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -11,21 +15,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.semtempo.controllers.UsuarioController;
+import com.example.semtempo.fragments.AddFragment;
 import com.example.semtempo.fragments.CategoriesFragment;
 import com.example.semtempo.fragments.HistoryFragment;
 import com.example.semtempo.fragments.RankFragment;
-import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Horario;
 import com.example.semtempo.fragments.HomeFragment;
-import com.example.semtempo.model.Prioridade;
 import com.example.semtempo.utils.CircleTransform;
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
@@ -38,10 +38,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -51,10 +48,11 @@ public class MainActivity extends AppCompatActivity
     private ImageView photo;
     private TextView name;
 
-    private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private NavigationView navigationView = null;
     private Toolbar toolbar = null;
 
+    SharedPreferences prefs;
+    public static Context contextOfApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +62,6 @@ public class MainActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.add_fab);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -80,14 +76,36 @@ public class MainActivity extends AppCompatActivity
 
         initUserInfor(navigationView);
 
+        if(getIntent().getExtras() != null){
+            String value = getIntent().getExtras().getString("flag");
+            if (value.equals("notificacao")){
+                Fragment fragment1 = new AddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "notificacao");
+                fragment1.setArguments(bundle);
+                callFragment(fragment1);
+            }
+        }else {
+            HomeFragment fragment = new HomeFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
+            fragmentTransaction.commit();
+        }
 
-        HomeFragment fragment = new HomeFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, "HOME_FRAGMENT");
-        fragmentTransaction.commit();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefs.getString("notificacao", "erro").equals("erro")){
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("notificacao", "ativa");
+            editor.putString("checkbox", "checked");
+            editor.putString("time", "08:00");
+            editor.commit();
+        }
 
-
+        if(prefs.getString("notificacao", "erro").equals("ativa")){
+            startRepeatingNotification();
+        }
+        contextOfApplication = getApplicationContext();
     }
 
     private void initUserInfor(NavigationView navigationView ) {
@@ -182,7 +200,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_pref) {
-
+            Intent n = new Intent(this, PreferenciasActivity.class);
+            startActivity(n);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -201,5 +220,22 @@ public class MainActivity extends AppCompatActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         //Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+    public void startRepeatingNotification(){
+        int hourNotification = Integer.parseInt(prefs.getString("time", "08:00").split(":")[0]);
+        int minuteNotification = Integer.parseInt(prefs.getString("time", "08:00").split(":")[1]);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hourNotification);
+        calendar.set(Calendar.MINUTE, minuteNotification);
+        calendar.set(calendar.SECOND, 10);
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendIntent);
+    }
+
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
     }
 }

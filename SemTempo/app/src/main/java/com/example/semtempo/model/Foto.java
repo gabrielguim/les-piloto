@@ -2,17 +2,17 @@ package com.example.semtempo.model;
 
 public class Foto {
 
-    private String idFoto;
+    private String base64Imagem;
 
-    public Foto(String idFoto){
-        this.idFoto = idFoto;
+    public Foto(String base64Imagem){
+        this.base64Imagem = base64Imagem;
     }
 
-    public String getIdFoto() {
-        return idFoto;
+    public String getBase64Imagem() {
+        return base64Imagem;
     }
 
-    public void setIdFoto(String idFoto) {
-        this.idFoto = idFoto;
+    public void setBase64Imagem(String base64Imagem) {
+        this.base64Imagem = base64Imagem;
     }
 }

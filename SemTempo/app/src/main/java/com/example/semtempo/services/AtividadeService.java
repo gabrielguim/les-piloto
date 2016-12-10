@@ -6,18 +6,15 @@ package com.example.semtempo.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Categoria;
 import com.example.semtempo.model.Horario;
-import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Tag;
 import com.example.semtempo.utils.Utils;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Classe que faz atua sobre uma lista de atividades, filtrando-as sob os mais diferentes critérios
@@ -104,30 +101,30 @@ public class AtividadeService {
     }
 
     /**
-     * Inform the quantity of hours spent by the user categorized by Tag(SemCategoria, Lazer, Trabalho)
+     * Inform the quantity of hours spent by the user categorized by Categoria(SemCategoria, Lazer, Trabalho)
      *
      * @param activities List of all user activities
      * @return categoriesHours A map with informations about how much time
      * the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
-    public static Map<Tag, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
-        Map<Tag, Integer> categoriesHours = new HashMap<>();
+    public static Map<Categoria, Integer> getTotalSpentHoursByCategories(List<Atividade> activities) {
+        Map<Categoria, Integer> categoriesHours = new HashMap<>();
 
-        categoriesHours.put(Tag.SEMCATEGORIA, 0);
-        categoriesHours.put(Tag.LAZER, 0);
-        categoriesHours.put(Tag.TRABALHO, 0);
+        categoriesHours.put(Categoria.SEMCATEGORIA, 0);
+        categoriesHours.put(Categoria.LAZER, 0);
+        categoriesHours.put(Categoria.TRABALHO, 0);
 
         for (int i = 0; i < activities.size(); i++) {
             Atividade atv = activities.get(i);
-            Tag tag = atv.getTag();
+            Categoria categoria = atv.getCategoria();
             int horas = atv.getHorario().getTotalHorasInvestidas();
 
-            if(tag == null){
-                int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
-                categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+            if(categoria == null){
+                int actualTime = categoriesHours.get(Categoria.SEMCATEGORIA);
+                categoriesHours.put(Categoria.SEMCATEGORIA, actualTime + horas);
             }else{
-                int actualTime = categoriesHours.get(tag);
-                categoriesHours.put(tag, actualTime + horas);
+                int actualTime = categoriesHours.get(categoria);
+                categoriesHours.put(categoria, actualTime + horas);
             }
         }
 
@@ -135,19 +132,19 @@ public class AtividadeService {
     }
 
     /**
-     * Inform the quantity of hours spent by the user on the actual week categorized by Tag(SemCategoria, Lazer, Trabalho)
+     * Inform the quantity of hours spent by the user on the actual week categorized by Categoria(SemCategoria, Lazer, Trabalho)
      *
      * @param activities List of all user activities
      * @param actualWeek Actual system week
      * @return categoriesHours A map with informations about how much time in the actual week
      *  the user spent on the categorized(SemCategoria, Lazer, Trabalho) activity
      */
-    public static Map<Tag, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
-        Map<Tag, Integer> categoriesHours = new HashMap<>();
+    public static Map<Categoria, Integer> getTotalSpentHoursByCategoriesActWeek(List<Atividade> activities, int actualWeek) {
+        Map<Categoria, Integer> categoriesHours = new HashMap<>();
 
-        categoriesHours.put(Tag.SEMCATEGORIA, 0);
-        categoriesHours.put(Tag.LAZER, 0);
-        categoriesHours.put(Tag.TRABALHO, 0);
+        categoriesHours.put(Categoria.SEMCATEGORIA, 0);
+        categoriesHours.put(Categoria.LAZER, 0);
+        categoriesHours.put(Categoria.TRABALHO, 0);
 
         for (int i = 0; i < activities.size(); i++) {
             Atividade atv = activities.get(i);
@@ -155,19 +152,70 @@ public class AtividadeService {
             int atvWeek = horario.getSemana();
 
             if(atvWeek == actualWeek){
-                Tag tag = atv.getTag();
+                Categoria categoria = atv.getCategoria();
                 int horas = atv.getHorario().getTotalHorasInvestidas();
 
-                if(tag == null){
-                    int actualTime = categoriesHours.get(Tag.SEMCATEGORIA);
-                    categoriesHours.put(Tag.SEMCATEGORIA, actualTime + horas);
+                if(categoria == null){
+                    int actualTime = categoriesHours.get(Categoria.SEMCATEGORIA);
+                    categoriesHours.put(Categoria.SEMCATEGORIA, actualTime + horas);
                 }else{
-                    int actualTime = categoriesHours.get(tag);
-                    categoriesHours.put(tag, actualTime + horas);
+                    int actualTime = categoriesHours.get(categoria);
+                    categoriesHours.put(categoria, actualTime + horas);
                 }
             }
         }
 
         return categoriesHours;
+    }
+
+    public static boolean registerActivityYesterday(List<Atividade> activities){
+        Calendar yesterday = new GregorianCalendar();
+        yesterday.add(Calendar.DATE, -1);
+        int month = yesterday.get(Calendar.MONTH);
+        int day = yesterday.get(Calendar.DAY_OF_MONTH);
+        int year = yesterday.get(Calendar.YEAR);
+
+        for (Atividade activity : activities){
+            int monthOfActivity = activity.getHorario().getMes();
+            int dayOfActivity = activity.getHorario().getDia();
+            int yearOfActivity = activity.getHorario().getAno();
+            if (monthOfActivity == month && dayOfActivity == day && yearOfActivity == year){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Filtra uma lista de atividades por tags passadas.
+     * @param atividades Lista de atividades a ser filtrada.
+     * @param tagsDaPesquisa Lista de String contendo as tags que devem estar contidas nas atividades.
+     * @return Lista com as atividades que contém todos os filtros buscados.
+     */
+    public static List<Atividade> filterByTag (List<Atividade> atividades, List<String> tagsDaPesquisa){
+        List<Atividade> atividadesFiltradas = new ArrayList<Atividade>();
+
+        for (Atividade atividade : atividades) {
+            List<String> tagsDaAtividade = atividade.getTags();
+
+            if(isGreaterOrEqualThan(tagsDaAtividade, tagsDaPesquisa)) {
+                if (tagsDaAtividade.containsAll(tagsDaPesquisa)){
+                    atividadesFiltradas.add(atividade);
+                }
+            }
+        }
+        return atividadesFiltradas;
+    }
+
+    /**
+     * Verifica se uma lista de tags é maior ou igual que outra
+     * @param tags1 Lista de String a ser comparada
+     * @param tags2 Lista de String base
+     * @return True caso Tags1 tenha mais elementos que Tags2, caso contrario retorna False
+     */
+    private static boolean isGreaterOrEqualThan(List<String> tags1, List<String> tags2) {
+        return tags1.size() >= tags2.size();
     }
 }

@@ -1,9 +1,11 @@
 package com.example.semtempo.fragments;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +54,8 @@ public class HomeFragment extends Fragment {
     private List<Atividade> atividades;
     private Map<Atividade, Integer> atividadesDaSemana;
     private List<Integer> chartColors;
+    private String flag;
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +66,14 @@ public class HomeFragment extends Fragment {
         seeMore = (TextView) rootView.findViewById(R.id.see_more);
         TextView warn = (TextView) rootView.findViewById(R.id.no_task_warn);
         warn.setVisibility(View.INVISIBLE);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            flag = bundle.getString("flag");
+        } else {
+            flag = "not";
+        }
 
         warn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +109,12 @@ public class HomeFragment extends Fragment {
         addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Fragment addFragment = new AddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", flag);
+                addFragment.setArguments(bundle);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, new AddFragment(), "NewFragmentTag");
+                ft.replace(R.id.fragment_container, addFragment , "NewFragmentTag");
                 ft.commit();
 
 
@@ -106,7 +122,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadRecentTasks(){
+    private void loadRecentTasks(ProgressDialog dialog){
         recentTasks = (ListView) rootView.findViewById(R.id.recent_tasks);
         recentTasks.setDivider(null);
         List<Atividade> atividades_recentes= new ArrayList<>();
@@ -132,6 +148,8 @@ public class HomeFragment extends Fragment {
             recentTasks.setAdapter(new AllTasksAdapter(getActivity(), atividades_recentes, rootView));
             Utils.setListViewHeightBasedOnChildren(recentTasks);
         }
+
+        dialog.dismiss();
 
     }
 
@@ -194,8 +212,8 @@ public class HomeFragment extends Fragment {
     private void setUp(){
         atividades = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
+        final int TIME = 3000;
 
-        final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
@@ -211,16 +229,23 @@ public class HomeFragment extends Fragment {
 
                 changeVisibility(!atividades.isEmpty());
 
-                dialog.dismiss();
-
                 atividades = data;
+                if (atividades!= null) {
+                    Boolean registrouAtividadeOntem = AtividadeService.registerActivityYesterday(atividades);
+                    if (registrouAtividadeOntem != null) {
+                        System.out.println(registrouAtividadeOntem.toString());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("ontem", registrouAtividadeOntem.toString());
+                        editor.commit();
+                    }
+                }
                 setUpWeek();
                 if (atividadesDaSemana != null) {
                     fillChartCollors();
                     plotChart();
                 }
 
-                loadRecentTasks();
+                loadRecentTasks(dialog);
             }
         });
 
@@ -244,9 +269,13 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
         super.onResume();
         setUp();
-        loadRecentTasks();
+        loadRecentTasks(dialog);
     }
 
     private void setUpWeek(){

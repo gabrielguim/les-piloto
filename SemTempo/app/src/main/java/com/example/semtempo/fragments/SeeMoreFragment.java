@@ -25,7 +25,8 @@ import java.util.List;
 
 import com.example.semtempo.model.Atividade;
 
-public class SeeMoreFragment extends Fragment {
+public class
+SeeMoreFragment extends Fragment {
 
     private ListView allTasks;
     private View rootView;
