@@ -21,6 +21,8 @@ import com.example.semtempo.utils.Utils;
  */
 public class AtividadeService {
 
+    public static List<Atividade> todasAtividades;
+
     /**
      * Filtra uma lista de atividades pela semana
      *
@@ -217,5 +219,16 @@ public class AtividadeService {
      */
     private static boolean isGreaterOrEqualThan(List<String> tags1, List<String> tags2) {
         return tags1.size() >= tags2.size();
+    }
+
+    public static void setAllActivities(List<Atividade> allActivities){
+        todasAtividades = allActivities;
+    }
+
+    public static List<Atividade> getAllActivities(){
+        if (todasAtividades == null)
+            return new ArrayList<>();
+        else
+            return todasAtividades;
     }
 }

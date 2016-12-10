@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +23,13 @@ import com.example.semtempo.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.semtempo.model.Atividade;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
+import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.utils.CircleTransform;
 import com.squareup.picasso.Picasso;
 
@@ -34,14 +38,17 @@ public class AllTasksAdapter extends BaseAdapter{
     private List<Atividade> atividades;
     private View rootView;
     private Context context;
-
+    private static boolean verCategorias;
+    private static boolean selecting;
     private static LayoutInflater inflater = null;
+    private static List<Atividade> selectedActivities;
 
     public AllTasksAdapter(Context context, List<Atividade> atividades, View rootView) {
 
         this.rootView = rootView;
         this.atividades = atividades;
         this.context = context;
+        this.selectedActivities = new ArrayList<>();
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -67,12 +74,17 @@ public class AllTasksAdapter extends BaseAdapter{
         TextView task_date;
         ImageView task_prority;
         ImageView task_photo;
+        CardView card_view;
+    }
+
+    public void setVerCategorias(boolean ver){
+        this.verCategorias = ver;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        Holder holder = new Holder();
+        final Holder holder = new Holder();
 
         View rowView;
 
@@ -82,6 +94,7 @@ public class AllTasksAdapter extends BaseAdapter{
         holder.task_time = (TextView) rowView.findViewById(R.id.task_time);
         holder.task_prority = (ImageView) rowView.findViewById(R.id.task_priority);
         holder.task_photo = (ImageView) rowView.findViewById(R.id.task_photo);
+        holder.card_view = (CardView) rowView.findViewById(R.id.card_view);
 
         String color;
         if (atividades.get(position).getPrioridade() == Prioridade.ALTA){
@@ -146,11 +159,43 @@ public class AllTasksAdapter extends BaseAdapter{
             }
         });
 
-        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.card_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selecting) {
+                    if (selectedActivities.contains(atividades.get(position))) {
+                        selectedActivities.remove(atividades.get(position));
+                        holder.card_view.setBackgroundColor(Color.parseColor("#ffffff"));
+                    } else {
+                        holder.card_view.setBackgroundColor(Color.parseColor("#f88794ce"));
+                        selectedActivities.add(atividades.get(position));
+                    }
+
+                    AtividadeService.setAllActivities(selectedActivities);
+                    selecting = !selectedActivities.isEmpty();
+                }
+            }
+        });
+
+        holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
-                return false;
+                if (!verCategorias){
+                    Toast.makeText(context, atividades.get(position).getNomeDaAtv(), Toast.LENGTH_SHORT).show();
+                } else {
+                    if (selectedActivities.contains(atividades.get(position))){
+                        selectedActivities.remove(atividades.get(position));
+                        holder.card_view.setBackgroundColor(Color.parseColor("#ffffff"));
+                    } else {
+                        holder.card_view.setBackgroundColor(Color.parseColor("#f88794ce"));
+                        selectedActivities.add(atividades.get(position));
+                    }
+
+                    AtividadeService.setAllActivities(selectedActivities);
+                    selecting = !selectedActivities.isEmpty();
+                }
+
+                return true;
             }
 
         });

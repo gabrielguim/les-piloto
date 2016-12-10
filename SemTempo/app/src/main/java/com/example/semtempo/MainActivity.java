@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity
             Intent n = new Intent(this, PreferenciasActivity.class);
             startActivity(n);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
