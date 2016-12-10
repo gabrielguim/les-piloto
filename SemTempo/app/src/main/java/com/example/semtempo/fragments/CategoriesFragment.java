@@ -79,6 +79,7 @@ public class CategoriesFragment extends Fragment {
             }
         });
     }
+
     private void setUp(){
         activities = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();

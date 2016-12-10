@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
@@ -19,8 +21,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:textSize="24sp"
-                android:id="@+id/all_tasks_label"
-                android:layout_below="@id/view1"/>
+                android:id="@+id/all_tasks_label"/>
 
             <Spinner
                 android:layout_width="wrap_content"
@@ -39,6 +40,43 @@
                 android:layout_below="@id/filter_spinner"
                 android:textAlignment="center"
                 android:layout_marginTop="30dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/all_tasks"
+                android:id="@+id/view1"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:layout_below="@id/view1"
+                tools:context="com.kunai.switchtest.MainActivity">
+
+                <TextView
+                    android:id="@+id/toogle_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clique para alterar a lista: " />
+
+                <ToggleButton
+                    android:id="@+id/toogle_hist_type"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textOff="Atividades da Semana"
+                    android:textOn="Todas as Atividades"
+                    android:layout_marginTop="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/toogle_info"
+                    android:background="@drawable/btn_toogle_categories"/>
+                />
+            </RelativeLayout>
 
         </RelativeLayout>
 
