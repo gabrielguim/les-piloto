@@ -19,6 +19,11 @@
             android:icon="@drawable/ic_group_work_black_24dp"
             android:title="Categorias"/>
 
+        <item
+            android:id="@+id/nav_tags"
+            android:icon="@drawable/ic_label_black_24dp"
+            android:title="Filtro por Tag"/>
+
     </group>
 
     <item android:title="Configurações">

@@ -26,6 +26,7 @@ import com.example.semtempo.fragments.CategoriesFragment;
 import com.example.semtempo.fragments.HistoryFragment;
 import com.example.semtempo.fragments.RankFragment;
 import com.example.semtempo.fragments.HomeFragment;
+import com.example.semtempo.fragments.TagsFragment;
 import com.example.semtempo.utils.CircleTransform;
 import com.firebase.client.Firebase;
 import com.google.android.gms.auth.api.Auth;
@@ -185,9 +186,14 @@ public class MainActivity extends AppCompatActivity
             fragment = new HistoryFragment();
             callFragment(fragment);
 
+        } else if(id == R.id.nav_tags) {
+            fragment = new TagsFragment();
+            callFragment(fragment);
+
         } else if(id == R.id.nav_categories) {
             fragment = new CategoriesFragment();
             callFragment(fragment);
+
         }else if (id == R.id.nav_logout) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
