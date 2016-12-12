@@ -16,8 +16,10 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.semtempo.MultiSelectionSpinner;
 import com.example.semtempo.R;
 import com.example.semtempo.adapters.SubtitlesAdapter;
 import com.example.semtempo.controllers.FirebaseController;
@@ -43,9 +45,12 @@ import java.util.Set;
  * Created by Lucas on 12/10/2016.
  */
 
-public class TagsFragment extends Fragment {
+public class TagsFragment extends Fragment implements MultiSelectionSpinner.OnMultipleItemsSelectedListener{
 
-    private final String[] categoriesColors = {"#EB4E00", "#EE6773", "#667FFF", "#D3D3D3"};
+    private final String[] categoriesColors = {"#EB4E00", "#EE6773", "#667FFF", "#66FF99", "#66FFE6", "#29B8FF", "#009CEB",
+            "#FF7029", "#EB4E00", "#FFE666", "#CCFF66", "#7FFF66", "#66FF99", "#66FFE6",
+            "#66CCFF", "#667FFF", "#9966FF", "#E666FF", "#FF66CC", "#FF667F", "#FF7029",
+            "#EB4E00", "#29B8FF", "#009CEB"};
     private List<Integer> chartColors;
     private ListView subtitles;
     private View rootView;
@@ -53,7 +58,7 @@ public class TagsFragment extends Fragment {
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private ToggleButton toggle;
     private String option;
-    private Spinner spinnerTags;
+    private MultiSelectionSpinner multiSelectionSpinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,47 +88,6 @@ public class TagsFragment extends Fragment {
                 plotChart();
             }
         });
-    }
-
-    private void setUpSpinner(){
-        spinnerTags = (Spinner) rootView.findViewById(R.id.spinnerTags);
-
-        List<String> tags =  listaDeTags();//new ArrayList<>();//listaDeTags();
-
-        if (getActivity() != null) {
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tags);
-
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            spinnerTags.setAdapter(dataAdapter);
-
-        }
-
-        AdapterView.OnItemSelectedListener adapter = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                final int TIME = 1500;
-                final ProgressDialog dialog = new ProgressDialog(getActivity());
-                dialog.setMessage("Filtro por tag " + spinnerTags.getSelectedItem());
-                dialog.setCancelable(false);
-                dialog.show();
-
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        plotChart();
-                        dialog.dismiss();
-                    }
-                }, TIME);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        };
-
-        spinnerTags.setOnItemSelectedListener(adapter);
-
-
     }
 
     private List<String> listaDeTags() {
@@ -160,7 +124,7 @@ public class TagsFragment extends Fragment {
 
                 if (data != null) {
                     fillChartCollors();
-                    setUpSpinner();
+                    setUpMultipleSpinner();
                     plotChart();
                 }
 
@@ -197,7 +161,7 @@ public class TagsFragment extends Fragment {
 
     private void fillChartCollors(){
         chartColors = new ArrayList<Integer>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < categoriesColors.length; i++) {
             int color = Color.parseColor(categoriesColors[i]);
             chartColors.add(color);
         }
@@ -207,15 +171,13 @@ public class TagsFragment extends Fragment {
         subtitles = (ListView) rootView.findViewById(R.id.subtitles);
         TextView perc_text =(TextView) rootView.findViewById(R.id.text_perc);
 
-        //List<String> categories = new ArrayList<String>();
         List<Float> perc = new ArrayList<Float>();
-
         List<String> tags = new ArrayList<String>();
         float totalHours = 0;
 
        // TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
-        Map<Atividade, Integer> tagsHours = getHoursPerAct((String) spinnerTags.getSelectedItem());
+        Map<Atividade, Integer> tagsHours = getHoursPerAct(multiSelectionSpinner.getSelectedStrings());
 
         for (Map.Entry<Atividade, Integer> entry : tagsHours.entrySet()) {
 
@@ -272,31 +234,20 @@ public class TagsFragment extends Fragment {
         });
     }
 
-    private Map<Atividade, Integer> getHoursPerAct(String tag){
+    private Map<Atividade, Integer> getHoursPerAct(List <String> tags){
         Map<Atividade, Integer> hoursOfAtvs;
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
-        //List<Atividade> filtered = AtividadeService.filtraPorTag(activities,spinnerTags.getSelectedItem().toString());
         if(option.equals("Hist. Week")){
             Calendar cal = new GregorianCalendar();
             int week = cal.get(Calendar.WEEK_OF_YEAR);
-            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagSemanal(activities, tag);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagSemanal(activities, tags);
         }else{
-            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagHistorico(activities, tag);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagHistorico(activities, tags);
         }
 
         return hoursOfAtvs;
     }
-
-//    private List<Atividade> filtraPorTag(String tag){
-//        List<Atividade> filtradas = new ArrayList<>();
-//        for (Atividade atv: activities) {
-//            if(atv.getTags() != null && atv.getTags().contains(tag)){
-//                filtradas.add(atv);
-//            }
-//        }
-//        return filtradas;
-//    }
 
     private void setTotalHorasTextAndDescription(){
         TextView textChart = (TextView) rootView.findViewById(R.id.text_chart);
@@ -305,5 +256,26 @@ public class TagsFragment extends Fragment {
         }else{
             textChart.setText("Filtro por Tags do Histórico");
         }
+    }
+
+    @Override
+    public void selectedStrings(List<String> strings) {
+        plotChart();
+
+    }
+    @Override
+    public void selectedIndices(List<Integer> indices) {
+
+    }
+
+    private void setUpMultipleSpinner(){
+        List<String> tags = new ArrayList<String>();
+        tags = listaDeTags();
+        multiSelectionSpinner = (MultiSelectionSpinner) rootView.findViewById(R.id.mySpinner);
+        multiSelectionSpinner.setItems(tags);
+        multiSelectionSpinner.setSelection(new int[]{0});
+        multiSelectionSpinner.setListener(this);
+
+
     }
 }

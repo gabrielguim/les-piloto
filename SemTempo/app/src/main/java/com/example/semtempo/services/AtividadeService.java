@@ -249,9 +249,9 @@ public class AtividadeService {
         return atividadesFiltradas;
     }
 
-    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagHistorico(List<Atividade> atividades, String tag) {
+    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagHistorico(List<Atividade> atividades, List <String> tags) {
         Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
-        List<Atividade> atvsFiltradas = filtraPorTag(atividades, tag);
+        List<Atividade> atvsFiltradas = filterByTag(atividades, tags);
         for (int i = 0; i < atvsFiltradas.size(); i++) {
             Atividade atv = atvsFiltradas.get(i);
             int horas = atv.getHorario().getTotalHorasInvestidas();
@@ -261,12 +261,12 @@ public class AtividadeService {
         return horasDasAtvs;
     }
 
-    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagSemanal(List<Atividade> atividades, String tag) {
+    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagSemanal(List<Atividade> atividades, List <String> tags) {
         Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
         Calendar cal = new GregorianCalendar();
         int week = cal.get(Calendar.WEEK_OF_YEAR);
         List<Atividade> atvsdaSemana = filterActivitiesByWeek(atividades, week);
-        List<Atividade> atvsFiltradas = filtraPorTag(atvsdaSemana, tag);
+        List<Atividade> atvsFiltradas = filterByTag(atvsdaSemana, tags);
         for (int i = 0; i < atvsFiltradas.size(); i++) {
             Atividade atv = atvsFiltradas.get(i);
             int horas = atv.getHorario().getTotalHorasInvestidas();

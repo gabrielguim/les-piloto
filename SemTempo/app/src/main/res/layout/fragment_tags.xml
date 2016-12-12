@@ -45,7 +45,7 @@
                 app:strokeSize="25dp"
                 android:id="@+id/fitChart"
                 app:animationMode="overdraw"
-                android:layout_below="@+id/spinnerTags"
+                android:layout_below="@+id/mySpinner"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="25dp" />
 
@@ -122,10 +122,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignBottom="@+id/text_chart" />
 
-            <Spinner
+            <com.example.semtempo.MultiSelectionSpinner
+                android:id="@+id/mySpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerTags"
                 android:layout_below="@+id/text_chart"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp" />
