@@ -133,6 +133,31 @@ public class AtividadeService {
         return categoriesHours;
     }
 
+    public static Map<Atividade, Integer> getTotalHorasPorAtividade(List<Atividade> atividades) {
+        Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
+
+        for (int i = 0; i < atividades.size(); i++) {
+            Atividade atv = atividades.get(i);
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+            horasDasAtvs.put(atv, horas);
+        }
+
+        return horasDasAtvs;
+    }
+
+    public static Map<Atividade, Integer> getTotalHorasPorAtvPorSemana(List<Atividade> atividades, int semana) {
+        Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
+        List<Atividade> atvsFiltradas = filterActivitiesByWeek(atividades,semana);
+        for (int i = 0; i < atvsFiltradas.size(); i++) {
+            Atividade atv = atvsFiltradas.get(i);
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+            horasDasAtvs.put(atv, horas);
+        }
+
+        return horasDasAtvs;
+    }
+
+
     /**
      * Inform the quantity of hours spent by the user on the actual week categorized by Categoria(SemCategoria, Lazer, Trabalho)
      *
@@ -206,6 +231,19 @@ public class AtividadeService {
                 if (tagsDaAtividade.containsAll(tagsDaPesquisa)){
                     atividadesFiltradas.add(atividade);
                 }
+            }
+        }
+        return atividadesFiltradas;
+    }
+
+    public static List<Atividade> filtraPorTag (List<Atividade> atividades, String tagDaPesquisa){
+        List<Atividade> atividadesFiltradas = new ArrayList<Atividade>();
+
+        for (Atividade atividade : atividades) {
+            List<String> tagsDaAtividade = atividade.getTags();
+
+            if (tagsDaAtividade != null && tagsDaAtividade.contains(tagDaPesquisa)){
+                atividadesFiltradas.add(atividade);
             }
         }
         return atividadesFiltradas;

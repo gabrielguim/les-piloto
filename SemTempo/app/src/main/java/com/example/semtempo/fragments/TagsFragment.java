@@ -10,8 +10,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -21,7 +24,6 @@ import com.example.semtempo.controllers.FirebaseController;
 import com.example.semtempo.controllers.OnGetDataListener;
 import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.model.Atividade;
-import com.example.semtempo.model.Categoria;
 import com.example.semtempo.services.AtividadeService;
 import com.example.semtempo.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -32,16 +34,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Created by Rafael on 12/3/2016.
+ * Created by Lucas on 12/10/2016.
  */
 
 public class TagsFragment extends Fragment {
 
-    private final String[] categoriesColors = {"#EB4E00", "#667FFF", "#D3D3D3"};
+    private final String[] categoriesColors = {"#EB4E00", "#EE6773", "#667FFF", "#D3D3D3"};
     private List<Integer> chartColors;
     private ListView subtitles;
     private View rootView;
@@ -49,6 +53,7 @@ public class TagsFragment extends Fragment {
     private final int ADD_ICON = R.drawable.ic_add_white_24dp;
     private ToggleButton toggle;
     private String option;
+    private Spinner spinnerTags;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +85,60 @@ public class TagsFragment extends Fragment {
         });
     }
 
+    private void setUpSpinner(){
+        spinnerTags = (Spinner) rootView.findViewById(R.id.spinnerTags);
+
+        List<String> tags =  listaDeTags();//new ArrayList<>();//listaDeTags();
+
+        if (getActivity() != null) {
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, tags);
+
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerTags.setAdapter(dataAdapter);
+
+        }
+
+        AdapterView.OnItemSelectedListener adapter = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                final int TIME = 1500;
+                final ProgressDialog dialog = new ProgressDialog(getActivity());
+                dialog.setMessage("Filtro por tag " + spinnerTags.getSelectedItem());
+                dialog.setCancelable(false);
+                dialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        plotChart();
+                        dialog.dismiss();
+                    }
+                }, TIME);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
+
+        spinnerTags.setOnItemSelectedListener(adapter);
+
+
+    }
+
+    private List<String> listaDeTags() {
+        List<String> tags = new ArrayList<>();
+        Set<String> aux = new HashSet<>();
+        Atividade atv;
+        for (int i = 0; i < activities.size(); i++) {
+            atv = activities.get(i);
+            if(atv.getTags()!= null && atv.getTags().size() > 0)
+                aux.addAll(atv.getTags());
+        }
+        tags.addAll(aux);
+        return tags;
+    }
+
     private void setUp(){
         activities = new ArrayList<>();
         GoogleSignInAccount currentUser = UsuarioController.getInstance().getCurrentUser();
@@ -102,6 +161,7 @@ public class TagsFragment extends Fragment {
                 if (data != null) {
                     fillChartCollors();
                     plotChart();
+                    setUpSpinner();
                 }
 
                 closeDialog(dialog);
@@ -151,17 +211,19 @@ public class TagsFragment extends Fragment {
         List<Float> perc = new ArrayList<Float>();
         float totalHours = 0;
 
-        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
-        Map<Categoria, Integer> categoriesHours = getCategoriesHoursPerOption();
+       // TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
-        for (Map.Entry<Categoria, Integer> entry : categoriesHours.entrySet()) {
-            categories.add(entry.getKey().toString() + " - Total de horas: " + entry.getValue());
+        Map<Atividade, Integer> categoriesHours = getHoursPerAct();
+
+        for (Map.Entry<Atividade, Integer> entry : categoriesHours.entrySet()) {
+
+            categories.add(entry.getKey().getNomeDaAtv() + " - Total: " + entry.getValue() + " hrs");
             totalHours += entry.getValue();
         }
 
-        setTotalHorasTextAndDescription(totalHours);
+        setTotalHorasTextAndDescription();
 
-        for (Map.Entry<Categoria, Integer> entry : categoriesHours.entrySet()) {
+        for (Map.Entry<Atividade, Integer> entry : categoriesHours.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
@@ -208,30 +270,37 @@ public class TagsFragment extends Fragment {
         });
     }
 
-    private Map<Categoria, Integer> getCategoriesHoursPerOption(){
-        Map<Categoria, Integer> categoriesHours;
+    private Map<Atividade, Integer> getHoursPerAct(){
+        Map<Atividade, Integer> hoursOfAtvs;
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
+        //List<Atividade> filtered = AtividadeService.filtraPorTag(activities,spinnerTags.getSelectedItem().toString());
         if(option.equals("Hist. Week")){
             Calendar cal = new GregorianCalendar();
             int week = cal.get(Calendar.WEEK_OF_YEAR);
-            categoriesHours = AtividadeService.getTotalSpentHoursByCategoriesActWeek(activities, week);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorSemana(activities, week);
         }else{
-            categoriesHours = AtividadeService.getTotalSpentHoursByCategories(activities);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtividade(activities);
         }
 
-        return categoriesHours;
+        return hoursOfAtvs;
     }
 
-    private void setTotalHorasTextAndDescription(float totalHours){
-        TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
-        TextView textChart = (TextView) rootView.findViewById(R.id.text_chart);
+//    private List<Atividade> filtraPorTag(String tag){
+//        List<Atividade> filtradas = new ArrayList<>();
+//        for (Atividade atv: activities) {
+//            if(atv.getTags() != null && atv.getTags().contains(tag)){
+//                filtradas.add(atv);
+//            }
+//        }
+//        return filtradas;
+//    }
 
+    private void setTotalHorasTextAndDescription(){
+        TextView textChart = (TextView) rootView.findViewById(R.id.text_chart);
         if(option.equals("Hist. Week")){
-            totalHoras.setText("Horas investidas na semana: " + totalHours);
             textChart.setText("Filtro por Tags da Semana");
         }else{
-            totalHoras.setText("Horas investidas ao total: " + totalHours);
             textChart.setText("Filtro por Tags do Histórico");
         }
     }

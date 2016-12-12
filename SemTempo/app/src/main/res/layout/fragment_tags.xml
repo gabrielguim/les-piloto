@@ -29,15 +29,15 @@
                 android:textSize="24sp"
                 android:id="@+id/text_chart"/>
 
-            <TextView
-                android:text="@string/total_hours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:textSize="14sp"
-                android:layout_below="@id/text_chart"
-                android:id="@+id/total_hours"/>
+            <!--<TextView-->
+                <!--android:text="@string/total_hours"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_below="@id/text_chart"-->
+                <!--android:id="@+id/total_hours"/>-->
 
             <com.txusballesteros.widgets.FitChart
                 android:layout_width="200dp"
@@ -45,10 +45,9 @@
                 app:strokeSize="25dp"
                 android:id="@+id/fitChart"
                 app:animationMode="overdraw"
+                android:layout_below="@+id/spinnerTags"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="30dp"
-                android:layout_below="@+id/total_hours"/>
+                android:layout_marginTop="25dp" />
 
             <ListView
                 android:layout_width="wrap_content"
@@ -56,7 +55,7 @@
                 android:id="@+id/subtitles"
                 android:layout_below="@id/fitChart"
                 android:textAlignment="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_alignLeft="@id/fitChart"
                 android:layout_marginLeft="-20dp" />
 
@@ -85,8 +84,10 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                android:layout_below="@id/view1"
-                tools:context="com.kunai.switchtest.MainActivity">
+                tools:context="com.kunai.switchtest.MainActivity"
+                android:layout_below="@+id/subtitles"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
                 <TextView
                     android:id="@+id/toogle_info"
@@ -117,7 +118,17 @@
                 android:gravity="center"
                 android:textSize="26sp"
                 android:background="#fc4242"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:layout_alignParentTop="true"
+                android:layout_alignBottom="@+id/text_chart" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerTags"
+                android:layout_below="@+id/text_chart"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp" />
 
         </RelativeLayout>
 
