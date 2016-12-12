@@ -249,6 +249,33 @@ public class AtividadeService {
         return atividadesFiltradas;
     }
 
+    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagHistorico(List<Atividade> atividades, String tag) {
+        Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
+        List<Atividade> atvsFiltradas = filtraPorTag(atividades, tag);
+        for (int i = 0; i < atvsFiltradas.size(); i++) {
+            Atividade atv = atvsFiltradas.get(i);
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+            horasDasAtvs.put(atv, horas);
+        }
+
+        return horasDasAtvs;
+    }
+
+    public static Map<Atividade, Integer> getTotalHorasPorAtvPorTagSemanal(List<Atividade> atividades, String tag) {
+        Map<Atividade, Integer> horasDasAtvs = new HashMap<>();
+        Calendar cal = new GregorianCalendar();
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+        List<Atividade> atvsdaSemana = filterActivitiesByWeek(atividades, week);
+        List<Atividade> atvsFiltradas = filtraPorTag(atvsdaSemana, tag);
+        for (int i = 0; i < atvsFiltradas.size(); i++) {
+            Atividade atv = atvsFiltradas.get(i);
+            int horas = atv.getHorario().getTotalHorasInvestidas();
+            horasDasAtvs.put(atv, horas);
+        }
+
+        return horasDasAtvs;
+    }
+
     /**
      * Verifica se uma lista de tags é maior ou igual que outra
      * @param tags1 Lista de String a ser comparada

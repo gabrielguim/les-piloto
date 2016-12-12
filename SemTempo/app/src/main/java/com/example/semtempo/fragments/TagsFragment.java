@@ -160,8 +160,8 @@ public class TagsFragment extends Fragment {
 
                 if (data != null) {
                     fillChartCollors();
-                    plotChart();
                     setUpSpinner();
+                    plotChart();
                 }
 
                 closeDialog(dialog);
@@ -207,28 +207,30 @@ public class TagsFragment extends Fragment {
         subtitles = (ListView) rootView.findViewById(R.id.subtitles);
         TextView perc_text =(TextView) rootView.findViewById(R.id.text_perc);
 
-        List<String> categories = new ArrayList<String>();
+        //List<String> categories = new ArrayList<String>();
         List<Float> perc = new ArrayList<Float>();
+
+        List<String> tags = new ArrayList<String>();
         float totalHours = 0;
 
        // TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
-        Map<Atividade, Integer> categoriesHours = getHoursPerAct();
+        Map<Atividade, Integer> tagsHours = getHoursPerAct((String) spinnerTags.getSelectedItem());
 
-        for (Map.Entry<Atividade, Integer> entry : categoriesHours.entrySet()) {
+        for (Map.Entry<Atividade, Integer> entry : tagsHours.entrySet()) {
 
-            categories.add(entry.getKey().getNomeDaAtv() + " - Total: " + entry.getValue() + " hrs");
+            tags.add(entry.getKey().getNomeDaAtv() + " - Total: " + entry.getValue() + " hrs");
             totalHours += entry.getValue();
         }
 
         setTotalHorasTextAndDescription();
 
-        for (Map.Entry<Atividade, Integer> entry : categoriesHours.entrySet()) {
+        for (Map.Entry<Atividade, Integer> entry : tagsHours.entrySet()) {
             perc.add((entry.getValue()/totalHours)*100f);
         }
 
         if (getActivity() != null) {
-            subtitles.setAdapter(new SubtitlesAdapter(getActivity(), categories, chartColors, perc, perc_text, rootView));
+            subtitles.setAdapter(new SubtitlesAdapter(getActivity(), tags, chartColors, perc, perc_text, rootView));
             subtitles.setDivider(null);
             Utils.setListViewHeightBasedOnChildren(subtitles);
         }
@@ -242,7 +244,7 @@ public class TagsFragment extends Fragment {
         Collection<FitChartValue> values = new ArrayList<FitChartValue>();
 
         try{
-            for (int i = 0; i < categories.size(); i++) {
+            for (int i = 0; i < tags.size(); i++) {
                 values.add(new FitChartValue(perc.get(i), chartColors.get(i)));
             }
         }catch(Exception e){
@@ -270,7 +272,7 @@ public class TagsFragment extends Fragment {
         });
     }
 
-    private Map<Atividade, Integer> getHoursPerAct(){
+    private Map<Atividade, Integer> getHoursPerAct(String tag){
         Map<Atividade, Integer> hoursOfAtvs;
         TextView totalHoras = (TextView) rootView.findViewById(R.id.total_hours);
 
@@ -278,9 +280,9 @@ public class TagsFragment extends Fragment {
         if(option.equals("Hist. Week")){
             Calendar cal = new GregorianCalendar();
             int week = cal.get(Calendar.WEEK_OF_YEAR);
-            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorSemana(activities, week);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagSemanal(activities, tag);
         }else{
-            hoursOfAtvs = AtividadeService.getTotalHorasPorAtividade(activities);
+            hoursOfAtvs = AtividadeService.getTotalHorasPorAtvPorTagHistorico(activities, tag);
         }
 
         return hoursOfAtvs;
