@@ -31,19 +31,18 @@ import android.widget.Toast;
 
 import com.example.semtempo.R;
 import com.example.semtempo.controllers.FirebaseController;
-import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.controllers.OnGetDataListener;
+import com.example.semtempo.controllers.UsuarioController;
 import com.example.semtempo.model.Atividade;
+import com.example.semtempo.model.Categoria;
 import com.example.semtempo.model.Horario;
 import com.example.semtempo.model.Prioridade;
-import com.example.semtempo.model.Categoria;
-import com.example.semtempo.services.AtividadeService;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -55,6 +54,8 @@ public class AddFragment extends Fragment {
 
     private final int SEND_ICON = R.drawable.ic_send_white_24dp;
 
+    private final String TAG_DELIMITER = "#";
+
     private List<Atividade> atividades;
     private List<String> ATIVIDADES;
     private ImageView high_priority;
@@ -63,6 +64,7 @@ public class AddFragment extends Fragment {
     private EditText spent_time;
     private EditText label_priority;
     private EditText categories_selection;
+    private EditText tags;
     private AutoCompleteTextView autoCompleteTextView;
     private AlertDialog levelDialog;
     private View rootView;
@@ -73,6 +75,7 @@ public class AddFragment extends Fragment {
     private Bitmap currentImage;
     private String flag;
     private Horario horario;
+    List<String> tags_list;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -209,7 +212,7 @@ public class AddFragment extends Fragment {
                         horario = new Horario(Integer.parseInt(spent_time.getText().toString()), creation_date);
                     }
 
-                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria);
+                    Atividade atv = new Atividade(autoCompleteTextView.getText().toString(), priority, horario, categoria, tags_list);
                     atv.setFoto(base64Image);
 
                     FirebaseController.saveActivity(UsuarioController.getInstance().getCurrentUser().getDisplayName(), atv);
@@ -274,6 +277,9 @@ public class AddFragment extends Fragment {
                 initAlertDialog();
             }
         });
+
+
+        tags = (EditText) rootView.findViewById(R.id.tags);
 
         if (flag.equals("notificacao")){
             new AlertDialog.Builder(getContext())
@@ -475,11 +481,35 @@ public class AddFragment extends Fragment {
 
         }
 
+
+        if(!tags.getText().toString().isEmpty()){
+            String[] tags_array = tags.getText().toString().split(" ");
+            tags_list = Arrays.asList(tags_array);
+
+            if(!hasDelimiter()) {
+                if (!err_msg.equals("")) {
+                    err_msg += "\n";
+                }
+                err_msg += "Insira uma tag válida. Ex: #SemTempo";
+                fields_ok = false;
+                tags_list = new ArrayList<String>();
+            }
+        }
+
         if (!fields_ok) {
             Toast.makeText(getActivity(), err_msg, Toast.LENGTH_SHORT).show();
         }
 
         return fields_ok;
+    }
+
+    private boolean hasDelimiter() {
+        for(String tag : tags_list){
+            if(!tag.startsWith(TAG_DELIMITER)){
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isSelected(ImageView priority){

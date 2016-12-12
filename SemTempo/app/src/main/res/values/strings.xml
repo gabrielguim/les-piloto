@@ -65,5 +65,6 @@
     <string name="total_hours">Horas investidas na semana:</string>
     <string name="text_rank">Ranking semanal</string>
     <string name="categories_default">Categoria</string>
+    <string name="tags">Tags</string>
 
 </resources>
