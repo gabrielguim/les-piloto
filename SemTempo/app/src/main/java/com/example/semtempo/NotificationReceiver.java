@@ -23,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Kelvin on 04-Dec-16.
@@ -75,6 +77,26 @@ public class NotificationReceiver extends BroadcastReceiver {
                 Ringtone toque = RingtoneManager.getRingtone(context, som);
                 toque.play();
             } catch (Exception e) {
+            }
+        }else if(prefes.getString("ontem", "false").equals("true")){
+            Date dataAtual = new Date();
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.setTime(dataAtual);
+            int dia = calendar.get(GregorianCalendar.DAY_OF_YEAR);
+            int ano = calendar.get(GregorianCalendar.YEAR);
+            System.out.println(dia);
+            System.out.println(ano);
+            int ultimoanoRegistrado = Integer.parseInt(prefes.getString("ano", "1990"));
+            int ultimodiaRegistrado = Integer.parseInt(prefes.getString("dia", "1"));
+            if((ultimoanoRegistrado < ano) || (ultimoanoRegistrado == ano && ultimodiaRegistrado < dia-1)){
+                System.out.println("ENTREI");
+                mNotificationManager.notify(100, not);
+                try {
+                    Uri som = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone toque = RingtoneManager.getRingtone(context, som);
+                    toque.play();
+                } catch (Exception e) {
+                }
             }
         }
     }

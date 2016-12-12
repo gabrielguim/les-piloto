@@ -29,6 +29,7 @@ import com.txusballesteros.widgets.FitChartValue;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -234,8 +235,15 @@ public class HomeFragment extends Fragment {
                     Boolean registrouAtividadeOntem = AtividadeService.registerActivityYesterday(atividades);
                     if (registrouAtividadeOntem != null) {
                         System.out.println(registrouAtividadeOntem.toString());
+                        Date dataAtual = new Date();
+                        GregorianCalendar calendar = new GregorianCalendar();
+                        calendar.setTime(dataAtual);
+                        int dia = calendar.get(GregorianCalendar.DAY_OF_YEAR);
+                        int ano = calendar.get(GregorianCalendar.YEAR);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString("ontem", registrouAtividadeOntem.toString());
+                        editor.putString("dia", Integer.toString(dia));
+                        editor.putString("ano", Integer.toString(ano));
                         editor.commit();
                     }
                 }
