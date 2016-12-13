@@ -193,7 +193,7 @@ public class AddFragment extends Fragment {
 
                     if (currentImage == null){
                         try {
-                            currentImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse("android.resource://com.example.semtempo/drawable/doge_img"));
+                            currentImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse("android.resource://com.example.semtempo/drawable/padrao"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
